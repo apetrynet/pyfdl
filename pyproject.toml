@@ -1,0 +1,41 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pyfdl"
+version = "0.0.1"
+authors = [
+  { name="Daniel Flehner Heen", email="flehnerheener@gmail.com" },
+]
+description = "Parse and write ASC FDL files"
+license = {file="LICENSE"}
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Multimedia :: Video :: Display",
+    "Topic :: Multimedia :: Video :: Non-Linear Editor",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Operating System :: OS Independent",
+    "Natural Language :: English"
+]
+keywords = ["film", "tv", "editing", "editorial", "edit", "non-linear", "fdl", "asc", "conform", "reformat"]
+
+[project.urls]
+"Homepage" = "https://github.com/apetrynet/pyfdl"
+"Bug Tracker" = "https://github.com/apetrynet/pyfdl/issues"
+
+#[project.entry-points."pyfdl"]
+#pyfdl = "pyfdl"
+
+#[tool.setuptools]
+#packages = ["fdl"]
+
+[tool.hatch.build.targets.sdist]
+# Ensure the sdist includes a setup.py for older pip versions
+support-legacy = true
+exclude = [".github"]

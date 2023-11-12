@@ -1,0 +1,2 @@
+class FDLError(Exception):
+    pass
