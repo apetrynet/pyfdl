@@ -5,7 +5,7 @@ import jsonschema
 from typing import IO
 from pathlib import Path
 
-from .classes import FDL
+from .classes import *
 from .errors import FDLError
 
 

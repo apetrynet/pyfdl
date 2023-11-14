@@ -1,8 +1,10 @@
 import os
+import sys
 import pytest
 from pathlib import Path
 
 import pyfdl
+from conftest import sample_header
 
 FDL_SCHEMA_FILE = Path("../fdl/FDL_Validation_Tooling/Python_FDL_Checker")
 SAMPLE_FDL_DIR = Path("/home/daniel/Code/fdl/Test_Scenarios-20231110T150107Z-001")
@@ -13,12 +15,24 @@ SAMPLE_FDL_FILE = Path(
 )
 
 
+def test_header_instance_from_object(sample_header):
+    header = pyfdl.Header.from_object(sample_header)
+    assert isinstance(header, pyfdl.Header)
+    assert header.to_json() == sample_header
+    assert str(header) == str(sample_header)
+
+
+def test_header_instance():
+    header = pyfdl.Header()
+    assert isinstance(header, pyfdl.Header)
+
+
 def test_load_unverified():
     with SAMPLE_FDL_FILE.open('rb') as fdl_file:
         fdl = pyfdl.load(fdl_file, validate=False)
 
-    assert isinstance(fdl, pyfdl.classes.FDL)
-    assert isinstance(fdl.header, pyfdl.classes.Header)
+    assert isinstance(fdl, pyfdl.FDL)
+    assert isinstance(fdl.header, pyfdl.Header)
     assert fdl.header.uuid != ""
 
 
@@ -40,17 +54,17 @@ def test_load_verified_with_schema():
     with SAMPLE_FDL_FILE.open('rb') as fdl_file:
         fdl = pyfdl.load(fdl_file, validate=True)
 
-    assert isinstance(fdl, pyfdl.classes.FDL)
+    assert isinstance(fdl, pyfdl.FDL)
 
 
 def test_init_empty_header():
-    header = pyfdl.classes.Header()
+    header = pyfdl.Header()
 
-    assert isinstance(header, pyfdl.classes.Header)
+    assert isinstance(header, pyfdl.Header)
     assert header.fdl_creator == 'pyfdl'
 
 
 def test_init_empty_fdl():
-    fdl = pyfdl.classes.FDL()
+    fdl = pyfdl.FDL()
 
-    assert isinstance(fdl, pyfdl.classes.FDL)
+    assert isinstance(fdl, pyfdl.FDL)

@@ -1,164 +1,207 @@
 import uuid
-import json
+from abc import ABC, abstractmethod
 
 from pyfdl.errors import FDLError
 
 FDL_VERSION = {'major': 1, 'minor': 0}
 
 
-class Dimensions:
+class Base(ABC):
+    __slots__ = []
+    kwarg_map = {}
+    object_map = {}
+    required = []
+
+    @abstractmethod
+    def __init__(self, **kwargs):
+        pass
+
+    def to_json(self) -> dict:
+        data = {}
+        for key in self.__slots__:
+            value = getattr(self, key)
+            if isinstance(value, list):
+                value = [item.to_json() for item in value]
+
+            elif isinstance(value, Base):
+                value = value.to_json()
+
+            data[key] = value
+
+        return data
+
+    @classmethod
+    def from_object(cls, raw: dict):
+        kwargs = {}
+        for key in cls.__slots__:
+            # We get the value before we convert the key to a valid name
+            value = raw.get(key)
+            if value is None:
+                continue
+
+            # Check for keyword override
+            keyword = cls.kwarg_map.get(key, key)
+
+            if key in cls.object_map:
+                if isinstance(value, list):
+                    value = [cls.object_map[key].from_object(item) for item in value]
+
+                else:
+                    value = cls.object_map[key].from_object(value)
+
+            kwargs[keyword] = value
+
+        return cls(**kwargs)
+
+    def __str__(self) -> str:
+        return str(self.to_json())
+
+
+class Dimensions(Base):
+    __slots__ = ['width', 'height']
+
     def __init__(self, width: [int, float], height: [int, float]):
         self.width = width
         self.height = height
 
-    def to_json(self) -> str:
-        return json.dumps({'width': self.width, 'height': self.height})
 
-    @staticmethod
-    def from_object(raw: dict):
-        return Dimensions(raw.get('width'), raw.get('height'))
+class Point(Base):
+    __slots__ = ['x', 'y']
 
-    def __str__(self) -> str:
-        return str(self.to_json())
-
-
-class Point:
     def __init__(self, x: [int, float], y: [int, float]):
         self.x = x
         self.y = y
 
-    def to_json(self) -> str:
-        return json.dumps({'x': self.x, 'y': self.y})
 
-    @staticmethod
-    def from_object(raw: dict):
-        return Point(raw.get('x'), raw.get('y'))
+class Header(Base):
+    __slots__ = ['uuid', 'version', 'fdl_creator', 'default_framing_intent']
+    kwarg_map = {'uuid': '_uuid'}
+    required = ['uuid', 'version']
 
-    def __str__(self) -> str:
-        return str(self.to_json())
-
-
-class Header:
     def __init__(
             self,
-            header_uuid: str = str(uuid.uuid4()),
-            version: dict = FDL_VERSION,
+            _uuid: str = str(uuid.uuid4()),
+            version: dict = None,
             fdl_creator: str = 'pyfdl',
             default_framing_intent: str = ''
     ):
-        self.uuid = header_uuid
-        self.version = version
+        self.uuid = _uuid
+        self.version = version or FDL_VERSION
         self.fdl_creator = fdl_creator
         self.default_framing_intent = default_framing_intent
 
-    def to_json(self) -> str:
-        data = {
-            'uuid': self.uuid,
-            'version': self.version,
-            'fdl_creator': self.fdl_creator,
-            'default_framing_intent': self.default_framing_intent
-        }
 
-        return json.dumps(data)
+class FramingIntent(Base):
 
-    def __str__(self) -> str:
-        return str(self.to_json())
+    __slots__ = ['id', 'label', 'aspect_ratio', 'protection']
+    kwarg_map = {'id': '_id'}
+    object_map = {'aspect_ratio': Dimensions}
 
+    def __init__(self, label: str = None, _id: str = None, aspect_ratio: Dimensions = None,
+                 protection: float = None):
 
-class FramingIntent:
-    def __init__(
-            self,
-            label: str = None,
-            intent_id: str = None,
-            aspect_ratio: Dimensions = None,
-            protection: float = None
-    ):
-        if not intent_id:
-            raise FDLError('Please provide a required "intent_id"')
+        if not _id:
+            raise FDLError('Please provide a required "_id"')
 
-        self.id = intent_id
+        self.id = _id
         self.label = label or ''
         self.aspect_ratio = aspect_ratio or Dimensions(1, 1)
         self.protection = protection or 0.0
 
-    def to_json(self) -> str:
-        data = {
-            'label': self.label,
-            'id': self.id,
-            'aspect_ratio': self.aspect_ratio.to_json(),
-            'protection': self.protection
-        }
 
-        return json.dumps(data)
+class FramingDecision(Base):
+    __slots__ = [
+        'label',
+        'id',
+        'framing_intent_id',
+        'dimensions',
+        'anchor_point',
+        'protection_dimensions',
+        'protection_anchor_point'
+    ]
+    kwarg_map = {'id': '_id'}
+    object_map = {
+        'dimensions': Dimensions,
+        'anchor_point': Point,
+        'protection_dimensions': Dimensions,
+        'protection_anchor_point': Point
+    }
 
-    @staticmethod
-    def from_object(raw: dict):
-        framing_intent = FramingIntent(
-            label=raw.get('label'),
-            intent_id=raw.get('id'),
-            aspect_ratio=Dimensions.from_object(raw.get('aspect_ratio')),
-            protection=raw.get('protection')
-        )
-
-        return framing_intent
-
-    def __str__(self) -> str:
-        return str(self.to_json())
-
-
-class Context:
-    def __init__(self, label: str = None, context_creator: str = None, canvases: list = None):
-        self.label = label or ''
-        self.context_creator = context_creator or ''
-        self.canvases = canvases or []
-
-    def to_json(self) -> str:
-        data = {
-            'label': self.label,
-            'context_creator': self.context_creator,
-            'canvases': [canvas.to_json() for canvas in self.canvases]
-        }
-
-        return json.dumps(data)
-
-    @staticmethod
-    def from_object(raw: dict):
-        context = Context(
-            label=raw.get('label'),
-            context_creator=raw.get('context_creator'),
-            canvases=[Canvas.from_object(canvas) for canvas in raw.get('canvases', [])]
-        )
-
-        return context
-
-    def __str__(self) -> str:
-        return str(self.to_json())
-
-
-class Canvas:
     def __init__(
             self,
             label: str = None,
-            canvas_id: str = None,
+            _id: str = None,
+            framing_intent_id: str = None,
+            dimensions: Dimensions = None,
+            anchor_point: Point = None,
+            protection_dimensions: Dimensions = None,
+            protection_anchor_point: Point = None
+    ):
+        if not _id:
+            raise FDLError('Please provide a required "_id"')
+
+        if not dimensions:
+            raise FDLError('Please provide a required "dimensions"')
+
+        if not anchor_point:
+            raise FDLError('Please provide a required "anchor_point"')
+
+        self.label = label or ''
+        self.id = _id
+        self.framing_intent_id = framing_intent_id
+        self.dimensions = dimensions
+        self.anchor_point = anchor_point
+        self.protection_dimensions = protection_dimensions
+        self.protection_anchor_point = protection_anchor_point
+
+
+class Canvas(Base):
+    __slots__ = [
+        'label',
+        'id',
+        'source_canvas_id',
+        'dimensions',
+        'effective_dimensions',
+        'effective_anchor_point',
+        'photosite_dimensions',
+        'physical_dimensions',
+        'anamorphic_squeeze',
+        'framing_decisions'
+    ]
+    kwarg_map = {'id': '_id'}
+    object_map = {
+        'dimensions': Dimensions,
+        'effective_dimensions': Dimensions,
+        'effective_anchor_point': Point,
+        'photosite_dimensions': Dimensions,
+        'physical_dimensions': Dimensions,
+        'framing_decisions': FramingDecision
+    }
+
+    def __init__(
+            self,
+            label: str = None,
+            _id: str = None,
             source_canvas_id: str = None,
             dimensions: Dimensions = None,
             effective_dimensions: Dimensions = None,
             effective_anchor_point: Point = None,
             photosite_dimensions: Dimensions = None,
             physical_dimensions: Dimensions = None,
-            anamorphic_squeeze: float = None
+            anamorphic_squeeze: float = None,
+            framing_decisions: list = None
     ):
-        if not canvas_id:
-            raise FDLError('Please provide a required "canvas_id"')
+        if not _id:
+            raise FDLError('Please provide a required "_id"')
 
-        if not Dimensions:
+        if not dimensions:
             raise FDLError('Please provide a required "dimensions"')
 
-        if not effective_anchor_point:
+        if effective_dimensions and not effective_anchor_point:
             raise FDLError('Please provide a required "effective_anchor_point"')
 
         self.label = label or ''
-        self.id = canvas_id
+        self.id = _id
         self.source_canvas_id = source_canvas_id or self.id
         self.dimensions = dimensions
         self.effective_dimensions = effective_dimensions
@@ -166,43 +209,22 @@ class Canvas:
         self.photosite_dimensions = photosite_dimensions
         self.physical_dimensions = physical_dimensions
         self.anamorphic_squeeze = anamorphic_squeeze or 1.0
-
-    @staticmethod
-    def from_object(raw: dict):
-        canvas = Canvas(
-            label=raw.get('label'),
-            canvas_id=raw.get('id'),
-            source_canvas_id=raw.get('source_canvas_id'),
-            dimensions=Dimensions.from_object(raw.get('dimensions')),
-            effective_dimensions=Dimensions.from_object(raw.get('effective_dimensions', {})),
-            effective_anchor_point=Point.from_object(raw.get('effective_anchor_point', {})),
-            photosite_dimensions=Dimensions.from_object(raw.get('photosite_dimensions', {})),
-            physical_dimensions=Dimensions.from_object(raw.get('physical_dimensions', {})),
-            anamorphic_squeeze=raw.get('anamorphic_squeeze')
-        )
-
-        return canvas
-
-    def to_json(self) -> str:
-        data = {
-            'label': self.label,
-            'id': self.id,
-            'source_canvas_id': self.source_canvas_id,
-            'dimensions': self.dimensions.to_json(),
-            'effective_dimensions': self.effective_dimensions.to_json(),
-            'effective_anchor_point': self.effective_anchor_point.to_json(),
-            'photosite_dimensions': self.photosite_dimensions.to_json(),
-            'physical_dimensions': self.physical_dimensions.to_json(),
-            'anamorphic_squeeze': self.anamorphic_squeeze
-        }
-
-        return json.dumps(data)
-
-    def __str__(self) -> str:
-        return str(self.to_json())
+        self.framing_decisions = framing_decisions or []
 
 
-class Rounding:
+class Context(Base):
+    __slots__ = ['label', 'context_creator', 'canvases']
+    object_map = {'canvases': Canvas}
+
+    def __init__(self, label: str = None, context_creator: str = None, canvases: list = None):
+        self.label = label or ''
+        self.context_creator = context_creator or ''
+        self.canvases = canvases or []
+
+
+class Rounding(Base):
+    __slots__ = ['even', 'mode']
+
     VALID_EVEN = ('even', 'whole')
     VALID_MODES = ('up', 'down', 'round')
 
@@ -213,17 +235,11 @@ class Rounding:
         if mode not in self.VALID_MODES:
             raise FDLError(f'"mode" must be one of the following: {self.VALID_MODES}')
 
-        self.data = {'even': even, 'mode': mode}
-
-    def to_json(self) -> str:
-        return json.dumps(self.data)
-
-    @staticmethod
-    def from_object(raw: dict):
-        return Rounding(even=raw.get('even'), mode=raw.get('mode'))
+        self.even = even
+        self.mode = mode
 
 
-class CanvasTemplate:
+class CanvasTemplate(Base):
     FIT_SOURCE = (
         'framing_decision.dimensions',
         'framing_decision.protection_dimensions',
@@ -240,11 +256,32 @@ class CanvasTemplate:
         'canvas.dimensions',
         'canvas.effective_dimensions'
     )
+    __slots__ = [
+        'label',
+        'id',
+        'target_dimensions',
+        'target_anamorphic_squeeze',
+        'fit_source',
+        'fit_method',
+        'alignment_method_vertical',
+        'alignment_method_horizontal',
+        'preserve_from_source_canvas',
+        'maximum_dimensions',
+        'pad_to_maximum',
+        'rounding'
+    ]
+
+    kwarg_map = {'id': '_id'}
+    object_map = {
+        'target_dimensions': Dimensions,
+        'maximum_dimensions': Dimensions,
+        'rounding': Rounding
+    }
 
     def __init__(
             self,
             label: str = None,
-            template_id: str = None,
+            _id: str = None,
             target_dimensions: Dimensions = None,
             target_anamorphic_squeeze: float = None,
             fit_source: str = None,
@@ -256,8 +293,8 @@ class CanvasTemplate:
             pad_to_maximum: bool = False,
             rounding: Rounding = None
     ):
-        if not template_id:
-            raise FDLError('Please provide a required "template_id"')
+        if not _id:
+            raise FDLError('Please provide a required "_id"')
 
         if not target_dimensions:
             raise FDLError('Please provide a required "target_dimensions"')
@@ -280,7 +317,7 @@ class CanvasTemplate:
             )
 
         self.label = label or ''
-        self.id = template_id
+        self.id = _id
         self.target_dimensions = target_dimensions
         self.target_anamorphic_squeeze = target_anamorphic_squeeze or 1.0
         self.fit_source = fit_source or self.FIT_SOURCE[0]
@@ -291,46 +328,6 @@ class CanvasTemplate:
         self.maximum_dimensions = maximum_dimensions
         self.pad_to_maximum = pad_to_maximum or False
         self.round = rounding.to_json()
-
-    def to_json(self) -> str:
-        data = {
-            'label': self.label,
-            'id': self.id,
-            'target_dimensions': self.target_dimensions.to_json(),
-            'target_anamorphic_squeeze': self.target_anamorphic_squeeze,
-            'fit_source': self.fit_source,
-            'fit_method': self.fit_method,
-            'alignment_method_vertical': self.alignment_method_vertical,
-            'alignment_method_horizontal': self.alignment_method_horizontal,
-            'preserve_from_source_canvas': self.preserve_from_source_canvas,
-            'maximum_dimensions': self.maximum_dimensions.to_json(),
-            'pad_to_maximum': self.pad_to_maximum,
-            'round': self.round
-        }
-
-        return json.dumps(data)
-
-    @staticmethod
-    def from_object(raw: dict):
-        canvas_template = CanvasTemplate(
-            label=raw.get('label'),
-            template_id=raw.get('id'),
-            target_dimensions=Dimensions.from_object(raw.get('target_dimensions')),
-            target_anamorphic_squeeze=raw.get('target_anamorphic_squeeze'),
-            fit_source=raw.get('fir_source'),
-            fit_method=raw.get('fir_method'),
-            alignment_method_vertical=raw.get('alignment_method_vertical'),
-            alignment_method_horizontal=raw.get('alignment_method_horizontal'),
-            preserve_from_source_canvas=raw.get('preserve_from_source_canvas'),
-            maximum_dimensions=Dimensions.from_object(raw.get('maximum_dimensions', {})),
-            pad_to_maximum=raw.get('pad_to_maximum'),
-            rounding=Rounding.from_object(raw.get('round'))
-        )
-
-        return canvas_template
-
-    def __str__(self) -> str:
-        return str(self.to_json())
 
 
 class FDL:
@@ -343,34 +340,28 @@ class FDL:
         self.contexts = []
         self.canvas_templates = []
 
-    def to_json(self) -> str:
+    def to_json(self) -> dict:
         data = self.header.to_json()
         data['framing_intents'] = [fi.to_json() for fi in self.framing_intents]
         data['contexts'] = [ctx.to_json() for ctx in self.contexts]
         data['canvas_templates'] = [template.to_json() for template in self.canvas_templates]
 
-        return json.dumps(data)
+        return data
 
     def __str__(self) -> str:
         return str(self.to_json())
 
     @staticmethod
     def from_object(raw: dict):
-        header = Header(
-            header_uuid=raw.get('uuid'),
-            version=raw.get('version'),
-            fdl_creator=raw.get('fdl_creator'),
-            default_framing_intent=raw.get('default_framing_intent')
-        )
+        header = Header.from_object(raw)
         fdl = FDL(header=header)
 
-        for intent in raw.get('framing_intents', []):
-            fdl.framing_intents.append(FramingIntent.from_object(intent))
+        fdl.framing_intents = [FramingIntent.from_object(item) for item in raw.get('framing_intents', [])]
+        fdl.contexts = [Context.from_object(item) for item in raw.get('contexts', [])]
+        # for context in raw.get('contexts', []):
+        #     fdl.contexts.append(Context.from_object(context))
 
-        for context in raw.get('contexts', []):
-            fdl.contexts.append(Context.from_object(context))
-
-        for canvas_template in raw.get('canvas_templates', []):
-            fdl.canvas_templates.append(CanvasTemplate.from_object(canvas_template))
+        # for canvas_template in raw.get('canvas_templates', []):
+        #     fdl.canvas_templates.append(CanvasTemplate.from_object(canvas_template))
 
         return fdl
