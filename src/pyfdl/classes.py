@@ -11,6 +11,7 @@ class Base(ABC):
     kwarg_map = {}
     object_map = {}
     required = []
+    omit_if_empty = []
 
     @abstractmethod
     def __init__(self, **kwargs):
@@ -20,9 +21,15 @@ class Base(ABC):
         data = {}
         for key in self.__slots__:
             value = getattr(self, key)
+
+            # check if empty value should be omitted
+            if key in self.omit_if_empty and not value:
+                continue
+
+            # Arrays (aka lists) contain other objects
             if isinstance(value, list):
                 value = [item.to_json() for item in value]
-
+            # THis should cover all known objects
             elif isinstance(value, Base):
                 value = value.to_json()
 
@@ -77,6 +84,7 @@ class Header(Base):
     __slots__ = ['uuid', 'version', 'fdl_creator', 'default_framing_intent']
     kwarg_map = {'uuid': '_uuid'}
     required = ['uuid', 'version']
+    omit_if_empty = ['fdl_creator']
 
     def __init__(
             self,
@@ -126,6 +134,7 @@ class FramingDecision(Base):
         'protection_dimensions': Dimensions,
         'protection_anchor_point': Point
     }
+    omit_if_empty = ['protection_dimensions', 'protection_anchor_point']
 
     def __init__(
             self,
@@ -177,6 +186,7 @@ class Canvas(Base):
         'physical_dimensions': Dimensions,
         'framing_decisions': FramingDecision
     }
+    omit_if_empty = ['effective_dimensions', 'effective_anchor_point', 'photosite_dimensions', 'physical_dimensions']
 
     def __init__(
             self,
@@ -277,6 +287,7 @@ class CanvasTemplate(Base):
         'maximum_dimensions': Dimensions,
         'rounding': Rounding
     }
+    omit_if_empty = ['maximum_dimensions', 'pad_to_maximum']
 
     def __init__(
             self,

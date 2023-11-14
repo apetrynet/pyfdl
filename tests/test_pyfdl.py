@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 import pytest
@@ -56,12 +57,10 @@ def test_load_verified_with_schema():
 
     assert isinstance(fdl, pyfdl.FDL)
 
+    with SAMPLE_FDL_FILE.open('rb') as f:
+        raw = json.load(f)
 
-def test_init_empty_header():
-    header = pyfdl.Header()
-
-    assert isinstance(header, pyfdl.Header)
-    assert header.fdl_creator == 'pyfdl'
+    assert raw == fdl.to_json()
 
 
 def test_init_empty_fdl():
