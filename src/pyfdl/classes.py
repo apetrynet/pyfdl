@@ -268,10 +268,10 @@ class CanvasTemplate(Base):
         'preserve_from_source_canvas',
         'maximum_dimensions',
         'pad_to_maximum',
-        'rounding'
+        'round'
     ]
 
-    kwarg_map = {'id': '_id'}
+    kwarg_map = {'id': '_id', 'round': '_round'}
     object_map = {
         'target_dimensions': Dimensions,
         'maximum_dimensions': Dimensions,
@@ -291,7 +291,7 @@ class CanvasTemplate(Base):
             preserve_from_source_canvas: str = None,
             maximum_dimensions: Dimensions = None,
             pad_to_maximum: bool = False,
-            rounding: Rounding = None
+            _round: Rounding = None
     ):
         if not _id:
             raise FDLError('Please provide a required "_id"')
@@ -327,7 +327,7 @@ class CanvasTemplate(Base):
         self.preserve_from_source_canvas = preserve_from_source_canvas or self.PRESERVE_FROM_SOURCE_CANVAS[0]
         self.maximum_dimensions = maximum_dimensions
         self.pad_to_maximum = pad_to_maximum or False
-        self.round = rounding.to_json()
+        self.round = _round
 
 
 class FDL:
@@ -358,10 +358,6 @@ class FDL:
 
         fdl.framing_intents = [FramingIntent.from_object(item) for item in raw.get('framing_intents', [])]
         fdl.contexts = [Context.from_object(item) for item in raw.get('contexts', [])]
-        # for context in raw.get('contexts', []):
-        #     fdl.contexts.append(Context.from_object(context))
-
-        # for canvas_template in raw.get('canvas_templates', []):
-        #     fdl.canvas_templates.append(CanvasTemplate.from_object(canvas_template))
+        fdl.canvas_templates = [CanvasTemplate.from_object(item) for item in raw.get('canvas_templates', [])]
 
         return fdl
