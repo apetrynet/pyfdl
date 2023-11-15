@@ -11,34 +11,53 @@ class Base(ABC):
     kwarg_map = {}
     object_map = {}
     required = []
-    omit_if_empty = []
 
     @abstractmethod
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         pass
 
-    def to_json(self) -> dict:
+    def check_required(self) -> list:
+        missing = []
+        for required_key in self.required:
+            # Check for dependant attributes.
+            # Like "effective_anchor_point" required if "effective_dimensions" is provided
+            if '.' in required_key:
+                attr1, attr2 = required_key.split('.')
+                if getattr(self, attr1) is not None and getattr(self, attr2) is None:
+                    missing.append(attr2)
+
+            elif getattr(self, required_key) is None:
+                missing.append(required_key)
+
+        return missing
+
+    def to_dict(self) -> dict:
         data = {}
         for key in self.__slots__:
             value = getattr(self, key)
 
             # check if empty value should be omitted
-            if key in self.omit_if_empty and not value:
+            if key not in self.required and not value:
                 continue
 
             # Arrays (aka lists) contain other objects
             if isinstance(value, list):
-                value = [item.to_json() for item in value]
-            # THis should cover all known objects
+                value = [item.to_dict() for item in value]
+
+            # This should cover all known objects
             elif isinstance(value, Base):
-                value = value.to_json()
+                value = value.to_dict()
 
             data[key] = value
+
+        missing = self.check_required()
+        if missing:
+            raise FDLError(f'{repr(self)} is missing some required attributes: {missing}')
 
         return data
 
     @classmethod
-    def from_object(cls, raw: dict):
+    def from_dict(cls, raw: dict):
         kwargs = {}
         for key in cls.__slots__:
             # We get the value before we convert the key to a valid name
@@ -51,21 +70,25 @@ class Base(ABC):
 
             if key in cls.object_map:
                 if isinstance(value, list):
-                    value = [cls.object_map[key].from_object(item) for item in value]
+                    value = [cls.object_map[key].from_dict(item) for item in value]
 
                 else:
-                    value = cls.object_map[key].from_object(value)
+                    value = cls.object_map[key].from_dict(value)
 
             kwargs[keyword] = value
 
         return cls(**kwargs)
 
+    def __repr__(self) -> str:
+        return f'"{self.__class__.__name__}"'
+
     def __str__(self) -> str:
-        return str(self.to_json())
+        return str(self.to_dict())
 
 
 class Dimensions(Base):
     __slots__ = ['width', 'height']
+    required = ['width', 'height']
 
     def __init__(self, width: [int, float], height: [int, float]):
         self.width = width
@@ -74,6 +97,7 @@ class Dimensions(Base):
 
 class Point(Base):
     __slots__ = ['x', 'y']
+    required = ['x', 'y']
 
     def __init__(self, x: [int, float], y: [int, float]):
         self.x = x
@@ -84,7 +108,6 @@ class Header(Base):
     __slots__ = ['uuid', 'version', 'fdl_creator', 'default_framing_intent']
     kwarg_map = {'uuid': '_uuid'}
     required = ['uuid', 'version']
-    omit_if_empty = ['fdl_creator']
 
     def __init__(
             self,
@@ -104,13 +127,15 @@ class FramingIntent(Base):
     __slots__ = ['id', 'label', 'aspect_ratio', 'protection']
     kwarg_map = {'id': '_id'}
     object_map = {'aspect_ratio': Dimensions}
+    required = ['id', 'aspect_ratio']
 
-    def __init__(self, label: str = None, _id: str = None, aspect_ratio: Dimensions = None,
-                 protection: float = None):
-
-        if not _id:
-            raise FDLError('Please provide a required "_id"')
-
+    def __init__(
+            self,
+            label: str = None,
+            _id: str = None,
+            aspect_ratio: Dimensions = None,
+            protection: float = None
+    ):
         self.id = _id
         self.label = label or ''
         self.aspect_ratio = aspect_ratio or Dimensions(1, 1)
@@ -134,7 +159,7 @@ class FramingDecision(Base):
         'protection_dimensions': Dimensions,
         'protection_anchor_point': Point
     }
-    omit_if_empty = ['protection_dimensions', 'protection_anchor_point']
+    required = ['id', 'framing_intent_id', 'dimensions', 'anchor_point']
 
     def __init__(
             self,
@@ -146,15 +171,6 @@ class FramingDecision(Base):
             protection_dimensions: Dimensions = None,
             protection_anchor_point: Point = None
     ):
-        if not _id:
-            raise FDLError('Please provide a required "_id"')
-
-        if not dimensions:
-            raise FDLError('Please provide a required "dimensions"')
-
-        if not anchor_point:
-            raise FDLError('Please provide a required "anchor_point"')
-
         self.label = label or ''
         self.id = _id
         self.framing_intent_id = framing_intent_id
@@ -186,7 +202,7 @@ class Canvas(Base):
         'physical_dimensions': Dimensions,
         'framing_decisions': FramingDecision
     }
-    omit_if_empty = ['effective_dimensions', 'effective_anchor_point', 'photosite_dimensions', 'physical_dimensions']
+    required = ['id', 'source_canvas_id', 'dimensions', 'effective_dimensions.effective_anchor_point']
 
     def __init__(
             self,
@@ -201,15 +217,6 @@ class Canvas(Base):
             anamorphic_squeeze: float = None,
             framing_decisions: list = None
     ):
-        if not _id:
-            raise FDLError('Please provide a required "_id"')
-
-        if not dimensions:
-            raise FDLError('Please provide a required "dimensions"')
-
-        if effective_dimensions and not effective_anchor_point:
-            raise FDLError('Please provide a required "effective_anchor_point"')
-
         self.label = label or ''
         self.id = _id
         self.source_canvas_id = source_canvas_id or self.id
@@ -239,12 +246,6 @@ class Rounding(Base):
     VALID_MODES = ('up', 'down', 'round')
 
     def __init__(self, even: str = 'even', mode: str = 'up'):
-        if even not in self.VALID_EVEN:
-            raise FDLError(f'"even" must be one of the following: {self.VALID_EVEN}')
-
-        if mode not in self.VALID_MODES:
-            raise FDLError(f'"mode" must be one of the following: {self.VALID_MODES}')
-
         self.even = even
         self.mode = mode
 
@@ -287,7 +288,7 @@ class CanvasTemplate(Base):
         'maximum_dimensions': Dimensions,
         'rounding': Rounding
     }
-    omit_if_empty = ['maximum_dimensions', 'pad_to_maximum']
+    required = ['id', 'target_dimensions', 'target_anamorphic_squeeze', 'fit_source', 'fit_method']
 
     def __init__(
             self,
@@ -304,29 +305,6 @@ class CanvasTemplate(Base):
             pad_to_maximum: bool = False,
             _round: Rounding = None
     ):
-        if not _id:
-            raise FDLError('Please provide a required "_id"')
-
-        if not target_dimensions:
-            raise FDLError('Please provide a required "target_dimensions"')
-
-        if fit_source and fit_source not in self.FIT_SOURCE:
-            raise FDLError(f'"fit_source" must be one of the following: {self.FIT_SOURCE}')
-
-        if fit_method and fit_method not in self.FIT_METHOD:
-            raise FDLError(f'"fit_method" must be one of the following: {self.FIT_METHOD}')
-
-        if alignment_method_vertical and alignment_method_vertical not in self.ALIGNMENT_VERTICAL:
-            raise FDLError(f'"alignment_method_vertical" must be one of the following: {self.ALIGNMENT_VERTICAL}')
-
-        if alignment_method_horizontal and alignment_method_horizontal not in self.ALIGNMENT_HORIZONTAL:
-            raise FDLError(f'"alignment_method_horizontal" must be one of the following: {self.ALIGNMENT_HORIZONTAL}')
-
-        if preserve_from_source_canvas and preserve_from_source_canvas not in self.PRESERVE_FROM_SOURCE_CANVAS:
-            raise FDLError(
-                f'"preserve_from_source_canvas" must be one of the following: {self.PRESERVE_FROM_SOURCE_CANVAS}'
-            )
-
         self.label = label or ''
         self.id = _id
         self.target_dimensions = target_dimensions
@@ -351,24 +329,23 @@ class FDL:
         self.contexts = []
         self.canvas_templates = []
 
-    def to_json(self) -> dict:
-        data = self.header.to_json()
-        data['framing_intents'] = [fi.to_json() for fi in self.framing_intents]
-        data['contexts'] = [ctx.to_json() for ctx in self.contexts]
-        data['canvas_templates'] = [template.to_json() for template in self.canvas_templates]
+    def to_dict(self) -> dict:
+        data = self.header.to_dict()
+        data['framing_intents'] = [fi.to_dict() for fi in self.framing_intents]
+        data['contexts'] = [ctx.to_dict() for ctx in self.contexts]
+        data['canvas_templates'] = [template.to_dict() for template in self.canvas_templates]
 
         return data
 
     def __str__(self) -> str:
-        return str(self.to_json())
+        return str(self.to_dict())
 
     @staticmethod
     def from_object(raw: dict):
-        header = Header.from_object(raw)
-        fdl = FDL(header=header)
-
-        fdl.framing_intents = [FramingIntent.from_object(item) for item in raw.get('framing_intents', [])]
-        fdl.contexts = [Context.from_object(item) for item in raw.get('contexts', [])]
-        fdl.canvas_templates = [CanvasTemplate.from_object(item) for item in raw.get('canvas_templates', [])]
+        fdl = FDL()
+        fdl.header = Header.from_dict(raw)
+        fdl.framing_intents = [FramingIntent.from_dict(item) for item in raw.get('framing_intents', [])]
+        fdl.contexts = [Context.from_dict(item) for item in raw.get('contexts', [])]
+        fdl.canvas_templates = [CanvasTemplate.from_dict(item) for item in raw.get('canvas_templates', [])]
 
         return fdl

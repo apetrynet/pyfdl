@@ -1,6 +1,5 @@
 import json
 import os
-import sys
 import pytest
 from pathlib import Path
 
@@ -16,16 +15,20 @@ SAMPLE_FDL_FILE = Path(
 )
 
 
-def test_header_instance_from_object(sample_header):
-    header = pyfdl.Header.from_object(sample_header)
+def test_header_instance(sample_header, sample_header_kwargs):
+    # Simulate reading header form fdl file
+    header = pyfdl.Header.from_dict(sample_header)
     assert isinstance(header, pyfdl.Header)
-    assert header.to_json() == sample_header
+    assert header.to_dict() == sample_header
     assert str(header) == str(sample_header)
 
+    # simulate creating one with kwargs
+    header1 = pyfdl.Header(**sample_header_kwargs)
+    assert isinstance(header1, pyfdl.Header)
+    assert header1.to_dict() == header.to_dict()
 
-def test_header_instance():
-    header = pyfdl.Header()
-    assert isinstance(header, pyfdl.Header)
+    # Test empty header
+    assert isinstance(pyfdl.Header(), pyfdl.Header)
 
 
 def test_load_unverified():
@@ -60,7 +63,7 @@ def test_load_verified_with_schema():
     with SAMPLE_FDL_FILE.open('rb') as f:
         raw = json.load(f)
 
-    assert raw == fdl.to_json()
+    assert raw == fdl.to_dict()
 
 
 def test_init_empty_fdl():
