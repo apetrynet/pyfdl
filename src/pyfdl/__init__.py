@@ -5,8 +5,39 @@ import jsonschema
 from typing import IO
 from pathlib import Path
 
-from .classes import *
+from .classes import (
+    FDL,
+    Header,
+    FramingIntent,
+    FramingDecision,
+    Canvas,
+    Context,
+    CanvasTemplate,
+    Dimensions,
+    Point,
+    RoundStrategy,
+    FDL_MAJOR,
+    FDL_MINOR,
+    FDL_VERSION
+)
 from .errors import FDLError
+
+__all__ = [
+    'FDL',
+    'Header',
+    'FramingIntent',
+    'FramingDecision',
+    'Canvas',
+    'Context',
+    'CanvasTemplate',
+    'Dimensions',
+    'Point',
+    'RoundStrategy',
+    'FDL_MAJOR',
+    'FDL_MINOR',
+    'FDL_VERSION',
+    'load'
+]
 
 
 def load_schema(path: Path) -> dict:

@@ -3,7 +3,9 @@ from abc import ABC, abstractmethod
 
 from pyfdl.errors import FDLError
 
-FDL_VERSION = {'major': 1, 'minor': 0}
+FDL_MAJOR = 1
+FDL_MINOR = 0
+FDL_VERSION = {'major': FDL_MAJOR, 'minor': FDL_MINOR}
 
 
 class Base(ABC):
@@ -11,6 +13,7 @@ class Base(ABC):
     kwarg_map = {}
     object_map = {}
     required = []
+    defaults = {}
 
     @abstractmethod
     def __init__(self, *args, **kwargs):
@@ -102,6 +105,18 @@ class Point(Base):
     def __init__(self, x: [int, float], y: [int, float]):
         self.x = x
         self.y = y
+
+
+class RoundStrategy(Base):
+    __slots__ = ['even', 'mode']
+
+    VALID_EVEN = ('even', 'whole')
+    VALID_MODES = ('up', 'down', 'round')
+    defaults = {'even': 'even', 'mode': 'up'}
+
+    def __init__(self, even: str = None, mode: str = None):
+        self.even = even
+        self.mode = mode
 
 
 class Header(Base):
@@ -239,17 +254,6 @@ class Context(Base):
         self.canvases = canvases or []
 
 
-class Rounding(Base):
-    __slots__ = ['even', 'mode']
-
-    VALID_EVEN = ('even', 'whole')
-    VALID_MODES = ('up', 'down', 'round')
-
-    def __init__(self, even: str = 'even', mode: str = 'up'):
-        self.even = even
-        self.mode = mode
-
-
 class CanvasTemplate(Base):
     FIT_SOURCE = (
         'framing_decision.dimensions',
@@ -286,7 +290,7 @@ class CanvasTemplate(Base):
     object_map = {
         'target_dimensions': Dimensions,
         'maximum_dimensions': Dimensions,
-        'rounding': Rounding
+        'rounding': RoundStrategy
     }
     required = ['id', 'target_dimensions', 'target_anamorphic_squeeze', 'fit_source', 'fit_method']
 
@@ -303,7 +307,7 @@ class CanvasTemplate(Base):
             preserve_from_source_canvas: str = None,
             maximum_dimensions: Dimensions = None,
             pad_to_maximum: bool = False,
-            _round: Rounding = None
+            _round: RoundStrategy = None
     ):
         self.label = label or ''
         self.id = _id
