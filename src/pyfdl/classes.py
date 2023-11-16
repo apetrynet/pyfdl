@@ -3,9 +3,9 @@ from abc import ABC, abstractmethod
 
 from pyfdl.errors import FDLError
 
-FDL_MAJOR = 1
-FDL_MINOR = 0
-FDL_VERSION = {'major': FDL_MAJOR, 'minor': FDL_MINOR}
+FDL_SCHEMA_MAJOR = 1
+FDL_SCHEMA_MINOR = 0
+FDL_SCHEMA_VERSION = {'major': FDL_SCHEMA_MAJOR, 'minor': FDL_SCHEMA_MINOR}
 
 
 class Base(ABC):
@@ -18,6 +18,19 @@ class Base(ABC):
     @abstractmethod
     def __init__(self, *args, **kwargs):
         pass
+
+    def apply_defaults(self):
+        """Applies default values, if any, to attributes that are `None`"""
+        for key, value in self.defaults.items():
+            if getattr(self, key) is None:
+                if callable(value):
+                    setattr(self, key, value())
+
+                elif isinstance(value, Base):
+                    setattr(self, key, value.apply_defaults())
+
+                else:
+                    setattr(self, key, value)
 
     def check_required(self) -> list:
         missing = []
@@ -89,20 +102,29 @@ class Base(ABC):
         return str(self.to_dict())
 
 
-class Dimensions(Base):
+class DimensionsFloat(Base):
     __slots__ = ['width', 'height']
     required = ['width', 'height']
 
-    def __init__(self, width: [int, float], height: [int, float]):
+    def __init__(self, width: float, height: float):
         self.width = width
         self.height = height
 
 
-class Point(Base):
+class DimensionsInt(Base):
+    __slots__ = ['width', 'height']
+    required = ['width', 'height']
+
+    def __init__(self, width: int, height: int):
+        self.width = width
+        self.height = height
+
+
+class PointFloat(Base):
     __slots__ = ['x', 'y']
     required = ['x', 'y']
 
-    def __init__(self, x: [int, float], y: [int, float]):
+    def __init__(self, x: float, y: float):
         self.x = x
         self.y = y
 
@@ -123,16 +145,17 @@ class Header(Base):
     __slots__ = ['uuid', 'version', 'fdl_creator', 'default_framing_intent']
     kwarg_map = {'uuid': '_uuid'}
     required = ['uuid', 'version']
+    defaults = {'uuid': uuid.uuid4, 'fdl_creator': 'PyFDL', 'version': FDL_SCHEMA_VERSION}
 
     def __init__(
             self,
-            _uuid: str = str(uuid.uuid4()),
+            _uuid: str = None,
             version: dict = None,
-            fdl_creator: str = 'pyfdl',
-            default_framing_intent: str = ''
+            fdl_creator: str = None,
+            default_framing_intent: str = None
     ):
         self.uuid = _uuid
-        self.version = version or FDL_VERSION
+        self.version = version or FDL_SCHEMA_VERSION
         self.fdl_creator = fdl_creator
         self.default_framing_intent = default_framing_intent
 
@@ -141,19 +164,19 @@ class FramingIntent(Base):
 
     __slots__ = ['id', 'label', 'aspect_ratio', 'protection']
     kwarg_map = {'id': '_id'}
-    object_map = {'aspect_ratio': Dimensions}
+    object_map = {'aspect_ratio': DimensionsFloat}
     required = ['id', 'aspect_ratio']
 
     def __init__(
             self,
             label: str = None,
             _id: str = None,
-            aspect_ratio: Dimensions = None,
+            aspect_ratio: DimensionsFloat = None,
             protection: float = None
     ):
         self.id = _id
         self.label = label or ''
-        self.aspect_ratio = aspect_ratio or Dimensions(1, 1)
+        self.aspect_ratio = aspect_ratio
         self.protection = protection or 0.0
 
 
@@ -169,10 +192,10 @@ class FramingDecision(Base):
     ]
     kwarg_map = {'id': '_id'}
     object_map = {
-        'dimensions': Dimensions,
-        'anchor_point': Point,
-        'protection_dimensions': Dimensions,
-        'protection_anchor_point': Point
+        'dimensions': DimensionsFloat,
+        'anchor_point': PointFloat,
+        'protection_dimensions': DimensionsFloat,
+        'protection_anchor_point': PointFloat
     }
     required = ['id', 'framing_intent_id', 'dimensions', 'anchor_point']
 
@@ -181,10 +204,10 @@ class FramingDecision(Base):
             label: str = None,
             _id: str = None,
             framing_intent_id: str = None,
-            dimensions: Dimensions = None,
-            anchor_point: Point = None,
-            protection_dimensions: Dimensions = None,
-            protection_anchor_point: Point = None
+            dimensions: DimensionsFloat = None,
+            anchor_point: PointFloat = None,
+            protection_dimensions: DimensionsFloat = None,
+            protection_anchor_point: PointFloat = None
     ):
         self.label = label or ''
         self.id = _id
@@ -210,11 +233,11 @@ class Canvas(Base):
     ]
     kwarg_map = {'id': '_id'}
     object_map = {
-        'dimensions': Dimensions,
-        'effective_dimensions': Dimensions,
-        'effective_anchor_point': Point,
-        'photosite_dimensions': Dimensions,
-        'physical_dimensions': Dimensions,
+        'dimensions': DimensionsInt,
+        'effective_dimensions': DimensionsInt,
+        'effective_anchor_point': PointFloat,
+        'photosite_dimensions': DimensionsInt,
+        'physical_dimensions': DimensionsFloat,
         'framing_decisions': FramingDecision
     }
     required = ['id', 'source_canvas_id', 'dimensions', 'effective_dimensions.effective_anchor_point']
@@ -224,11 +247,11 @@ class Canvas(Base):
             label: str = None,
             _id: str = None,
             source_canvas_id: str = None,
-            dimensions: Dimensions = None,
-            effective_dimensions: Dimensions = None,
-            effective_anchor_point: Point = None,
-            photosite_dimensions: Dimensions = None,
-            physical_dimensions: Dimensions = None,
+            dimensions: DimensionsInt = None,
+            effective_dimensions: DimensionsInt = None,
+            effective_anchor_point: PointFloat = None,
+            photosite_dimensions: DimensionsInt = None,
+            physical_dimensions: DimensionsFloat = None,
             anamorphic_squeeze: float = None,
             framing_decisions: list = None
     ):
@@ -288,8 +311,8 @@ class CanvasTemplate(Base):
 
     kwarg_map = {'id': '_id', 'round': '_round'}
     object_map = {
-        'target_dimensions': Dimensions,
-        'maximum_dimensions': Dimensions,
+        'target_dimensions': DimensionsInt,
+        'maximum_dimensions': DimensionsInt,
         'rounding': RoundStrategy
     }
     required = ['id', 'target_dimensions', 'target_anamorphic_squeeze', 'fit_source', 'fit_method']
@@ -298,14 +321,14 @@ class CanvasTemplate(Base):
             self,
             label: str = None,
             _id: str = None,
-            target_dimensions: Dimensions = None,
+            target_dimensions: DimensionsInt = None,
             target_anamorphic_squeeze: float = None,
             fit_source: str = None,
             fit_method: str = None,
             alignment_method_vertical: str = None,
             alignment_method_horizontal: str = None,
             preserve_from_source_canvas: str = None,
-            maximum_dimensions: Dimensions = None,
+            maximum_dimensions: DimensionsInt = None,
             pad_to_maximum: bool = False,
             _round: RoundStrategy = None
     ):

@@ -13,12 +13,13 @@ from .classes import (
     Canvas,
     Context,
     CanvasTemplate,
-    Dimensions,
-    Point,
+    DimensionsFloat,
+    DimensionsInt,
+    PointFloat,
     RoundStrategy,
-    FDL_MAJOR,
-    FDL_MINOR,
-    FDL_VERSION
+    FDL_SCHEMA_MAJOR,
+    FDL_SCHEMA_MINOR,
+    FDL_SCHEMA_VERSION
 )
 from .errors import FDLError
 
@@ -30,15 +31,22 @@ __all__ = [
     'Canvas',
     'Context',
     'CanvasTemplate',
-    'Dimensions',
-    'Point',
+    'DimensionsFloat',
+    'DimensionsInt',
+    'PointFloat',
     'RoundStrategy',
-    'FDL_MAJOR',
-    'FDL_MINOR',
-    'FDL_VERSION',
+    'FDL_SCHEMA_MAJOR',
+    'FDL_SCHEMA_MINOR',
+    'FDL_SCHEMA_VERSION',
     'load'
 ]
 
+__version__ = "0.1.0"
+FDL_SCHEMA_FILE = Path(__file__).parent.joinpath(
+    f'schema',
+    f'v{FDL_SCHEMA_MAJOR}.{FDL_SCHEMA_MINOR}',
+    f'Python_FDL_Checker'
+)
 
 def load_schema(path: Path) -> dict:
     with path.open('rb') as fp:
@@ -48,12 +56,14 @@ def load_schema(path: Path) -> dict:
 
 
 def load(fp: IO, validate: bool = False) -> FDL:
-    raw = json.load(fp)
-    if validate:
-        if not os.getenv('FDL_SCHEMA', None):
-            raise FDLError("No FDL_SCHEMA environment variable set. Please provide a path to the current FDL schema.")
+    raw = fp.read()
+    return loads(raw, validate=validate)
 
-        schema = load_schema(Path(os.getenv('FDL_SCHEMA')))
+
+def loads(string: str, validate: bool = False) -> FDL:
+    raw = json.loads(string)
+    if validate:
+        schema = load_schema(FDL_SCHEMA_FILE)
         jsonschema.validate(raw, schema)
 
     fdl = FDL.from_object(raw)

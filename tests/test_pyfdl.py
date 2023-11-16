@@ -6,7 +6,6 @@ from pathlib import Path
 import pyfdl
 from conftest import sample_header
 
-FDL_SCHEMA_FILE = Path("../fdl/FDL_Validation_Tooling/Python_FDL_Checker")
 SAMPLE_FDL_DIR = Path("/home/daniel/Code/fdl/Test_Scenarios-20231110T150107Z-001")
 SAMPLE_FDL_FILE = Path(
     SAMPLE_FDL_DIR,
@@ -22,13 +21,30 @@ def test_header_instance(sample_header, sample_header_kwargs):
     assert header.to_dict() == sample_header
     assert str(header) == str(sample_header)
 
-    # simulate creating one with kwargs
+    # Simulate creating one with kwargs
     header1 = pyfdl.Header(**sample_header_kwargs)
     assert isinstance(header1, pyfdl.Header)
     assert header1.to_dict() == header.to_dict()
 
     # Test empty header
-    assert isinstance(pyfdl.Header(), pyfdl.Header)
+    header2 = pyfdl.Header()
+    assert isinstance(header2, pyfdl.Header)
+
+    # Test applying defaults
+    assert header2.uuid is None
+    header2.apply_defaults()
+    assert header2.uuid is not None
+    assert header2.version == pyfdl.FDL_SCHEMA_VERSION
+
+
+def test_rounding_strategy_default_values():
+    rs = pyfdl.RoundStrategy()
+    assert rs.even is None
+    assert rs.mode is None
+
+    rs.apply_defaults()
+    assert rs.even is not None
+    assert rs.mode is not None
 
 
 def test_load_unverified():
@@ -40,21 +56,7 @@ def test_load_unverified():
     assert fdl.header.uuid != ""
 
 
-def test_load_verified_no_schema():
-    if 'FDL_SCHEMA' in os.environ:
-        del os.environ['FDL_SCHEMA']
-
-    with pytest.raises(pyfdl.errors.FDLError) as err:
-        with SAMPLE_FDL_FILE.open('rb') as fdl_file:
-            pyfdl.load(fdl_file, validate=True)
-
-    assert err.type == pyfdl.errors.FDLError
-    assert str(err.value) == "No FDL_SCHEMA environment variable set. Please provide a path to the current FDL schema."
-
-
-def test_load_verified_with_schema():
-    os.environ['FDL_SCHEMA'] = FDL_SCHEMA_FILE.as_posix()
-
+def test_load_verified():
     with SAMPLE_FDL_FILE.open('rb') as fdl_file:
         fdl = pyfdl.load(fdl_file, validate=True)
 
@@ -64,6 +66,14 @@ def test_load_verified_with_schema():
         raw = json.load(f)
 
     assert raw == fdl.to_dict()
+
+
+def test_loads():
+    with SAMPLE_FDL_FILE.open('rb') as fdl_file:
+        raw = fdl_file.read()
+
+    fdl = pyfdl.loads(raw)
+    assert fdl.to_dict() == json.loads(raw)
 
 
 def test_init_empty_fdl():
