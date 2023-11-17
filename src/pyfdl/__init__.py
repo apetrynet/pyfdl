@@ -1,4 +1,3 @@
-import os
 import json
 import jsonschema
 
@@ -42,11 +41,13 @@ __all__ = [
 ]
 
 __version__ = "0.1.0"
+
 FDL_SCHEMA_FILE = Path(__file__).parent.joinpath(
     f'schema',
     f'v{FDL_SCHEMA_MAJOR}.{FDL_SCHEMA_MINOR}',
     f'Python_FDL_Checker'
 )
+
 
 def load_schema(path: Path) -> dict:
     with path.open('rb') as fp:

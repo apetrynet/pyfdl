@@ -9,7 +9,7 @@ FDL_SCHEMA_VERSION = {'major': FDL_SCHEMA_MAJOR, 'minor': FDL_SCHEMA_MINOR}
 
 
 class Base(ABC):
-    __slots__ = []
+    attributes = []
     kwarg_map = {}
     object_map = {}
     required = []
@@ -49,7 +49,7 @@ class Base(ABC):
 
     def to_dict(self) -> dict:
         data = {}
-        for key in self.__slots__:
+        for key in self.attributes:
             value = getattr(self, key)
 
             # check if empty value should be omitted
@@ -75,7 +75,7 @@ class Base(ABC):
     @classmethod
     def from_dict(cls, raw: dict):
         kwargs = {}
-        for key in cls.__slots__:
+        for key in cls.attributes:
             # We get the value before we convert the key to a valid name
             value = raw.get(key)
             if value is None:
@@ -103,7 +103,7 @@ class Base(ABC):
 
 
 class DimensionsFloat(Base):
-    __slots__ = ['width', 'height']
+    attributes = ['width', 'height']
     required = ['width', 'height']
 
     def __init__(self, width: float, height: float):
@@ -112,7 +112,7 @@ class DimensionsFloat(Base):
 
 
 class DimensionsInt(Base):
-    __slots__ = ['width', 'height']
+    attributes = ['width', 'height']
     required = ['width', 'height']
 
     def __init__(self, width: int, height: int):
@@ -121,7 +121,7 @@ class DimensionsInt(Base):
 
 
 class PointFloat(Base):
-    __slots__ = ['x', 'y']
+    attributes = ['x', 'y']
     required = ['x', 'y']
 
     def __init__(self, x: float, y: float):
@@ -130,7 +130,7 @@ class PointFloat(Base):
 
 
 class RoundStrategy(Base):
-    __slots__ = ['even', 'mode']
+    attributes = ['even', 'mode']
 
     VALID_EVEN = ('even', 'whole')
     VALID_MODES = ('up', 'down', 'round')
@@ -142,7 +142,7 @@ class RoundStrategy(Base):
 
 
 class Header(Base):
-    __slots__ = ['uuid', 'version', 'fdl_creator', 'default_framing_intent']
+    attributes = ['uuid', 'version', 'fdl_creator', 'default_framing_intent']
     kwarg_map = {'uuid': '_uuid'}
     required = ['uuid', 'version']
     defaults = {'uuid': uuid.uuid4, 'fdl_creator': 'PyFDL', 'version': FDL_SCHEMA_VERSION}
@@ -155,17 +155,18 @@ class Header(Base):
             default_framing_intent: str = None
     ):
         self.uuid = _uuid
-        self.version = version or FDL_SCHEMA_VERSION
+        self.version = version
         self.fdl_creator = fdl_creator
         self.default_framing_intent = default_framing_intent
 
 
 class FramingIntent(Base):
 
-    __slots__ = ['id', 'label', 'aspect_ratio', 'protection']
+    attributes = ['id', 'label', 'aspect_ratio', 'protection']
     kwarg_map = {'id': '_id'}
     object_map = {'aspect_ratio': DimensionsFloat}
     required = ['id', 'aspect_ratio']
+    defaults = {'protection': 0}
 
     def __init__(
             self,
@@ -175,13 +176,13 @@ class FramingIntent(Base):
             protection: float = None
     ):
         self.id = _id
-        self.label = label or ''
+        self.label = label
         self.aspect_ratio = aspect_ratio
-        self.protection = protection or 0.0
+        self.protection = protection
 
 
 class FramingDecision(Base):
-    __slots__ = [
+    attributes = [
         'label',
         'id',
         'framing_intent_id',
@@ -219,7 +220,7 @@ class FramingDecision(Base):
 
 
 class Canvas(Base):
-    __slots__ = [
+    attributes = [
         'label',
         'id',
         'source_canvas_id',
@@ -241,6 +242,7 @@ class Canvas(Base):
         'framing_decisions': FramingDecision
     }
     required = ['id', 'source_canvas_id', 'dimensions', 'effective_dimensions.effective_anchor_point']
+    defaults = {'anamorphic_squeeze': 1}
 
     def __init__(
             self,
@@ -255,7 +257,7 @@ class Canvas(Base):
             anamorphic_squeeze: float = None,
             framing_decisions: list = None
     ):
-        self.label = label or ''
+        self.label = label
         self.id = _id
         self.source_canvas_id = source_canvas_id or self.id
         self.dimensions = dimensions
@@ -263,12 +265,12 @@ class Canvas(Base):
         self.effective_anchor_point = effective_anchor_point
         self.photosite_dimensions = photosite_dimensions
         self.physical_dimensions = physical_dimensions
-        self.anamorphic_squeeze = anamorphic_squeeze or 1.0
+        self.anamorphic_squeeze = anamorphic_squeeze
         self.framing_decisions = framing_decisions or []
 
 
 class Context(Base):
-    __slots__ = ['label', 'context_creator', 'canvases']
+    attributes = ['label', 'context_creator', 'canvases']
     object_map = {'canvases': Canvas}
 
     def __init__(self, label: str = None, context_creator: str = None, canvases: list = None):
@@ -278,23 +280,7 @@ class Context(Base):
 
 
 class CanvasTemplate(Base):
-    FIT_SOURCE = (
-        'framing_decision.dimensions',
-        'framing_decision.protection_dimensions',
-        'canvas.dimensions',
-        'canvas.effective_dimensions'
-    )
-    FIT_METHOD = ('width', 'height', 'fit_all', 'fill')
-    ALIGNMENT_VERTICAL = ('center', 'top', 'bottom')
-    ALIGNMENT_HORIZONTAL = ('center', 'left', 'right')
-    PRESERVE_FROM_SOURCE_CANVAS = (
-        'none',
-        'framing_decision.dimensions',
-        'framing_decision.protection_dimensions',
-        'canvas.dimensions',
-        'canvas.effective_dimensions'
-    )
-    __slots__ = [
+    attributes = [
         'label',
         'id',
         'target_dimensions',
@@ -316,6 +302,14 @@ class CanvasTemplate(Base):
         'rounding': RoundStrategy
     }
     required = ['id', 'target_dimensions', 'target_anamorphic_squeeze', 'fit_source', 'fit_method']
+    defaults = {
+        'target_anamorphic_squeeze': 1,
+        'fit_source': 'framing_decision.dimensions',
+        'alignment_method_vertical': 'center',
+        'alignment_method_horizontal': 'center',
+        'preserve_from_source_canvas': 'none',
+        'pad_to_maximum': False
+    }
 
     def __init__(
             self,
@@ -332,18 +326,104 @@ class CanvasTemplate(Base):
             pad_to_maximum: bool = False,
             _round: RoundStrategy = None
     ):
-        self.label = label or ''
+        self.label = label
         self.id = _id
         self.target_dimensions = target_dimensions
-        self.target_anamorphic_squeeze = target_anamorphic_squeeze or 1.0
-        self.fit_source = fit_source or self.FIT_SOURCE[0]
-        self.fit_method = fit_method or self.FIT_METHOD[0]
-        self.alignment_method_vertical = alignment_method_vertical or self.ALIGNMENT_VERTICAL[0]
-        self.alignment_method_horizontal = alignment_method_horizontal or self.ALIGNMENT_HORIZONTAL[0]
-        self.preserve_from_source_canvas = preserve_from_source_canvas or self.PRESERVE_FROM_SOURCE_CANVAS[0]
+        self.target_anamorphic_squeeze = target_anamorphic_squeeze
+        self.fit_source = fit_source
+        self.fit_method = fit_method
+        self.alignment_method_vertical = alignment_method_vertical
+        self.alignment_method_horizontal = alignment_method_horizontal
+        self.preserve_from_source_canvas = preserve_from_source_canvas
         self.maximum_dimensions = maximum_dimensions
-        self.pad_to_maximum = pad_to_maximum or False
+        self.pad_to_maximum = pad_to_maximum
         self.round = _round
+
+    @property
+    def fit_source(self) -> str:
+        return self._fit_source
+
+    @fit_source.setter
+    def fit_source(self, value: str):
+        valid_options = (
+            'framing_decision.dimensions',
+            'framing_decision.protection_dimensions',
+            'canvas.dimensions',
+            'canvas.effective_dimensions'
+        )
+        if value is not None and value not in valid_options:
+            raise FDLError(
+                f'"{value}" is not a valid option for "fit_source".\n'
+                f'Please use one of the following: {valid_options}'
+            )
+
+        self._fit_source = value
+
+    @property
+    def fit_method(self) -> str:
+        return self._fit_method
+
+    @fit_method.setter
+    def fit_method(self, value: str):
+        valid_options = ('width', 'height', 'fit_all', 'fill')
+        if value is not None and value not in valid_options:
+            raise FDLError(
+                f'"{value}" is not a valid option for "fit_method".\n'
+                f'Please use one of the following: {valid_options}'
+            )
+
+        self._fit_method = value
+
+    @property
+    def alignment_method_vertical(self) -> str:
+        return self._alignment_method_vertical
+
+    @alignment_method_vertical.setter
+    def alignment_method_vertical(self, value):
+        valid_options = ('center', 'top', 'bottom')
+        if value is not None and value not in valid_options:
+            raise FDLError(
+                f'"{value}" is not a valid option for "alignment_method_vertical".\n'
+                f'Please use one of the following: {valid_options}'
+            )
+
+        self._alignment_method_vertical = value
+
+    @property
+    def alignment_method_horizontal(self) -> str:
+        return self._alignment_method_horizontal
+
+    @alignment_method_horizontal.setter
+    def alignment_method_horizontal(self, value):
+        valid_options = ('center', 'left', 'right')
+        if value is not None and value not in valid_options:
+            raise FDLError(
+                f'"{value}" is not a valid option for "alignment_method_horizontal".\n'
+                f'Please use one of the following: {valid_options}'
+            )
+
+        self._alignment_method_horizontal = value
+
+    @property
+    def preserve_from_source_canvas(self) -> str:
+        return self._preserve_from_source_canvas
+
+    @preserve_from_source_canvas.setter
+    def preserve_from_source_canvas(self, value):
+        valid_options = (
+            "none",
+            "framing_decision.dimensions",
+            "framing_decision.protection_dimensions",
+            "canvas.dimensions",
+            "canvas.effective_dimensions"
+        )
+        if value is not None and value not in valid_options:
+            raise FDLError(
+                f'"{value}" is not a valid option for "preserve_from_source_canvas".\n'
+                f'Please use one of the following: {valid_options}'
+            )
+
+        self._preserve_from_source_canvas = value
 
 
 class FDL:
