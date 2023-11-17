@@ -4,14 +4,7 @@ import jsonschema
 from typing import IO
 from pathlib import Path
 
-from .classes import (
-    FDL,
-    Header,
-    FramingIntent,
-    FramingDecision,
-    Canvas,
-    Context,
-    CanvasTemplate,
+from .base import (
     DimensionsFloat,
     DimensionsInt,
     PointFloat,
@@ -20,16 +13,16 @@ from .classes import (
     FDL_SCHEMA_MINOR,
     FDL_SCHEMA_VERSION
 )
+from .header import Header
+from .fraaming_intent import FramingIntent
+from .framing_dexision import FramingDecision
+from .canvas import Canvas
+from .context import Context
+from .canvas_template import CanvasTemplate
+from .fdl import FDL
 from .errors import FDLError
 
 __all__ = [
-    'FDL',
-    'Header',
-    'FramingIntent',
-    'FramingDecision',
-    'Canvas',
-    'Context',
-    'CanvasTemplate',
     'DimensionsFloat',
     'DimensionsInt',
     'PointFloat',
