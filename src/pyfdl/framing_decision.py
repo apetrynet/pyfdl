@@ -1,5 +1,4 @@
-from pyfdl import DimensionsFloat, PointFloat
-from pyfdl.base import Base
+from pyfdl import Base, DimensionsFloat, Point
 
 
 class FramingDecision(Base):
@@ -15,9 +14,9 @@ class FramingDecision(Base):
     kwarg_map = {'id': '_id'}
     object_map = {
         'dimensions': DimensionsFloat,
-        'anchor_point': PointFloat,
+        'anchor_point': Point,
         'protection_dimensions': DimensionsFloat,
-        'protection_anchor_point': PointFloat
+        'protection_anchor_point': Point
     }
     required = ['id', 'framing_intent_id', 'dimensions', 'anchor_point']
 
@@ -27,11 +26,11 @@ class FramingDecision(Base):
             _id: str = None,
             framing_intent_id: str = None,
             dimensions: DimensionsFloat = None,
-            anchor_point: PointFloat = None,
+            anchor_point: Point = None,
             protection_dimensions: DimensionsFloat = None,
-            protection_anchor_point: PointFloat = None
+            protection_anchor_point: Point = None
     ):
-        self.label = label or ''
+        self.label = label
         self.id = _id
         self.framing_intent_id = framing_intent_id
         self.dimensions = dimensions

@@ -1,12 +1,11 @@
-from pyfdl import DimensionsFloat
-from pyfdl.base import Base
+from pyfdl import Base, DimensionsInt
 
 
 class FramingIntent(Base):
 
     attributes = ['id', 'label', 'aspect_ratio', 'protection']
     kwarg_map = {'id': '_id'}
-    object_map = {'aspect_ratio': DimensionsFloat}
+    object_map = {'aspect_ratio': DimensionsInt}
     required = ['id', 'aspect_ratio']
     defaults = {'protection': 0}
 
@@ -14,7 +13,7 @@ class FramingIntent(Base):
             self,
             label: str = None,
             _id: str = None,
-            aspect_ratio: DimensionsFloat = None,
+            aspect_ratio: DimensionsInt = None,
             protection: float = None
     ):
         self.id = _id

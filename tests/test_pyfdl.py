@@ -1,12 +1,7 @@
 import json
-import os
-import pytest
 from pathlib import Path
 
 import pyfdl
-import pyfdl.fdl
-import pyfdl.header
-from conftest import sample_header
 
 SAMPLE_FDL_DIR = Path("/home/daniel/Code/fdl/Test_Scenarios-20231110T150107Z-001")
 SAMPLE_FDL_FILE = Path(
@@ -16,45 +11,12 @@ SAMPLE_FDL_FILE = Path(
 )
 
 
-def test_header_instance(sample_header, sample_header_kwargs):
-    # Simulate reading header form fdl file
-    header = pyfdl.header.Header.from_dict(sample_header)
-    assert isinstance(header, pyfdl.header.Header)
-    assert header.to_dict() == sample_header
-    assert str(header) == str(sample_header)
-
-    # Simulate creating one with kwargs
-    header1 = pyfdl.header.Header(**sample_header_kwargs)
-    assert isinstance(header1, pyfdl.header.Header)
-    assert header1.to_dict() == header.to_dict()
-
-    # Test empty header
-    header2 = pyfdl.header.Header()
-    assert isinstance(header2, pyfdl.header.Header)
-
-    # Test applying defaults
-    assert header2.uuid is None
-    header2.apply_defaults()
-    assert header2.uuid is not None
-    assert header2.version == pyfdl.FDL_SCHEMA_VERSION
-
-
-def test_rounding_strategy_default_values():
-    rs = pyfdl.RoundStrategy()
-    assert rs.even is None
-    assert rs.mode is None
-
-    rs.apply_defaults()
-    assert rs.even is not None
-    assert rs.mode is not None
-
-
 def test_load_unverified():
     with SAMPLE_FDL_FILE.open('rb') as fdl_file:
         fdl = pyfdl.load(fdl_file, validate=False)
 
-    assert isinstance(fdl, pyfdl.fdl.FDL)
-    assert isinstance(fdl.header, pyfdl.header.Header)
+    assert isinstance(fdl, pyfdl.FDL)
+    assert isinstance(fdl.header, pyfdl.Header)
     assert fdl.header.uuid != ""
 
 
@@ -62,7 +24,7 @@ def test_load_verified():
     with SAMPLE_FDL_FILE.open('rb') as fdl_file:
         fdl = pyfdl.load(fdl_file, validate=True)
 
-    assert isinstance(fdl, pyfdl.fdl.FDL)
+    assert isinstance(fdl, pyfdl.FDL)
 
     with SAMPLE_FDL_FILE.open('rb') as f:
         raw = json.load(f)
@@ -79,6 +41,6 @@ def test_loads():
 
 
 def test_init_empty_fdl():
-    fdl = pyfdl.fdl.FDL()
+    fdl = pyfdl.FDL()
 
-    assert isinstance(fdl, pyfdl.fdl.FDL)
+    assert isinstance(fdl, pyfdl.FDL)

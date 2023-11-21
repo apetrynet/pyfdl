@@ -1,5 +1,4 @@
-from pyfdl import DimensionsInt, PointFloat, DimensionsFloat, FramingDecision
-from pyfdl.base import Base
+from pyfdl import Base, DimensionsInt, Point, DimensionsFloat, FramingDecision
 
 
 class Canvas(Base):
@@ -19,13 +18,13 @@ class Canvas(Base):
     object_map = {
         'dimensions': DimensionsInt,
         'effective_dimensions': DimensionsInt,
-        'effective_anchor_point': PointFloat,
+        'effective_anchor_point': Point,
         'photosite_dimensions': DimensionsInt,
         'physical_dimensions': DimensionsFloat,
         'framing_decisions': FramingDecision
     }
     required = ['id', 'source_canvas_id', 'dimensions', 'effective_dimensions.effective_anchor_point']
-    defaults = {'anamorphic_squeeze': 1}
+    defaults = {'source_canvas_id': 'self.id', 'anamorphic_squeeze': 1}
 
     def __init__(
             self,
@@ -34,15 +33,15 @@ class Canvas(Base):
             source_canvas_id: str = None,
             dimensions: DimensionsInt = None,
             effective_dimensions: DimensionsInt = None,
-            effective_anchor_point: PointFloat = None,
+            effective_anchor_point: Point = None,
             photosite_dimensions: DimensionsInt = None,
             physical_dimensions: DimensionsFloat = None,
             anamorphic_squeeze: float = None,
-            framing_decisions: list = None
+            framing_decisions: list[FramingDecision] = None
     ):
         self.label = label
         self.id = _id
-        self.source_canvas_id = source_canvas_id or self.id
+        self.source_canvas_id = source_canvas_id
         self.dimensions = dimensions
         self.effective_dimensions = effective_dimensions
         self.effective_anchor_point = effective_anchor_point

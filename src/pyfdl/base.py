@@ -8,10 +8,15 @@ FDL_SCHEMA_VERSION = {'major': FDL_SCHEMA_MAJOR, 'minor': FDL_SCHEMA_MINOR}
 
 
 class Base(ABC):
+    # Holds a list of known attributes
     attributes = []
+    # Maps attribute names that clash with reserved builtin functions to safe alternatives (id -> _id)
     kwarg_map = {}
+    # Map keys to custom classes
     object_map = {}
+    # List of required attributes
     required = []
+    # Default values for attributes
     defaults = {}
 
     @abstractmethod
@@ -22,12 +27,16 @@ class Base(ABC):
         """Applies default values, if any, to attributes that are `None`"""
         for key, value in self.defaults.items():
             if getattr(self, key) is None:
+                # value is a function
                 if callable(value):
                     setattr(self, key, value())
-
+                # value is an instance of PyFDL a class
                 elif isinstance(value, Base):
                     setattr(self, key, value.apply_defaults())
-
+                # Value is an attribute of this instance
+                elif 'self.' in value:
+                    setattr(self, key, getattr(self, value.strip('self.')))
+                # Value is whatever
                 else:
                     setattr(self, key, value)
 
@@ -53,7 +62,9 @@ class Base(ABC):
 
             # check if empty value should be omitted
             if key not in self.required and not value:
-                continue
+                # Keys with arrays as values should pass (for now?)
+                if not isinstance(value, list):
+                    continue
 
             # Arrays (aka lists) contain other objects
             if isinstance(value, list):
@@ -115,11 +126,11 @@ class DimensionsInt(Base):
     required = ['width', 'height']
 
     def __init__(self, width: int, height: int):
-        self.width = width
-        self.height = height
+        self.width = width.__int__()
+        self.height = height.__int__()
 
 
-class PointFloat(Base):
+class Point(Base):
     attributes = ['x', 'y']
     required = ['x', 'y']
 
@@ -130,11 +141,39 @@ class PointFloat(Base):
 
 class RoundStrategy(Base):
     attributes = ['even', 'mode']
-
-    VALID_EVEN = ('even', 'whole')
-    VALID_MODES = ('up', 'down', 'round')
+    required = ['even', 'mode']
     defaults = {'even': 'even', 'mode': 'up'}
 
     def __init__(self, even: str = None, mode: str = None):
         self.even = even
         self.mode = mode
+
+    @property
+    def even(self):
+        return self._even
+
+    @even.setter
+    def even(self, value):
+        valid_options = ('even', 'whole')
+        if value is not None and value not in valid_options:
+            raise FDLError(
+                f'"{value}" is not a valid option for "even".\n'
+                f'Please use one of the following: {valid_options}'
+            )
+
+        self._even = value
+
+    @property
+    def mode(self):
+        return self._mode
+
+    @mode.setter
+    def mode(self, value):
+        valid_options = ('up', 'down', 'round')
+        if value is not None and value not in valid_options:
+            raise FDLError(
+                f'"{value}" is not a valid option for "mode".\n'
+                f'Please use one of the following: {valid_options}'
+            )
+
+        self._mode = value

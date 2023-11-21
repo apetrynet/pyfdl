@@ -1,7 +1,6 @@
 import uuid
 
-from pyfdl import FDL_SCHEMA_VERSION
-from pyfdl.base import Base
+from pyfdl import FDL_SCHEMA_VERSION, Base
 
 
 class Header(Base):

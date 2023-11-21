@@ -5,9 +5,10 @@ from typing import IO
 from pathlib import Path
 
 from .base import (
+    Base,
     DimensionsFloat,
     DimensionsInt,
-    PointFloat,
+    Point,
     RoundStrategy,
     FDL_SCHEMA_MAJOR,
     FDL_SCHEMA_MINOR,
@@ -15,7 +16,7 @@ from .base import (
 )
 from .header import Header
 from .fraaming_intent import FramingIntent
-from .framing_dexision import FramingDecision
+from .framing_decision import FramingDecision
 from .canvas import Canvas
 from .context import Context
 from .canvas_template import CanvasTemplate
@@ -23,14 +24,24 @@ from .fdl import FDL
 from .errors import FDLError
 
 __all__ = [
+    'Base',
+    'Canvas',
+    'CanvasTemplate',
+    'Context',
     'DimensionsFloat',
     'DimensionsInt',
-    'PointFloat',
-    'RoundStrategy',
+    'FDL',
+    'FDLError',
     'FDL_SCHEMA_MAJOR',
     'FDL_SCHEMA_MINOR',
     'FDL_SCHEMA_VERSION',
-    'load'
+    'FramingDecision',
+    'FramingIntent',
+    'Header',
+    'load',
+    'loads',
+    'Point',
+    'RoundStrategy'
 ]
 
 __version__ = "0.1.0"

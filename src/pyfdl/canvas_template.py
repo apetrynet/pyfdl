@@ -1,4 +1,5 @@
-from pyfdl.base import Base, DimensionsInt, RoundStrategy, FDLError
+from pyfdl import Base, DimensionsInt, RoundStrategy
+from pyfdl.errors import FDLError
 
 
 class CanvasTemplate(Base):
