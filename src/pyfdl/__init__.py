@@ -1,8 +1,6 @@
 import json
-import jsonschema
 
 from typing import IO
-from pathlib import Path
 
 from .base import (
     Base,
@@ -46,31 +44,27 @@ __all__ = [
 
 __version__ = "0.1.0"
 
-FDL_SCHEMA_FILE = Path(__file__).parent.joinpath(
-    f'schema',
-    f'v{FDL_SCHEMA_MAJOR}.{FDL_SCHEMA_MINOR}',
-    f'Python_FDL_Checker'
-)
 
-
-def load_schema(path: Path) -> dict:
-    with path.open('rb') as fp:
-        schema = json.load(fp)
-
-    return schema
-
-
-def load(fp: IO, validate: bool = False) -> FDL:
+def load(fp: IO, validate: bool = True) -> FDL:
     raw = fp.read()
     return loads(raw, validate=validate)
 
 
-def loads(string: str, validate: bool = False) -> FDL:
-    raw = json.loads(string)
-    if validate:
-        schema = load_schema(FDL_SCHEMA_FILE)
-        jsonschema.validate(raw, schema)
+def loads(s: str, validate: bool = True) -> FDL:
+    fdl = FDL.from_dict(json.loads(s))
 
-    fdl = FDL.from_object(raw)
+    if validate:
+        fdl.validate()
 
     return fdl
+
+
+def dump(obj: FDL, fp: IO, validate: bool = True):
+    fp.write(dumps(obj, validate=validate))
+
+
+def dumps(obj: FDL, validate: bool = True) -> str:
+    if validate:
+        obj.validate()
+
+    return json.dumps(obj.to_dict(), indent=2, sort_keys=False)

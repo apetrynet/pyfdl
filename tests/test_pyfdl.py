@@ -40,6 +40,15 @@ def test_loads():
     assert fdl.to_dict() == json.loads(raw)
 
 
+def test_dumps():
+    with SAMPLE_FDL_FILE.open('rb') as fdl_file:
+        raw = fdl_file.read()
+
+    fdl = pyfdl.loads(raw)
+
+    assert pyfdl.dumps(fdl) == raw
+
+
 def test_init_empty_fdl():
     fdl = pyfdl.FDL()
 

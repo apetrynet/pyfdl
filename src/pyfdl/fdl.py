@@ -1,15 +1,38 @@
-from pyfdl import Header, FramingIntent, Context, CanvasTemplate
+import json
+import jsonschema
+from pathlib import Path
+
+from pyfdl import Base, Header, FramingIntent, Context, CanvasTemplate, FDL_SCHEMA_MAJOR, FDL_SCHEMA_MINOR
 
 
-class FDL:
-    def __init__(self, header: Header = None):
-        if not header:
-            header = Header()
+class FDL(Base):
+    attributes = ['header', 'framing_intents', 'contexts', 'canvas_templates']
+    required = ['header']
+    object_map = {
+        'header': Header,
+        'framing_intents': FramingIntent,
+        'contexts': Context,
+        'canvas_templates': CanvasTemplate
+    }
 
+    def __init__(
+            self,
+            header: Header = None,
+            framing_intents: list[FramingIntent] = None,
+            contexts: list[Context] = None,
+            canvas_templates: list[CanvasTemplate] = None
+    ):
         self.header = header
-        self.framing_intents = []
-        self.contexts = []
-        self.canvas_templates = []
+        self.framing_intents = framing_intents or []
+        self.contexts = contexts or []
+        self.canvas_templates = canvas_templates or []
+        self._schema = None
+
+    def validate(self):
+        if not self._schema:
+            self._schema = FDL.load_schema()
+
+        jsonschema.validate(self.to_dict(), self._schema)
 
     def to_dict(self) -> dict:
         data = self.header.to_dict()
@@ -19,11 +42,8 @@ class FDL:
 
         return data
 
-    def __str__(self) -> str:
-        return str(self.to_dict())
-
-    @staticmethod
-    def from_object(raw: dict):
+    @classmethod
+    def from_dict(cls, raw: dict):
         fdl = FDL()
         fdl.header = Header.from_dict(raw)
         fdl.framing_intents = [FramingIntent.from_dict(item) for item in raw.get('framing_intents', [])]
@@ -31,3 +51,15 @@ class FDL:
         fdl.canvas_templates = [CanvasTemplate.from_dict(item) for item in raw.get('canvas_templates', [])]
 
         return fdl
+
+    @staticmethod
+    def load_schema() -> dict:
+        schema_path = Path(__file__).parent.joinpath(
+            f'schema',
+            f'v{FDL_SCHEMA_MAJOR}.{FDL_SCHEMA_MINOR}',
+            f'Python_FDL_Checker'
+        )
+        with schema_path.open('rb') as fp:
+            schema = json.load(fp)
+
+        return schema
