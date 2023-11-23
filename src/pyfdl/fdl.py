@@ -62,20 +62,15 @@ class FDL(Base):
 
     @property
     def header(self) -> Header:
-        header = Header(
-            _uuid=self.uuid,
-            version=self.version,
-            fdl_creator=self.fdl_creator,
-            default_framing_intent=self.default_framing_intent
-        )
+        header = Header.from_dict(self.to_dict())
+
         return header
 
     @header.setter
     def header(self, header: Header):
-        self.uuid = header.uuid
-        self.version = header.version
-        self.fdl_creator = header.fdl_creator
-        self.default_framing_intent = header.default_framing_intent
+        # Future proof setting of attributes in case Header expands its attributes
+        for attr in header.attributes:
+            setattr(self, attr, getattr(header, attr))
 
     @staticmethod
     def load_schema() -> dict:

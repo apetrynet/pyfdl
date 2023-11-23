@@ -51,5 +51,14 @@ def test_dumps():
 
 def test_init_empty_fdl():
     fdl = pyfdl.FDL()
-
     assert isinstance(fdl, pyfdl.FDL)
+
+
+def test_setting_getting_header():
+    fdl = pyfdl.FDL()
+    header = pyfdl.Header()
+    header.apply_defaults()
+    fdl.header = header
+
+    assert isinstance(fdl.header, pyfdl.Header)
+    assert header.uuid == fdl.uuid
