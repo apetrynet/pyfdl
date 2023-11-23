@@ -3,11 +3,10 @@ from pathlib import Path
 
 import pyfdl
 
-SAMPLE_FDL_DIR = Path("/home/daniel/Code/fdl/Test_Scenarios-20231110T150107Z-001")
+SAMPLE_FDL_DIR = Path(__file__).parent.joinpath("sample_data")
 SAMPLE_FDL_FILE = Path(
     SAMPLE_FDL_DIR,
-    "Test_Scenarios/Creating_FDLs/Scenario-9__Canvas_Template_UsedToDo_VFXPull/Scenario-9_results/Scenario-9__FDL_DeliveredToVFXVendor.fdl"
-    # "Test_Scenarios/Receiving_FDLs/Scenario-1__OneFramingDecision/Scenario-1_sources/Scenario-1__1FramingDecision.fdl"
+    "Scenario-9__FDL_DeliveredToVFXVendor.fdl"
 )
 
 
