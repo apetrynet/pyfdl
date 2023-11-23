@@ -1,6 +1,6 @@
 import json
 
-from typing import IO
+from typing import IO, Union
 
 from .base import (
     Base,
@@ -18,7 +18,7 @@ from .framing_decision import FramingDecision
 from .canvas import Canvas
 from .context import Context
 from .canvas_template import CanvasTemplate
-from .fdl import FDL
+from .pyfdl import FDL
 from .errors import FDLError
 
 __all__ = [
@@ -59,12 +59,12 @@ def loads(s: str, validate: bool = True) -> FDL:
     return fdl
 
 
-def dump(obj: FDL, fp: IO, validate: bool = True):
-    fp.write(dumps(obj, validate=validate))
+def dump(obj: FDL, fp: IO, validate: bool = True, indent: Union[int, None] = 2):
+    fp.write(dumps(obj, validate=validate, indent=indent))
 
 
-def dumps(obj: FDL, validate: bool = True) -> str:
+def dumps(obj: FDL, validate: bool = True, indent: Union[int, None] = 2) -> str:
     if validate:
         obj.validate()
 
-    return json.dumps(obj.to_dict(), indent=2, sort_keys=False)
+    return json.dumps(obj.to_dict(), indent=indent, sort_keys=False)

@@ -4,11 +4,11 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pyfdl"
-version = "0.0.1"
+version = "0.1.0"
 authors = [
   { name="Daniel Flehner Heen", email="flehnerheener@gmail.com" },
 ]
-description = "Parse and write ASC FDL files"
+description = "Toolkit for parsing and producing ASC FDL files"
 license = {file="LICENSE"}
 readme = "README.md"
 requires-python = ">=3.7"
@@ -21,9 +21,10 @@ classifiers = [
     "Topic :: Multimedia :: Video :: Non-Linear Editor",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Operating System :: OS Independent",
+    "License :: OSI Approved :: Apache Software License",
     "Natural Language :: English"
 ]
-keywords = ["film", "tv", "editing", "editorial", "edit", "non-linear", "fdl", "asc", "conform", "reformat"]
+keywords = ["film", "tv", "editing", "editorial", "fdl", "asc", "conform", "reformat", "vfx"]
 
 [project.urls]
 "Homepage" = "https://github.com/apetrynet/pyfdl"

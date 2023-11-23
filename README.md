@@ -20,6 +20,20 @@ described in the FDL.
 N/A Not applicable  
 
 # Usage
+```python
+import pyfdl
+from pathlib import Path
+
+# Read from file
+fdl_path = Path('/path/to/fdl/file.fdl')
+with fdl_path.open('r') as fp:
+    fdl = pyfdl.load(fp)
+
+# Write to file
+fdl_path = Path('/path/to/fdl/myfile.fdl')
+with fdl_path.open('w') as fp:
+    pyfdl.dump(fdl, fp)
+```
 
 # Schema Files
 PyFDL ships with JSON schema definition files kindly provided by [ASC MITC](https://github.com/ascmitc/fdl).  
