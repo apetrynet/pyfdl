@@ -1,15 +1,35 @@
 import json
+import uuid
 import jsonschema
+
 from pathlib import Path
 
-from pyfdl import Base, Header, FramingIntent, Context, CanvasTemplate, FDL_SCHEMA_MAJOR, FDL_SCHEMA_MINOR
+from pyfdl import (
+    Base,
+    Header,
+    FramingIntent,
+    Context,
+    CanvasTemplate,
+    FDL_SCHEMA_MAJOR,
+    FDL_SCHEMA_MINOR,
+    FDL_SCHEMA_VERSION
+)
 
 
 class FDL(Base):
-    attributes = ['header', 'framing_intents', 'contexts', 'canvas_templates']
-    required = ['header']
+    attributes = [
+        'uuid',
+        'version',
+        'fdl_creator',
+        'default_framing_intent',
+        'framing_intents',
+        'contexts',
+        'canvas_templates'
+    ]
+    kwarg_map = {'uuid': '_uuid'}
+    required = ['uuid', 'version']
+    defaults = {'uuid': uuid.uuid4, 'fdl_creator': 'PyFDL', 'version': FDL_SCHEMA_VERSION}
     object_map = {
-        'header': Header,
         'framing_intents': FramingIntent,
         'contexts': Context,
         'canvas_templates': CanvasTemplate
@@ -17,12 +37,18 @@ class FDL(Base):
 
     def __init__(
             self,
-            header: Header = None,
+            _uuid: str = None,
+            version: dict = None,
+            fdl_creator: str = None,
+            default_framing_intent: str = None,
             framing_intents: list[FramingIntent] = None,
             contexts: list[Context] = None,
             canvas_templates: list[CanvasTemplate] = None
     ):
-        self.header = header
+        self.uuid = _uuid
+        self.version = version
+        self.fdl_creator = fdl_creator
+        self.default_framing_intent = default_framing_intent
         self.framing_intents = framing_intents or []
         self.contexts = contexts or []
         self.canvas_templates = canvas_templates or []
@@ -34,23 +60,22 @@ class FDL(Base):
 
         jsonschema.validate(self.to_dict(), self._schema)
 
-    def to_dict(self) -> dict:
-        data = self.header.to_dict()
-        data['framing_intents'] = [fi.to_dict() for fi in self.framing_intents]
-        data['contexts'] = [ctx.to_dict() for ctx in self.contexts]
-        data['canvas_templates'] = [template.to_dict() for template in self.canvas_templates]
+    @property
+    def header(self) -> Header:
+        header = Header(
+            _uuid=self.uuid,
+            version=self.version,
+            fdl_creator=self.fdl_creator,
+            default_framing_intent=self.default_framing_intent
+        )
+        return header
 
-        return data
-
-    @classmethod
-    def from_dict(cls, raw: dict):
-        fdl = FDL()
-        fdl.header = Header.from_dict(raw)
-        fdl.framing_intents = [FramingIntent.from_dict(item) for item in raw.get('framing_intents', [])]
-        fdl.contexts = [Context.from_dict(item) for item in raw.get('contexts', [])]
-        fdl.canvas_templates = [CanvasTemplate.from_dict(item) for item in raw.get('canvas_templates', [])]
-
-        return fdl
+    @header.setter
+    def header(self, header: Header):
+        self.uuid = header.uuid
+        self.version = header.version
+        self.fdl_creator = header.fdl_creator
+        self.default_framing_intent = header.default_framing_intent
 
     @staticmethod
     def load_schema() -> dict:
