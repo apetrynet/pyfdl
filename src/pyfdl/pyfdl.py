@@ -83,3 +83,6 @@ class FDL(Base):
             schema = json.load(fp)
 
         return schema
+
+    def __repr__(self):
+        return repr(self.header)

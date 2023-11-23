@@ -49,3 +49,6 @@ class Canvas(Base):
         self.physical_dimensions = physical_dimensions
         self.anamorphic_squeeze = anamorphic_squeeze
         self.framing_decisions = framing_decisions or []
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(label={self.label}, id={self.id})"

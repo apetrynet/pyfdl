@@ -105,8 +105,9 @@ class Base(ABC):
 
         return cls(**kwargs)
 
+    @abstractmethod
     def __repr__(self) -> str:
-        return f'"{self.__class__.__name__}"'
+        pass
 
     def __str__(self) -> str:
         return str(self.to_dict())
@@ -120,6 +121,9 @@ class DimensionsFloat(Base):
         self.width = width
         self.height = height
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}(width={self.width}, height={self.height})"
+
 
 class DimensionsInt(Base):
     attributes = ['width', 'height']
@@ -129,6 +133,9 @@ class DimensionsInt(Base):
         self.width = width.__int__()
         self.height = height.__int__()
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}(width={self.width}, height={self.height})"
+
 
 class Point(Base):
     attributes = ['x', 'y']
@@ -137,6 +144,9 @@ class Point(Base):
     def __init__(self, x: float, y: float):
         self.x = x
         self.y = y
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(x={self.x}, y={self.y})"
 
 
 class RoundStrategy(Base):
@@ -177,3 +187,6 @@ class RoundStrategy(Base):
             )
 
         self._mode = value
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(even={self.even}, mode={self.mode})"

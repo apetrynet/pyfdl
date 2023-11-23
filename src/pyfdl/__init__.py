@@ -13,7 +13,7 @@ from .base import (
     FDL_SCHEMA_VERSION
 )
 from .header import Header
-from .fraaming_intent import FramingIntent
+from .framing_intent import FramingIntent
 from .framing_decision import FramingDecision
 from .canvas import Canvas
 from .context import Context

@@ -12,3 +12,6 @@ class Context(Base):
         self.canvases = canvases or []
 
     # TODO verify appending canvases
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(label={self.label})"

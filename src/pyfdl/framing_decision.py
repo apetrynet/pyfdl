@@ -37,3 +37,10 @@ class FramingDecision(Base):
         self.anchor_point = anchor_point
         self.protection_dimensions = protection_dimensions
         self.protection_anchor_point = protection_anchor_point
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__}("
+            f"label={self.label}, id={self.id}, framing_intent_id={self.framing_intent_id}"
+            f")"
+        )
