@@ -11,7 +11,7 @@ authors = [
 description = "Toolkit for parsing and producing ASC FDL files"
 license = {file="LICENSE"}
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 dependencies = ["jsonschema"]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -30,12 +30,6 @@ keywords = ["film", "tv", "editing", "editorial", "fdl", "asc", "conform", "refo
 [project.urls]
 "Homepage" = "https://github.com/apetrynet/pyfdl"
 "Bug Tracker" = "https://github.com/apetrynet/pyfdl/issues"
-
-#[project.entry-points."pyfdl"]
-#pyfdl = "pyfdl"
-
-#[tool.setuptools]
-#packages = ["fdl"]
 
 [tool.hatch.build.targets.sdist]
 # Ensure the sdist includes a setup.py for older pip versions
