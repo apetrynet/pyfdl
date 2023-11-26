@@ -119,6 +119,12 @@ def test_verified_init_list():
     assert vl2[0] == point
 
 
+def test_verified_list_raise():
+    vl = pyfdl.VerifiedList(pyfdl.Point)
+    with pytest.raises(TypeError):
+        vl.append('string')
+
+
 def test_verified_list_append():
     point = pyfdl.Point(x=10, y=10)
     vl1 = pyfdl.VerifiedList(pyfdl.Point)
