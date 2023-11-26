@@ -1,4 +1,7 @@
 from abc import ABC, abstractmethod
+from collections import UserList
+from collections.abc import MutableSequence
+from typing import Type
 
 from pyfdl.errors import FDLError
 
@@ -63,15 +66,15 @@ class Base(ABC):
             # check if empty value should be omitted
             if key not in self.required and not value:
                 # Keys with arrays as values should pass (for now?)
-                if not isinstance(value, list):
+                if not isinstance(value, TypedList):
                     continue
 
             # Arrays (aka lists) contain other objects
-            if isinstance(value, list):
+            if isinstance(value, TypedList):
                 value = [item.to_dict() for item in value]
 
             # This should cover all known objects
-            elif isinstance(value, Base):
+            elif isinstance(value, (Base, TypedList)):
                 value = value.to_dict()
 
             data[key] = value
@@ -96,7 +99,8 @@ class Base(ABC):
 
             if key in cls.object_map:
                 if isinstance(value, list):
-                    value = [cls.object_map[key].from_dict(item) for item in value]
+                    _cls = cls.object_map[key]
+                    value = TypedList(_cls, [_cls.from_dict(item) for item in value])
 
                 else:
                     value = cls.object_map[key].from_dict(value)
@@ -111,6 +115,30 @@ class Base(ABC):
 
     def __str__(self) -> str:
         return str(self.to_dict())
+
+
+class TypedList(UserList):
+    def __init__(self, cls: Type[Base], items: list = None):
+        super().__init__()
+        self._cls = cls
+        if items:
+            self.extend(items)
+
+    def append(self, item):
+        self.insert(self.__len__(), item)
+
+    def extend(self, other):
+        for item in other:
+            self.append(item)
+
+    def insert(self, i, item):
+        if not isinstance(item, self._cls):
+            raise TypeError(
+                f"This list does not accept items of type: \"{type(item)}\". "
+                f"Please provide items of type: \"{self._cls}\""
+            )
+
+        super().insert(i, item)
 
 
 class DimensionsFloat(Base):
@@ -189,4 +217,4 @@ class RoundStrategy(Base):
         self._mode = value
 
     def __repr__(self):
-        return f"{self.__class__.__name__}(even={self.even}, mode={self.mode})"
+        return f'{self.__class__.__name__}(even="{self.even}", mode="{self.mode}")'

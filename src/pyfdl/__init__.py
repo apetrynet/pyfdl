@@ -10,7 +10,8 @@ from .base import (
     RoundStrategy,
     FDL_SCHEMA_MAJOR,
     FDL_SCHEMA_MINOR,
-    FDL_SCHEMA_VERSION
+    FDL_SCHEMA_VERSION,
+    TypedList
 )
 from .header import Header
 from .framing_intent import FramingIntent
@@ -39,7 +40,8 @@ __all__ = [
     'load',
     'loads',
     'Point',
-    'RoundStrategy'
+    'RoundStrategy',
+    'TypedList'
 ]
 
 __version__ = "0.1.0"
