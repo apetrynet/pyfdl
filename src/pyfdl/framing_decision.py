@@ -40,7 +40,7 @@ class FramingDecision(Base):
 
     def __repr__(self):
         return (
-            f"{self.__class__.__name__}("
-            f"label={self.label}, id={self.id}, framing_intent_id={self.framing_intent_id}"
-            f")"
+            f'{self.__class__.__name__}('
+            f'label="{self.label}", id="{self.id}", framing_intent_id="{self.framing_intent_id}"'
+            f')'
         )

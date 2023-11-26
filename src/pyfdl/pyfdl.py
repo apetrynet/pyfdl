@@ -10,6 +10,7 @@ from pyfdl import (
     FramingIntent,
     Context,
     CanvasTemplate,
+    VerifiedList,
     FDL_SCHEMA_MAJOR,
     FDL_SCHEMA_MINOR,
     FDL_SCHEMA_VERSION
@@ -41,17 +42,17 @@ class FDL(Base):
             version: dict = None,
             fdl_creator: str = None,
             default_framing_intent: str = None,
-            framing_intents: list[FramingIntent] = None,
-            contexts: list[Context] = None,
-            canvas_templates: list[CanvasTemplate] = None
+            framing_intents: VerifiedList[FramingIntent] = None,
+            contexts: VerifiedList[Context] = None,
+            canvas_templates: VerifiedList[CanvasTemplate] = None
     ):
         self.uuid = _uuid
         self.version = version
         self.fdl_creator = fdl_creator
         self.default_framing_intent = default_framing_intent
-        self.framing_intents = framing_intents or []
-        self.contexts = contexts or []
-        self.canvas_templates = canvas_templates or []
+        self.framing_intents = framing_intents or VerifiedList(FramingIntent)
+        self.contexts = contexts or VerifiedList(Context)
+        self.canvas_templates = canvas_templates or VerifiedList(CanvasTemplate)
         self._schema = None
 
     def validate(self):

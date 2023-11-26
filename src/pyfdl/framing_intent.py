@@ -22,4 +22,4 @@ class FramingIntent(Base):
         self.protection = protection
 
     def __repr__(self):
-        return f"{self.__class__.__name__}(label={self.label}, id={self.id})"
+        return f'{self.__class__.__name__}(label="{self.label}", id="{self.id}")'
