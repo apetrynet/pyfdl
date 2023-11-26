@@ -66,15 +66,15 @@ class Base(ABC):
             # check if empty value should be omitted
             if key not in self.required and not value:
                 # Keys with arrays as values should pass (for now?)
-                if not isinstance(value, VerifiedList):
+                if not isinstance(value, TypedList):
                     continue
 
             # Arrays (aka lists) contain other objects
-            if isinstance(value, VerifiedList):
+            if isinstance(value, TypedList):
                 value = [item.to_dict() for item in value]
 
             # This should cover all known objects
-            elif isinstance(value, (Base, VerifiedList)):
+            elif isinstance(value, (Base, TypedList)):
                 value = value.to_dict()
 
             data[key] = value
@@ -100,7 +100,7 @@ class Base(ABC):
             if key in cls.object_map:
                 if isinstance(value, list):
                     _cls = cls.object_map[key]
-                    value = VerifiedList(_cls, [_cls.from_dict(item) for item in value])
+                    value = TypedList(_cls, [_cls.from_dict(item) for item in value])
 
                 else:
                     value = cls.object_map[key].from_dict(value)
@@ -117,7 +117,7 @@ class Base(ABC):
         return str(self.to_dict())
 
 
-class VerifiedList(UserList):
+class TypedList(UserList):
     def __init__(self, cls: Type[Base], items: list = None):
         super().__init__()
         self._cls = cls

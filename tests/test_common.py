@@ -108,42 +108,42 @@ def test_rounding_strategy_default_values():
     assert rs.check_required() == []
 
 
-def test_verified_init_list():
-    vl1 = pyfdl.VerifiedList(pyfdl.Point)
-    assert isinstance(vl1, pyfdl.VerifiedList)
+def test_typed_init_list():
+    vl1 = pyfdl.TypedList(pyfdl.Point)
+    assert isinstance(vl1, pyfdl.TypedList)
     assert vl1 == []
 
     point = pyfdl.Point(x=10, y=10)
-    vl2 = pyfdl.VerifiedList(pyfdl.Point, [point])
-    assert isinstance(vl2, pyfdl.VerifiedList)
+    vl2 = pyfdl.TypedList(pyfdl.Point, [point])
+    assert isinstance(vl2, pyfdl.TypedList)
     assert vl2[0] == point
 
 
-def test_verified_list_raise():
-    vl = pyfdl.VerifiedList(pyfdl.Point)
+def test_typed_list_raise():
+    vl = pyfdl.TypedList(pyfdl.Point)
     with pytest.raises(TypeError):
         vl.append('string')
 
 
-def test_verified_list_append():
+def test_typed_list_append():
     point = pyfdl.Point(x=10, y=10)
-    vl1 = pyfdl.VerifiedList(pyfdl.Point)
+    vl1 = pyfdl.TypedList(pyfdl.Point)
     vl1.append(point)
     assert vl1[0] == point
 
 
-def test_verified_list_extend():
+def test_typed_list_extend():
     points = [pyfdl.Point(x=10, y=10)]
-    vl1 = pyfdl.VerifiedList(pyfdl.Point)
+    vl1 = pyfdl.TypedList(pyfdl.Point)
     vl1.extend(points)
     assert len(vl1) == 1
     assert vl1[0] == points[0]
 
 
-def test_verified_list_insert():
+def test_typed_list_insert():
     points = [pyfdl.Point(x=10, y=10), pyfdl.Point(x=30, y=30)]
     expected_points = [pyfdl.Point(x=10, y=10), pyfdl.Point(x=20, y=20), pyfdl.Point(x=30, y=30)]
-    vl1 = pyfdl.VerifiedList(pyfdl.Point, points)
+    vl1 = pyfdl.TypedList(pyfdl.Point, points)
     vl1.insert(1, pyfdl.Point(x=20, y=20))
     assert len(vl1) == 3
     assert repr(vl1) == repr(expected_points)

@@ -1,4 +1,4 @@
-from pyfdl import Base, DimensionsInt, Point, DimensionsFloat, FramingDecision, VerifiedList
+from pyfdl import Base, DimensionsInt, Point, DimensionsFloat, FramingDecision, TypedList
 
 
 class Canvas(Base):
@@ -37,7 +37,7 @@ class Canvas(Base):
             photosite_dimensions: DimensionsInt = None,
             physical_dimensions: DimensionsFloat = None,
             anamorphic_squeeze: float = None,
-            framing_decisions: VerifiedList[FramingDecision] = None
+            framing_decisions: TypedList[FramingDecision] = None
     ):
         self.label = label
         self.id = _id
@@ -48,7 +48,7 @@ class Canvas(Base):
         self.photosite_dimensions = photosite_dimensions
         self.physical_dimensions = physical_dimensions
         self.anamorphic_squeeze = anamorphic_squeeze
-        self.framing_decisions = framing_decisions or VerifiedList(FramingDecision)
+        self.framing_decisions = framing_decisions or TypedList(FramingDecision)
 
     def __repr__(self):
         return f'{self.__class__.__name__}(label="{self.label}", id="{self.id}")'
