@@ -16,7 +16,8 @@ def test_load_unverified():
 
     assert isinstance(fdl, pyfdl.FDL)
     assert isinstance(fdl.header, pyfdl.Header)
-    assert fdl.header.uuid != ""
+    assert fdl.header.uuid == fdl.uuid
+    assert fdl.uuid != ""
 
 
 def test_load_verified():

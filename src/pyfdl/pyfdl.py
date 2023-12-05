@@ -1,10 +1,9 @@
 import json
 import uuid
-from typing import Type
-
 import jsonschema
-
+from typing import Type
 from pathlib import Path
+
 
 from pyfdl import (
     Base,
@@ -59,7 +58,7 @@ class FDL(Base):
 
     def validate(self):
         if not self._schema:
-            self._schema = FDL.load_schema()
+            self._schema = self.load_schema()
 
         jsonschema.validate(self.to_dict(), self._schema)
 
@@ -85,16 +84,19 @@ class FDL(Base):
         for attr in header.attributes:
             setattr(self, attr, getattr(header, attr))
 
-    @staticmethod
-    def load_schema() -> dict:
-        """Load a jsonschema that matches the current version of the spec
+    def load_schema(self) -> dict:
+        """Load a jsonschema based on the version in `Header` or default to current version
+        set in [base](common.md)
 
         Returns:
             schema:
         """
+        major = self.version.get('major') if self.version else FDL_SCHEMA_MAJOR
+        minor = self.version.get('minor') if self.version else FDL_SCHEMA_MINOR
+
         schema_path = Path(__file__).parent.joinpath(
             f'schema',
-            f'v{FDL_SCHEMA_MAJOR}.{FDL_SCHEMA_MINOR}',
+            f'v{major}.{minor}',
             f'Python_FDL_Checker'
         )
         with schema_path.open('rb') as fp:
