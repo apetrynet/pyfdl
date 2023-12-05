@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from collections import UserList
-from collections.abc import MutableSequence
-from typing import Type
+from typing import Type, Any
 
 from pyfdl.errors import FDLError
 
@@ -23,11 +22,30 @@ class Base(ABC):
     defaults = {}
 
     @abstractmethod
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any):
+        """Base class not to be instanced directly.
+
+            Args:
+                *args:
+                **kwargs:
+
+            Attributes:
+                attributes: list of attributes described in FDL spec
+                kwarg_map: map attribute names that clash with reserved builtin python functions to safe alternatives
+                    like: (id -> _id) and (uuid -> _uuid)
+                object_map: map attributes to custom classes
+                required: list of required attributes.
+                    Supports linked attributes like: "effective_dimensions.effective_anchor_point" where
+                    "effective_anchor_point" is required if "effective_dimensions" is set
+                defaults: map default values to attributes. In addition to primitive values supports: callable,
+                    subclasses of [Base](#Base)
+
+            """
         pass
 
-    def apply_defaults(self):
-        """Applies default values, if any, to attributes that are `None`"""
+    def apply_defaults(self) -> None:
+        """Applies default values defined in the `defaults` attribute to attributes that are `None`"""
+
         for key, value in self.defaults.items():
             if getattr(self, key) is None:
                 # value is a function
@@ -44,6 +62,14 @@ class Base(ABC):
                     setattr(self, key, value)
 
     def check_required(self) -> list:
+        """Check that required attributes contain values.
+        Checks linked attributes like: "effective_dimensions.effective_anchor_point" where
+        "effective_anchor_point" is required if "effective_dimensions" is set
+
+        Returns:
+            a list of missing attributes
+        """
+
         missing = []
         for required_key in self.required:
             # Check for dependant attributes.
@@ -59,6 +85,15 @@ class Base(ABC):
         return missing
 
     def to_dict(self) -> dict:
+        """
+        Produce a dictionary representation of the current object along with all sub objects.
+
+        Raises:
+           FDLError: if required keys are missing
+
+        Returns:
+            representation of object
+        """
         data = {}
         for key in self.attributes:
             value = getattr(self, key)
@@ -86,7 +121,15 @@ class Base(ABC):
         return data
 
     @classmethod
-    def from_dict(cls, raw: dict):
+    def from_dict(cls, raw: dict) -> Any:
+        """Create instances of classes a from provided dict.
+
+        Args:
+            raw: dictionary to convert to supported classes
+
+        Returns:
+            cls: and instance of the current class
+        """
         kwargs = {}
         for key in cls.attributes:
             # We get the value before we convert the key to a valid name
@@ -119,19 +162,50 @@ class Base(ABC):
 
 class TypedList(UserList):
     def __init__(self, cls: Type[Base], items: list = None):
+        """A list that only accepts items of a given type
+
+        Args:
+            cls: accepted class for this instance. Example [FramingDecision](framing_decision.md)
+            items: an initial list of items
+        """
         super().__init__()
         self._cls = cls
         if items:
             self.extend(items)
 
-    def append(self, item):
+    def append(self, item: Type[Base]) -> None:
+        """Append an item to the list.
+
+        Args:
+            item: of same class as defined when instanced
+
+        Raises:
+            TypeError: if wrong type of item is provided
+        """
         self.insert(self.__len__(), item)
 
-    def extend(self, other):
+    def extend(self, other: list[Type[Base]]) -> None:
+        """Extend list with a list of same type of items
+
+        Args:
+            other: items to merge with this list
+
+        Raises:
+            TypeError: if other list contains items of a different class than this one
+        """
         for item in other:
             self.append(item)
 
-    def insert(self, i, item):
+    def insert(self, i: int, item: Type[Base]) -> None:
+        """Insert an item at the given position of the list
+
+        Args:
+            i: index a.k.a position of the item
+            item: an item of the given class to insert in this list
+
+        Raises:
+            TypeError: if wrong type of item is provided
+        """
         if not isinstance(item, self._cls):
             raise TypeError(
                 f"This list does not accept items of type: \"{type(item)}\". "
@@ -146,6 +220,12 @@ class DimensionsFloat(Base):
     required = ['width', 'height']
 
     def __init__(self, width: float, height: float):
+        """Dimensions properly formatted and stored as floats
+
+        Args:
+            width:
+            height:
+        """
         self.width = width
         self.height = height
 
@@ -158,6 +238,12 @@ class DimensionsInt(Base):
     required = ['width', 'height']
 
     def __init__(self, width: int, height: int):
+        """Dimensions properly formatted and stored as ints
+
+        Args:
+            width:
+            height:
+        """
         self.width = width.__int__()
         self.height = height.__int__()
 
@@ -170,6 +256,12 @@ class Point(Base):
     required = ['x', 'y']
 
     def __init__(self, x: float, y: float):
+        """Point properly formatted
+
+        Args:
+            x:
+            y:
+        """
         self.x = x
         self.y = y
 
@@ -183,6 +275,20 @@ class RoundStrategy(Base):
     defaults = {'even': 'even', 'mode': 'up'}
 
     def __init__(self, even: str = None, mode: str = None):
+        """Describes how to handle rounding of values.
+
+        Args:
+            even:
+                "whole" = to nearest integer,
+                "even" = to nearest even-numbered integer
+
+            mode:
+                "up" = always round up,
+                "down" = always round down
+
+        Raises:
+            FDLError: if you provide a value other than the ones listed above
+        """
         self.even = even
         self.mode = mode
 
