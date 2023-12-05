@@ -1,0 +1,21 @@
+site_name: PyFDL
+
+theme:
+  name: "readthedocs"
+
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            show_source: false
+            inherited_members: true
+            members_order: "alphabetical"
+            group_by_category: true
+            show_root_heading: true
+            show_submodules: false
+            merge_init_into_class: true
+            allow_inspection: false

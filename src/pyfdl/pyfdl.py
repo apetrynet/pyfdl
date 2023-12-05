@@ -1,5 +1,7 @@
 import json
 import uuid
+from typing import Type
+
 import jsonschema
 
 from pathlib import Path
@@ -62,19 +64,34 @@ class FDL(Base):
         jsonschema.validate(self.to_dict(), self._schema)
 
     @property
-    def header(self) -> Header:
+    def header(self) -> Type[Header]:
+        """
+
+        Returns:
+            Header: based on attributes
+        """
         header = Header.from_dict(self.to_dict())
 
         return header
 
     @header.setter
     def header(self, header: Header):
-        # Future proof setting of attributes in case Header expands its attributes
+        """
+
+        Args:
+            header: Header instance
+        """
+        # Future-proof setting of attributes in case Header expands its attributes
         for attr in header.attributes:
             setattr(self, attr, getattr(header, attr))
 
     @staticmethod
     def load_schema() -> dict:
+        """Load a jsonschema that matches the current version of the spec
+
+        Returns:
+            schema:
+        """
         schema_path = Path(__file__).parent.joinpath(
             f'schema',
             f'v{FDL_SCHEMA_MAJOR}.{FDL_SCHEMA_MINOR}',
