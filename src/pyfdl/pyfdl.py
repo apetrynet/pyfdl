@@ -97,7 +97,7 @@ class FDL(Base):
         schema_path = Path(__file__).parent.joinpath(
             f'schema',
             f'v{major}.{minor}',
-            f'Python_FDL_Checker'
+            f'ascfdl.schema.json'
         )
         with schema_path.open('rb') as fp:
             schema = json.load(fp)
