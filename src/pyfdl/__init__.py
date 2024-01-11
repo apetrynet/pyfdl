@@ -11,7 +11,7 @@ from .base import (
     FDL_SCHEMA_MAJOR,
     FDL_SCHEMA_MINOR,
     FDL_SCHEMA_VERSION,
-    TypedContainer,
+    TypedCollection,
     TypedList
 )
 from .header import Header
@@ -43,7 +43,7 @@ __all__ = [
     'loads',
     'Point',
     'RoundStrategy',
-    'TypedContainer',
+    'TypedCollection',
     'TypedList'
 ]
 

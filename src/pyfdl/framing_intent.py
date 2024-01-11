@@ -1,6 +1,6 @@
 from typing import Union
 
-from pyfdl import Base, DimensionsInt, TypedContainer
+from pyfdl import Base, DimensionsInt, TypedCollection
 
 
 class FramingIntent(Base):
@@ -17,7 +17,7 @@ class FramingIntent(Base):
             _id: str = None,
             aspect_ratio: DimensionsInt = None,
             protection: float = None,
-            parent: TypedContainer = None
+            parent: TypedCollection = None
     ):
         self.parent = parent
         self.id = _id
@@ -26,11 +26,11 @@ class FramingIntent(Base):
         self.protection = protection
 
     @property
-    def parent(self) -> Union[TypedContainer, None]:
+    def parent(self) -> Union[TypedCollection, None]:
         return self._parent
 
     @parent.setter
-    def parent(self, parent: TypedContainer):
+    def parent(self, parent: TypedCollection):
         self._parent = parent
 
     def __repr__(self):

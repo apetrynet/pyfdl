@@ -7,13 +7,14 @@ described in the FDL.
 
 # Features
 
-| Feature         | Read | Write | Notes                                 |
-|:----------------|:----:|:-----:|---------------------------------------|
-| FDL files       |  ✔   |   ✔   |                                       |
-| FDL as metadata |  ✖   |   ✖   | Only files supported by OpenImageIO   |
-| GUI             |  ✖   |   ✖   | Visualize framing intents             |
-| Reformat tool   |  ✖   |   ✖   | Commandline tool based on OpenImageIO |
-| Nuke plugin     |  ✖   |   ✖   |                                       |
+| Feature                         | Read | Write | Notes                                                                    |
+|:--------------------------------|:----:|:-----:|--------------------------------------------------------------------------|
+| FDL files                       |  ✔   |   ✔   |                                                                          |
+| Validate id's and relationships |  ✔   |   ✔   | Enforces unique ID's and makes sure relationship between items are valid |
+| FDL as metadata                 |  ✖   |   ✖   | Only files supported by OpenImageIO                                      |
+| GUI                             |  ✖   |   ✖   | Visualize framing intents                                                |
+| Reformat tool                   |  ✖   |   ✖   | Commandline tool based on OpenImageIO                                    |
+| Nuke plugin                     |  ✖   |   ✖   |                                                                          |
 
 ✔ Implemented  
 ✖ Not implemented  
