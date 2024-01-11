@@ -1,4 +1,6 @@
-from pyfdl import Base, DimensionsInt, RoundStrategy
+from typing import Union
+
+from pyfdl import Base, DimensionsInt, RoundStrategy, TypedContainer
 from pyfdl.errors import FDLError
 
 
@@ -47,8 +49,10 @@ class CanvasTemplate(Base):
             preserve_from_source_canvas: str = None,
             maximum_dimensions: DimensionsInt = None,
             pad_to_maximum: bool = False,
-            _round: RoundStrategy = None
+            _round: RoundStrategy = None,
+            parent: TypedContainer = None
     ):
+        self.parent = parent
         self.label = label
         self.id = _id
         self.target_dimensions = target_dimensions
@@ -61,6 +65,14 @@ class CanvasTemplate(Base):
         self.maximum_dimensions = maximum_dimensions
         self.pad_to_maximum = pad_to_maximum
         self.round = _round
+
+    @property
+    def parent(self) -> Union[TypedContainer, None]:
+        return self._parent
+
+    @parent.setter
+    def parent(self, parent: TypedContainer):
+        self._parent = parent
 
     @property
     def fit_source(self) -> str:

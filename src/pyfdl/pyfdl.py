@@ -1,9 +1,7 @@
 import json
 import uuid
 import jsonschema
-from typing import Type
 from pathlib import Path
-
 
 from pyfdl import (
     Base,
@@ -12,10 +10,12 @@ from pyfdl import (
     Context,
     CanvasTemplate,
     TypedList,
+    TypedContainer,
     FDL_SCHEMA_MAJOR,
     FDL_SCHEMA_MINOR,
     FDL_SCHEMA_VERSION
 )
+from pyfdl.errors import FDLError, FDLValidationError
 
 
 class FDL(Base):
@@ -50,20 +50,54 @@ class FDL(Base):
         self.uuid = _uuid
         self.version = version
         self.fdl_creator = fdl_creator
+        self.framing_intents = framing_intents or TypedContainer(FramingIntent)
         self.default_framing_intent = default_framing_intent
-        self.framing_intents = framing_intents or TypedList(FramingIntent)
         self.contexts = contexts or TypedList(Context)
-        self.canvas_templates = canvas_templates or TypedList(CanvasTemplate)
+        self.canvas_templates = canvas_templates or TypedContainer(CanvasTemplate)
         self._schema = None
 
     def validate(self):
+        """Validate the current state of the FDL against the json schema.
+
+        Raises:
+            FDLValidationError: if any errors are found
+        """
         if not self._schema:
             self._schema = self.load_schema()
 
-        jsonschema.validate(self.to_dict(), self._schema)
+        errors = []
+
+        # Check internal relations
+        for context in self.contexts:
+            for canvas in context.canvases:
+                if canvas.source_canvas_id not in context.canvases:
+                    errors.append(
+                        f'{canvas}.source_canvas_id (canvas.source_canvas_id) not found in '
+                        f'registered canvases'
+                    )
+
+                for framing_decision in canvas.framing_decisions:
+                    if framing_decision.framing_intent_id not in self.framing_intents:
+                        errors.append(
+                            f'{framing_decision}.framing_intent_id ({framing_decision.framing_intent_id}) '
+                            f'not found in registered framing intents'
+                        )
+
+        # Check structure and values against json schema
+        v = jsonschema.validators.validator_for(self._schema)
+        validator = v(schema=self._schema, format_checker=v.FORMAT_CHECKER)
+        for error in validator.iter_errors(self.to_dict()):
+            errors.append(str(error))
+
+        if errors:
+            nl = '\n'
+            FDLValidationError(
+                f"Validation failed!\n"
+                f"{f'{nl}'.join(errors)}"
+            )
 
     @property
-    def header(self) -> Type[Header]:
+    def header(self) -> Header:
         """
 
         Returns:
@@ -80,9 +114,23 @@ class FDL(Base):
         Args:
             header: Header instance
         """
-        # Future-proof setting of attributes in case Header expands its attributes
+        # "Future-proof" setting of attributes in case Header expands its attributes
         for attr in header.attributes:
             setattr(self, attr, getattr(header, attr))
+
+    @property
+    def default_framing_intent(self) -> str:
+        return self._default_framing_intent
+
+    @default_framing_intent.setter
+    def default_framing_intent(self, framing_intent_id: str):
+        if framing_intent_id and framing_intent_id not in self.framing_intents:
+            raise FDLError(
+                f"Default framing intent: \"{framing_intent_id}\" not found in "
+                f"registered framing intents."
+            )
+
+        self._default_framing_intent = framing_intent_id
 
     def load_schema(self) -> dict:
         """Load a jsonschema based on the version in `Header` or default to current version

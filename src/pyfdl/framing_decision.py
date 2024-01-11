@@ -1,4 +1,6 @@
-from pyfdl import Base, DimensionsFloat, Point
+from typing import Union
+
+from pyfdl import Base, DimensionsFloat, Point, TypedContainer
 
 
 class FramingDecision(Base):
@@ -28,8 +30,10 @@ class FramingDecision(Base):
             dimensions: DimensionsFloat = None,
             anchor_point: Point = None,
             protection_dimensions: DimensionsFloat = None,
-            protection_anchor_point: Point = None
+            protection_anchor_point: Point = None,
+            parent: TypedContainer = None
     ):
+        self.parent = parent
         self.label = label
         self.id = _id
         self.framing_intent_id = framing_intent_id
@@ -37,6 +41,14 @@ class FramingDecision(Base):
         self.anchor_point = anchor_point
         self.protection_dimensions = protection_dimensions
         self.protection_anchor_point = protection_anchor_point
+
+    @property
+    def parent(self) -> Union[TypedContainer, None]:
+        return self._parent
+
+    @parent.setter
+    def parent(self, parent: TypedContainer):
+        self._parent = parent
 
     def __repr__(self):
         return (
