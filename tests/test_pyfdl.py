@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+import pytest
+
 import pyfdl
 
 SAMPLE_FDL_DIR = Path(__file__).parent.joinpath("sample_data")
@@ -10,7 +12,7 @@ SAMPLE_FDL_FILE = Path(
 )
 
 
-def test_load_unverified():
+def test_load_unvalidated():
     with SAMPLE_FDL_FILE.open('r') as fdl_file:
         fdl = pyfdl.load(fdl_file, validate=False)
 
@@ -20,7 +22,7 @@ def test_load_unverified():
     assert fdl.uuid != ""
 
 
-def test_load_verified():
+def test_load_validated():
     with SAMPLE_FDL_FILE.open('r') as fdl_file:
         fdl = pyfdl.load(fdl_file, validate=True)
 
@@ -59,8 +61,8 @@ def test_dumps():
         raw = fdl_file.read()
 
     fdl = pyfdl.loads(raw)
-    # TODO Find a safer way to compare the two. Preferably as strings
-    assert eval(pyfdl.dumps(fdl)) == eval(raw)
+    # TODO Is this a valid approach to test the dumps?
+    assert json.loads(pyfdl.dumps(fdl)) == json.loads(raw)
 
 
 def test_init_empty_fdl():
@@ -76,3 +78,18 @@ def test_setting_getting_header():
 
     assert isinstance(fdl.header, pyfdl.Header)
     assert header.uuid == fdl.uuid
+
+
+def test_setting_default_framing_id(sample_framing_intent):
+    fdl = pyfdl.FDL()
+
+    fi = pyfdl.FramingIntent.from_dict(sample_framing_intent)
+    fdl.framing_intents.add_item(fi)
+    fdl.default_framing_intent = fi.id
+
+    assert fdl.default_framing_intent == fi.id
+
+    with pytest.raises(pyfdl.FDLError) as err:
+        fdl.default_framing_intent = 'nogood'
+
+    assert "Default framing intent: \"nogood\" not found in" in str(err.value)

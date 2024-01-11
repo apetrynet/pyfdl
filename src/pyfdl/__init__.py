@@ -11,6 +11,7 @@ from .base import (
     FDL_SCHEMA_MAJOR,
     FDL_SCHEMA_MINOR,
     FDL_SCHEMA_VERSION,
+    TypedContainer,
     TypedList
 )
 from .header import Header
@@ -20,7 +21,7 @@ from .canvas import Canvas
 from .context import Context
 from .canvas_template import CanvasTemplate
 from .pyfdl import FDL
-from .errors import FDLError
+from .errors import FDLError, FDLValidationError
 
 __all__ = [
     'Base',
@@ -31,6 +32,7 @@ __all__ = [
     'DimensionsInt',
     'FDL',
     'FDLError',
+    'FDLValidationError',
     'FDL_SCHEMA_MAJOR',
     'FDL_SCHEMA_MINOR',
     'FDL_SCHEMA_VERSION',
@@ -41,6 +43,7 @@ __all__ = [
     'loads',
     'Point',
     'RoundStrategy',
+    'TypedContainer',
     'TypedList'
 ]
 

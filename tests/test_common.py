@@ -147,3 +147,40 @@ def test_typed_list_insert():
     vl1.insert(1, pyfdl.Point(x=20, y=20))
     assert len(vl1) == 3
     assert repr(vl1) == repr(expected_points)
+
+
+def test_typed_container(sample_framing_intent, sample_framing_intent_kwargs):
+    td = pyfdl.TypedContainer(pyfdl.FramingIntent)
+    fi = pyfdl.FramingIntent.from_dict(sample_framing_intent)
+    td.add_item(fi)
+
+    assert fi in td
+    assert fi.id in td
+    assert td.get_item(fi.id) == fi
+    assert [_fi for _fi in td] == [fi]
+
+    td.remove_item(fi.id)
+    assert len(td) == 0
+    assert bool(td) is False
+
+    with pytest.raises(TypeError) as err:
+        td.add_item(pyfdl.Point(x=10, y=10))
+
+    assert "This container does not accept items of type:" in str(err.value)
+
+    # Test missing id
+    fi1 = pyfdl.FramingIntent()
+    with pytest.raises(pyfdl.FDLError) as err:
+        td.add_item(fi1)
+
+    assert f"Item must have a valid ID" in str(err.value)
+
+    # Test duplicate id's
+    td.add_item(fi)
+    kwargs = sample_framing_intent_kwargs.copy()
+    kwargs['label'] = 'somethingelse'
+    fi2 = pyfdl.FramingIntent(**kwargs)
+    with pytest.raises(pyfdl.FDLError) as err:
+        td.add_item(fi2)
+
+    assert f"FramingIntent.id ({fi.id}) already exists." in str(err.value)

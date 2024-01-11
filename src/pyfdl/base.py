@@ -101,15 +101,15 @@ class Base(ABC):
             # check if empty value should be omitted
             if key not in self.required and not value:
                 # Keys with arrays as values should pass (for now?)
-                if not isinstance(value, TypedList):
+                if not isinstance(value, (TypedList, TypedContainer)):
                     continue
 
             # Arrays (aka lists) contain other objects
-            if isinstance(value, TypedList):
+            if isinstance(value, (TypedList, TypedContainer)):
                 value = [item.to_dict() for item in value]
 
             # This should cover all known objects
-            elif isinstance(value, (Base, TypedList)):
+            elif isinstance(value, Base):
                 value = value.to_dict()
 
             data[key] = value
@@ -121,10 +121,11 @@ class Base(ABC):
         return data
 
     @classmethod
-    def from_dict(cls, raw: dict) -> Any:
-        """Create instances of classes a from provided dict.
+    def from_dict(cls, raw: dict, parent: Any = None) -> Any:
+        """Create instances of classes from a provided dict.
 
         Args:
+            parent: is used in collections of items
             raw: dictionary to convert to supported classes
 
         Returns:
@@ -143,12 +144,21 @@ class Base(ABC):
             if key in cls.object_map:
                 if isinstance(value, list):
                     _cls = cls.object_map[key]
-                    value = TypedList(_cls, [_cls.from_dict(item) for item in value])
-
+                    # TODO consider using TypedContainer for all and put the id stuff in there
+                    if 'id' in _cls.attributes:
+                        tc = TypedContainer(_cls)
+                        for item in value:
+                            tc.add_item(_cls.from_dict(item, parent=tc))
+                        value = tc
+                    else:
+                        value = TypedList(_cls, [_cls.from_dict(item) for item in value])
                 else:
                     value = cls.object_map[key].from_dict(value)
 
             kwargs[keyword] = value
+
+        if parent:
+            kwargs['parent'] = parent
 
         return cls(**kwargs)
 
@@ -158,6 +168,52 @@ class Base(ABC):
 
     def __str__(self) -> str:
         return str(self.to_dict())
+
+
+class TypedContainer:
+    def __init__(self, cls: Any):
+        self._cls = cls
+        self._data = {}
+
+    def add_item(self, item: Any):
+        if not isinstance(item, self._cls):
+            raise TypeError(
+                f"This container does not accept items of type: \"{type(item)}\". "
+                f"Please provide items of type: \"{self._cls}\""
+            )
+
+        if item.id:
+            _item = self._data.setdefault(item.id, item)
+            if _item != item:
+                raise FDLError(
+                    f"{item.__class__.__name__}.id ({item.id}) already exists. ID's must be unique."
+                )
+
+        else:
+            raise FDLError(f"Item must have a valid ID (not None or empty string)")
+
+        item.parent = self
+
+    def get_item(self, _id: str, default: Any = None) -> Any:
+        return self._data.get(_id, default)
+
+    def remove_item(self, _id: str):
+        if _id in self._data:
+            del self._data[_id]
+
+    def __len__(self):
+        return len(self._data)
+
+    def __iter__(self):
+        for item in self._data.values():
+            yield item
+
+    def __contains__(self, item: Any) -> bool:
+        try:
+            return item.id in self._data
+
+        except AttributeError:
+            return item in self._data
 
 
 class TypedList(UserList):
@@ -212,7 +268,7 @@ class TypedList(UserList):
                 f"Please provide items of type: \"{self._cls}\""
             )
 
-        super().insert(i, item)
+        self.data.insert(i, item)
 
 
 class DimensionsFloat(Base):
