@@ -30,7 +30,7 @@ def test_canvas_linked_requirements(sample_canvas_kwargs):
 
 
 def test_source_canvas_id(sample_canvas_kwargs):
-    tc = pyfdl.TypedContainer(pyfdl.Canvas)
+    tc = pyfdl.TypedCollection(pyfdl.Canvas)
 
     kwargs = sample_canvas_kwargs.copy()
     _id = kwargs.pop('source_canvas_id')

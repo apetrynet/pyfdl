@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from collections import UserList
-from typing import Type, Any
+from typing import Type, Any, Union
 
 from pyfdl.errors import FDLError
 
@@ -101,11 +101,11 @@ class Base(ABC):
             # check if empty value should be omitted
             if key not in self.required and not value:
                 # Keys with arrays as values should pass (for now?)
-                if not isinstance(value, (TypedList, TypedContainer)):
+                if not isinstance(value, (TypedList, TypedCollection)):
                     continue
 
             # Arrays (aka lists) contain other objects
-            if isinstance(value, (TypedList, TypedContainer)):
+            if isinstance(value, (TypedList, TypedCollection)):
                 value = [item.to_dict() for item in value]
 
             # This should cover all known objects
@@ -146,7 +146,7 @@ class Base(ABC):
                     _cls = cls.object_map[key]
                     # TODO consider using TypedContainer for all and put the id stuff in there
                     if 'id' in _cls.attributes:
-                        tc = TypedContainer(_cls)
+                        tc = TypedCollection(_cls)
                         for item in value:
                             tc.add_item(_cls.from_dict(item, parent=tc))
                         value = tc
@@ -170,12 +170,28 @@ class Base(ABC):
         return str(self.to_dict())
 
 
-class TypedContainer:
+class TypedCollection:
     def __init__(self, cls: Any):
+        """Collection only accepting items of a given class.
+        In addition, a strict control of unique id's is enforced.
+
+        Args:
+            cls: type of class to be accepted
+        """
         self._cls = cls
         self._data = {}
 
     def add_item(self, item: Any):
+        """Add an item to the collection.
+         All items added to a collection get associated to the collection by passing itself
+         as parent
+
+        Args:
+            item: of type passed at instancing of the collection.
+
+        Raises:
+            FDLError: for missing id or if a duplicate id is detected
+        """
         if not isinstance(item, self._cls):
             raise TypeError(
                 f"This container does not accept items of type: \"{type(item)}\". "
@@ -194,12 +210,25 @@ class TypedContainer:
 
         item.parent = self
 
-    def get_item(self, _id: str, default: Any = None) -> Any:
-        return self._data.get(_id, default)
+    def get_item(self, item_id: str) -> Union[Any, None]:
+        """Get an item in the collection
 
-    def remove_item(self, _id: str):
-        if _id in self._data:
-            del self._data[_id]
+        Args:
+            item_id: id of item you'd like to get
+
+        Returns:
+            item: in collection or `None` if not found
+        """
+        return self._data.get(item_id)
+
+    def remove_item(self, item_id: str):
+        """Remove an item in the collection if found
+
+        Args:
+            item_id: id of item to be removed
+        """
+        if item_id in self._data:
+            del self._data[item_id]
 
     def __len__(self):
         return len(self._data)
@@ -209,6 +238,7 @@ class TypedContainer:
             yield item
 
     def __contains__(self, item: Any) -> bool:
+        # We support both looking for an item by item.id and "string" for future use of collection
         try:
             return item.id in self._data
 

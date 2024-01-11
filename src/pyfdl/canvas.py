@@ -1,6 +1,6 @@
 from typing import Union
 
-from pyfdl import Base, DimensionsInt, Point, DimensionsFloat, FramingDecision, TypedContainer
+from pyfdl import Base, DimensionsInt, Point, DimensionsFloat, FramingDecision, TypedCollection
 from pyfdl.errors import FDLError
 
 
@@ -40,8 +40,8 @@ class Canvas(Base):
             photosite_dimensions: DimensionsInt = None,
             physical_dimensions: DimensionsFloat = None,
             anamorphic_squeeze: float = None,
-            framing_decisions: TypedContainer = None,
-            parent: TypedContainer = None
+            framing_decisions: TypedCollection = None,
+            parent: TypedCollection = None
     ):
         self.parent = parent
         self.label = label
@@ -53,14 +53,14 @@ class Canvas(Base):
         self.photosite_dimensions = photosite_dimensions
         self.physical_dimensions = physical_dimensions
         self.anamorphic_squeeze = anamorphic_squeeze
-        self.framing_decisions = framing_decisions or TypedContainer(FramingDecision)
+        self.framing_decisions = framing_decisions or TypedCollection(FramingDecision)
 
     @property
-    def parent(self) -> Union[TypedContainer, None]:
+    def parent(self) -> Union[TypedCollection, None]:
         return self._parent
 
     @parent.setter
-    def parent(self, parent: TypedContainer):
+    def parent(self, parent: TypedCollection):
         self._parent = parent
 
     @property

@@ -1,6 +1,6 @@
 from typing import Union
 
-from pyfdl import Base, DimensionsInt, RoundStrategy, TypedContainer
+from pyfdl import Base, DimensionsInt, RoundStrategy, TypedCollection
 from pyfdl.errors import FDLError
 
 
@@ -50,7 +50,7 @@ class CanvasTemplate(Base):
             maximum_dimensions: DimensionsInt = None,
             pad_to_maximum: bool = False,
             _round: RoundStrategy = None,
-            parent: TypedContainer = None
+            parent: TypedCollection = None
     ):
         self.parent = parent
         self.label = label
@@ -67,11 +67,11 @@ class CanvasTemplate(Base):
         self.round = _round
 
     @property
-    def parent(self) -> Union[TypedContainer, None]:
+    def parent(self) -> Union[TypedCollection, None]:
         return self._parent
 
     @parent.setter
-    def parent(self, parent: TypedContainer):
+    def parent(self, parent: TypedCollection):
         self._parent = parent
 
     @property
