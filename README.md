@@ -11,9 +11,10 @@ described in the FDL.
 |:--------------------------------|:----:|:-----:|--------------------------------------------------------------------------|
 | FDL files                       |  ✔   |   ✔   |                                                                          |
 | Validate id's and relationships |  ✔   |   ✔   | Enforces unique ID's and makes sure relationship between items are valid |
-| FDL as metadata                 |  ✖   |   ✖   | Only files supported by OpenImageIO                                      |
-| GUI                             |  ✖   |   ✖   | Visualize framing intents                                                |
+| FDL wizard                      |  ✖   |   ✖   | Commandline tool to produce FDL files                                    |
 | Reformat tool                   |  ✖   |   ✖   | Commandline tool based on OpenImageIO                                    |
+| FDL as metadata                 |  ✖   |   ✖   | Only files supported by OpenImageIO                                      |
+| GUI for reformat tool           |  ✖   |   ✖   | Visualize framing intents                                                |
 | Nuke plugin                     |  ✖   |   ✖   |                                                                          |
 
 ✔ Implemented  
@@ -35,6 +36,12 @@ fdl_path = Path('/path/to/fdl/myfile.fdl')
 with fdl_path.open('w') as fp:
     pyfdl.dump(fdl, fp)
 ```
+
+# Documentation
+You can build the documentation by installing and running `mkdocs build` in the 
+root directory. A "site" folder should appear with an `index.html` file.  
+The documentation is primarily based on docstrings at the moment. 
+More examples and use cases will be added as the project evolves.
 
 # Schema Files
 PyFDL ships with JSON schema definition files kindly provided by [ASC MITC](https://github.com/ascmitc/fdl).  
