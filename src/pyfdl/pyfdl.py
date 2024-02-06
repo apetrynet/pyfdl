@@ -57,7 +57,9 @@ class FDL(Base):
         self._schema = None
 
     def validate(self):
-        """Validate the current state of the FDL against the json schema.
+        """Validate the current state of the FDL.
+         ID's and relationships between items are checked and values are
+         validated against the json schema.
 
         Raises:
             FDLValidationError: if any errors are found
