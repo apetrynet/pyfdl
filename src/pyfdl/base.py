@@ -55,7 +55,7 @@ class Base(ABC):
                 elif isinstance(value, Base):
                     setattr(self, key, value.apply_defaults())
                 # Value is an attribute of this instance
-                elif 'self.' in value:
+                elif isinstance(value, str) and 'self.' in value:
                     setattr(self, key, getattr(self, value.strip('self.')))
                 # Value is whatever
                 else:
