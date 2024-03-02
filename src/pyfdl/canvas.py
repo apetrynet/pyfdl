@@ -1,6 +1,6 @@
 from typing import Union, Tuple, Type
 
-from pyfdl import Base, DimensionsInt, Point, DimensionsFloat, FramingDecision, TypedCollection
+from pyfdl import Base, DimensionsInt, Point, DimensionsFloat, FramingDecision, TypedCollection, FramingIntent
 from pyfdl.errors import FDLError
 
 
@@ -55,7 +55,7 @@ class Canvas(Base):
         self.anamorphic_squeeze = anamorphic_squeeze
         self.framing_decisions = framing_decisions or TypedCollection(FramingDecision)
 
-    def place_framing_intent(self, framing_intent: Type['FramingIntent']) -> str:
+    def place_framing_intent(self, framing_intent: FramingIntent) -> str:
         """Create a new [FramingDecision](framing_decision.md#Framing Decision) based on the provided
         [FramingIntent](framing_intent.md#Framing Intent) and add it to the
         collection of framing decisions.
