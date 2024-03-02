@@ -54,3 +54,21 @@ def test_source_canvas_id(sample_canvas_kwargs):
 
     tc.add_item(cv2)
     cv2.source_canvas_id = cv1.id
+
+
+def test_place_framing_intent(sample_framing_intent, sample_canvas, sample_header, sample_framing_decision):
+    fdl = pyfdl.FDL()
+    intent = pyfdl.FramingIntent.from_dict(sample_framing_intent)
+    fdl.framing_intents.add_item(intent)
+    fdl.header = pyfdl.Header.from_dict(sample_header)
+    ctx = pyfdl.Context(label="calculated")
+    canvas = pyfdl.Canvas.from_dict(sample_canvas)
+
+    decision_id = canvas.place_framing_intent(intent)
+    assert decision_id == f'{canvas.id}-{intent.id}'
+
+    ctx.canvases.add_item(canvas)
+    fdl.contexts.append(ctx)
+    decision = canvas.framing_decisions.get_item(decision_id)
+    facit_decision = pyfdl.FramingDecision.from_dict(sample_framing_decision)
+    assert decision == facit_decision

@@ -1,4 +1,4 @@
-from typing import Union, Tuple
+from typing import Union, Tuple, Type
 
 from pyfdl import Base, DimensionsInt, Point, DimensionsFloat, FramingDecision, TypedCollection
 from pyfdl.errors import FDLError
@@ -55,13 +55,65 @@ class Canvas(Base):
         self.anamorphic_squeeze = anamorphic_squeeze
         self.framing_decisions = framing_decisions or TypedCollection(FramingDecision)
 
-    def add_framing_decision(self, framing_decision: Union[FramingDecision, TypedCollection]):
-        if isinstance(framing_decision, FramingDecision):
-            framing_decision = [framing_decision]
+    def place_framing_intent(self, framing_intent: Type['FramingIntent']) -> str:
+        """Create a new [FramingDecision](framing_decision.md#Framing Decision) based on the provided
+        [FramingIntent](framing_intent.md#Framing Intent) and add it to the
+        collection of framing decisions.
 
-        for fd in framing_decision:
-            # TODO Solidify/calculate framing intent before adding to collection
-            self.framing_decisions.add_item(fd)
+        The framing decision's properties are calculated for you.
+        If the canvas has effective dimensions set, these will be used for the calculations. Otherwise, we use the
+        dimensions
+
+        Args:
+            framing_intent: framing intent to place in canvas
+
+        Returns:
+            framing_decision_id: id of the newly created framing decision
+
+        """
+        active_dimensions, active_anchor_point = self.get_dimensions()
+
+        # Compare aspect ratios of canvas and framing intent
+        intent_quotient = framing_intent.aspect_ratio.width / framing_intent.aspect_ratio.height
+        canvas_quotient = active_dimensions.width / active_dimensions.height
+        if intent_quotient >= canvas_quotient:
+            # Need to calculate height
+            aspect_quotient = framing_intent.aspect_ratio.height / framing_intent.aspect_ratio.width
+            width = active_dimensions.width
+            # This trick was mentioned in a ASC MITC FDL meeting by someone, but I can't recall by whom
+            height = round((width * self.anamorphic_squeeze * aspect_quotient) / 2) * 2
+
+        else:
+            # Need to calculate width
+            width = round((active_dimensions.height * intent_quotient) / 2) * 2
+            height = active_dimensions.height
+
+        decision_id = f'{self.id}-{framing_intent.id}'
+        protection_dimensions = DimensionsFloat(width=width, height=height)
+        protection_anchor_point = Point(
+            x=(active_dimensions.width - protection_dimensions.width) / 2,
+            y=(active_dimensions.height - protection_dimensions.height) / 2
+        )
+        dimensions = DimensionsFloat(
+            width=round(protection_dimensions.width * (1 - framing_intent.protection) / 2) * 2,
+            height=round(protection_dimensions.height * (1 - framing_intent.protection) / 2) * 2
+        )
+        anchor_point = Point(
+            x=protection_anchor_point.x + (protection_dimensions.width - dimensions.width) / 2,
+            y=protection_anchor_point.y + (protection_dimensions.height - dimensions.height) / 2
+        )
+        framing_decision = FramingDecision(
+            _id=decision_id,
+            label=framing_intent.label,
+            framing_intent_id=framing_intent.id,
+            dimensions=dimensions,
+            anchor_point=anchor_point,
+            protection_dimensions=protection_dimensions,
+            protection_anchor_point=protection_anchor_point
+        )
+        self.framing_decisions.add_item(framing_decision)
+
+        return decision_id
 
     def get_dimensions(self) -> Tuple[DimensionsInt, Point]:
         """ Get the most relevant dimensions and anchor point for the canvas.
