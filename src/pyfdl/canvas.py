@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Tuple
 
 from pyfdl import Base, DimensionsInt, Point, DimensionsFloat, FramingDecision, TypedCollection
 from pyfdl.errors import FDLError
@@ -54,6 +54,27 @@ class Canvas(Base):
         self.physical_dimensions = physical_dimensions
         self.anamorphic_squeeze = anamorphic_squeeze
         self.framing_decisions = framing_decisions or TypedCollection(FramingDecision)
+
+    def add_framing_decision(self, framing_decision: Union[FramingDecision, TypedCollection]):
+        if isinstance(framing_decision, FramingDecision):
+            framing_decision = [framing_decision]
+
+        for fd in framing_decision:
+            # TODO Solidify/calculate framing intent before adding to collection
+            self.framing_decisions.add_item(fd)
+
+    def get_dimensions(self) -> Tuple[DimensionsInt, Point]:
+        """ Get the most relevant dimensions and anchor point for the canvas.
+        `effective_dimensions` and `effective_anchor_point` win over `dimensions`
+
+        Returns:
+            (dimensions, anchor_point):
+
+        """
+        if self.effective_dimensions:
+            return self.effective_dimensions, self.effective_anchor_point
+
+        return self.dimensions, Point(x=0, y=0)
 
     @property
     def parent(self) -> Union[TypedCollection, None]:

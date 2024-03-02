@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Type
 
 from pyfdl import Base, DimensionsFloat, Point, TypedCollection
 
@@ -49,6 +49,24 @@ class FramingDecision(Base):
     @parent.setter
     def parent(self, parent: TypedCollection):
         self._parent = parent
+
+    # TODO this should perhaps live in Canvas? Canvas.new_framing_decision()
+    @classmethod
+    def new(cls, canvas: Type['Canvas'], framing_intent: Type['FramingIntent']) -> 'FramingDecision':
+        canvas_dimensions, canvas_anchor_point = canvas.get_dimensions()
+        aspect_quotient = framing_intent.aspect_ratio.height / framing_intent.aspect_ratio.width
+        protection_dimensions = DimensionsFloat(
+            width=canvas_dimensions.width,
+            height=canvas_dimensions.width * canvas.anamorphic_squeeze * aspect_quotient
+        )
+        fd = FramingDecision(
+            _id=f'{canvas.id}-{framing_intent.id}',
+            framing_intent_id=framing_intent.id,
+            protection_dimensions=protection_dimensions,
+            protection_anchor_point=anchor_point
+        )
+
+        return fd
 
     def __repr__(self):
         return (
