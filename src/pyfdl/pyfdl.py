@@ -56,6 +56,42 @@ class FDL(Base):
         self.canvas_templates = canvas_templates or TypedCollection(CanvasTemplate)
         self._schema = None
 
+    @property
+    def header(self) -> Header:
+        """
+
+        Returns:
+            Header: based on attributes
+        """
+        header = Header.from_dict(self.to_dict())
+
+        return header
+
+    @header.setter
+    def header(self, header: Header):
+        """
+
+        Args:
+            header: Header instance
+        """
+        # "Future-proof" setting of attributes in case Header expands its attributes
+        for attr in header.attributes:
+            setattr(self, attr, getattr(header, attr))
+
+    @property
+    def default_framing_intent(self) -> str:
+        return self._default_framing_intent
+
+    @default_framing_intent.setter
+    def default_framing_intent(self, framing_intent_id: str):
+        if framing_intent_id and framing_intent_id not in self.framing_intents:
+            raise FDLError(
+                f"Default framing intent: \"{framing_intent_id}\" not found in "
+                f"registered framing intents."
+            )
+
+        self._default_framing_intent = framing_intent_id
+
     def validate(self):
         """Validate the current state of the FDL.
          ID's and relationships between items are checked and values are
@@ -97,42 +133,6 @@ class FDL(Base):
                 f"Validation failed!\n"
                 f"{f'{nl}'.join(errors)}"
             )
-
-    @property
-    def header(self) -> Header:
-        """
-
-        Returns:
-            Header: based on attributes
-        """
-        header = Header.from_dict(self.to_dict())
-
-        return header
-
-    @header.setter
-    def header(self, header: Header):
-        """
-
-        Args:
-            header: Header instance
-        """
-        # "Future-proof" setting of attributes in case Header expands its attributes
-        for attr in header.attributes:
-            setattr(self, attr, getattr(header, attr))
-
-    @property
-    def default_framing_intent(self) -> str:
-        return self._default_framing_intent
-
-    @default_framing_intent.setter
-    def default_framing_intent(self, framing_intent_id: str):
-        if framing_intent_id and framing_intent_id not in self.framing_intents:
-            raise FDLError(
-                f"Default framing intent: \"{framing_intent_id}\" not found in "
-                f"registered framing intents."
-            )
-
-        self._default_framing_intent = framing_intent_id
 
     def load_schema(self) -> dict:
         """Load a jsonschema based on the version in `Header` or default to current version
