@@ -34,4 +34,10 @@ class FramingIntent(Base):
         self._parent = parent
 
     def __repr__(self):
-        return f'{self.__class__.__name__}(label="{self.label}", id="{self.id}")'
+        return (f'{self.__class__.__name__}('
+                f'label="{self.label}", '
+                f'id="{self.id}", '
+                f'aspect_ratio={self.aspect_ratio}, '
+                f'protection={self.protection}'
+                f')'
+                )

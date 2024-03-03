@@ -50,6 +50,15 @@ class FramingDecision(Base):
     def parent(self, parent: TypedCollection):
         self._parent = parent
 
+    def __eq__(self, other):
+        return (
+                self.id == other.id and
+                self.dimensions == other.dimensions and
+                self.anchor_point == other.anchor_point and
+                self.protection_dimensions == other.protection_dimensions and
+                self.protection_anchor_point == other.protection_anchor_point
+        )
+
     def __repr__(self):
         return (
             f'{self.__class__.__name__}('

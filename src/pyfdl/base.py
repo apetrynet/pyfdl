@@ -55,7 +55,7 @@ class Base(ABC):
                 elif isinstance(value, Base):
                     setattr(self, key, value.apply_defaults())
                 # Value is an attribute of this instance
-                elif 'self.' in value:
+                elif isinstance(value, str) and 'self.' in value:
                     setattr(self, key, getattr(self, value.strip('self.')))
                 # Value is whatever
                 else:
@@ -315,6 +315,9 @@ class DimensionsFloat(Base):
         self.width = width
         self.height = height
 
+    def __eq__(self, other):
+        return self.width == other.width and self.height == other.height
+
     def __repr__(self):
         return f"{self.__class__.__name__}(width={self.width}, height={self.height})"
 
@@ -333,6 +336,9 @@ class DimensionsInt(Base):
         self.width = width.__int__()
         self.height = height.__int__()
 
+    def __eq__(self, other):
+        return self.width == other.width and self.height == other.height
+
     def __repr__(self):
         return f"{self.__class__.__name__}(width={self.width}, height={self.height})"
 
@@ -350,6 +356,9 @@ class Point(Base):
         """
         self.x = x
         self.y = y
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
 
     def __repr__(self):
         return f"{self.__class__.__name__}(x={self.x}, y={self.y})"
