@@ -3,9 +3,6 @@ name: Deploy Docs
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
 
 jobs:
   build:
@@ -20,6 +17,7 @@ jobs:
           python-version: 3.11
       - run: |
           pip install -r requirements.txt
+          # Install pyfdl
           pip install .
       - run: mkdocs build --clean
       - uses: peaceiris/actions-gh-pages@v3
