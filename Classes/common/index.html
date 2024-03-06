@@ -62,23 +62,23 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#pyfdl.Base">Base</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Base.apply_defaults">apply_defaults()</a>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Base.apply_defaults">apply_defaults</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Base.check_required">check_required()</a>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Base.check_required">check_required</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Base.from_dict">from_dict()</a>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Base.from_dict">from_dict</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Base.to_dict">to_dict()</a>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Base.to_dict">to_dict</a>
     </li>
         </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#pyfdl.TypedCollection">TypedCollection</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.TypedCollection.add_item">add_item()</a>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.TypedCollection.add_item">add_item</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.TypedCollection.get_item">get_item()</a>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.TypedCollection.get_item">get_item</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.TypedCollection.remove_item">remove_item()</a>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.TypedCollection.remove_item">remove_item</a>
     </li>
         </ul>
     </li>
@@ -146,9 +146,8 @@
 
 
 
-
 <h2 id="pyfdl.Base" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">Base</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+            <code class="highlight language-python">pyfdl.Base(*args, **kwargs)</code>
 
 </h2>
 
@@ -271,9 +270,8 @@ subclasses of <a href="#pyfdl.Base--Base">Base</a></p>
 
 
 
-
 <h3 id="pyfdl.Base.apply_defaults" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">apply_defaults</span><span class="p">()</span></code>
+          <code class="highlight language-python">apply_defaults()</code>
 
 </h3>
 
@@ -291,9 +289,8 @@ subclasses of <a href="#pyfdl.Base--Base">Base</a></p>
 
 
 
-
 <h3 id="pyfdl.Base.check_required" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">check_required</span><span class="p">()</span></code>
+          <code class="highlight language-python">check_required()</code>
 
 </h3>
 
@@ -337,9 +334,8 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
 
 
 
-
 <h3 id="pyfdl.Base.from_dict" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">from_dict</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+          <code class="highlight language-python">from_dict(raw, parent=None)</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
@@ -420,9 +416,8 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
 
 
 
-
 <h3 id="pyfdl.Base.to_dict" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">to_dict</span><span class="p">()</span></code>
+          <code class="highlight language-python">to_dict()</code>
 
 </h3>
 
@@ -489,15 +484,15 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
 
   </div>
 
+
 </div>
 
 <div class="doc doc-object doc-class">
 
 
 
-
 <h2 id="pyfdl.TypedCollection" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">TypedCollection</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span></code>
+            <code class="highlight language-python">pyfdl.TypedCollection(cls)</code>
 
 </h2>
 
@@ -551,9 +546,8 @@ In addition, a strict control of unique id's is enforced.</p>
 
 
 
-
 <h3 id="pyfdl.TypedCollection.add_item" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">add_item</span><span class="p">(</span><span class="n">item</span><span class="p">)</span></code>
+          <code class="highlight language-python">add_item(item)</code>
 
 </h3>
 
@@ -622,9 +616,8 @@ In addition, a strict control of unique id's is enforced.</p>
 
 
 
-
 <h3 id="pyfdl.TypedCollection.get_item" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">get_item</span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span></code>
+          <code class="highlight language-python">get_item(item_id)</code>
 
 </h3>
 
@@ -691,9 +684,8 @@ In addition, a strict control of unique id's is enforced.</p>
 
 
 
-
 <h3 id="pyfdl.TypedCollection.remove_item" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">remove_item</span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span></code>
+          <code class="highlight language-python">remove_item(item_id)</code>
 
 </h3>
 
@@ -737,15 +729,15 @@ In addition, a strict control of unique id's is enforced.</p>
 
   </div>
 
+
 </div>
 
 <div class="doc doc-object doc-class">
 
 
 
-
 <h2 id="pyfdl.DimensionsFloat" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">DimensionsFloat</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span></code>
+            <code class="highlight language-python">pyfdl.DimensionsFloat(width, height)</code>
 
 </h2>
 
@@ -809,15 +801,15 @@ In addition, a strict control of unique id's is enforced.</p>
 
   </div>
 
+
 </div>
 
 <div class="doc doc-object doc-class">
 
 
 
-
 <h2 id="pyfdl.DimensionsInt" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">DimensionsInt</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span></code>
+            <code class="highlight language-python">pyfdl.DimensionsInt(width, height)</code>
 
 </h2>
 
@@ -881,15 +873,15 @@ In addition, a strict control of unique id's is enforced.</p>
 
   </div>
 
+
 </div>
 
 <div class="doc doc-object doc-class">
 
 
 
-
 <h2 id="pyfdl.Point" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></code>
+            <code class="highlight language-python">pyfdl.Point(x, y)</code>
 
 </h2>
 
@@ -953,15 +945,15 @@ In addition, a strict control of unique id's is enforced.</p>
 
   </div>
 
+
 </div>
 
 <div class="doc doc-object doc-class">
 
 
 
-
 <h2 id="pyfdl.RoundStrategy" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">RoundStrategy</span><span class="p">(</span><span class="n">even</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+            <code class="highlight language-python">pyfdl.RoundStrategy(even=None, mode=None)</code>
 
 </h2>
 
@@ -1055,6 +1047,7 @@ In addition, a strict control of unique id's is enforced.</p>
 
   </div>
 
+
 </div><h2 id="global-variables">Global Variables</h2>
 <p>Version numbers are used as default values in <a href="../header/">Header</a> and to select a matching json schema file
 if no version is set.</p>
@@ -1064,9 +1057,8 @@ if no version is set.</p>
 
 
 
-
 <h2 id="pyfdl.FDL_SCHEMA_MAJOR" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">FDL_SCHEMA_MAJOR</span> <span class="o">=</span> <span class="mi">1</span></code>
+          <code class="highlight language-python">pyfdl.FDL_SCHEMA_MAJOR = 1</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
@@ -1081,12 +1073,11 @@ if no version is set.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
 <h2 id="pyfdl.FDL_SCHEMA_MINOR" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">FDL_SCHEMA_MINOR</span> <span class="o">=</span> <span class="mi">0</span></code>
+          <code class="highlight language-python">pyfdl.FDL_SCHEMA_MINOR = 0</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
@@ -1104,9 +1095,8 @@ if no version is set.</p>
 
 
 
-
 <h2 id="pyfdl.FDL_SCHEMA_VERSION" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">FDL_SCHEMA_VERSION</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;major&#39;</span><span class="p">:</span> <span class="n">FDL_SCHEMA_MAJOR</span><span class="p">,</span> <span class="s1">&#39;minor&#39;</span><span class="p">:</span> <span class="n">FDL_SCHEMA_MINOR</span><span class="p">}</span></code>
+          <code class="highlight language-python">pyfdl.FDL_SCHEMA_VERSION = {'major': FDL_SCHEMA_MAJOR, 'minor': FDL_SCHEMA_MINOR}</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
