@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Common Classes - PyFDL</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Common Classes";
+        var mkdocs_page_input_path = "Classes/common.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> PyFDL
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Welcome to PyFDL</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../top_level_functions/">Top Level Functions</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Classes</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../canvas/">Canvas</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../canvas_template/">Canvas Template</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Common Classes</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.Base">Base</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Base.apply_defaults">apply_defaults()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Base.check_required">check_required()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Base.from_dict">from_dict()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Base.to_dict">to_dict()</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.TypedCollection">TypedCollection</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.TypedCollection.add_item">add_item()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.TypedCollection.get_item">get_item()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.TypedCollection.remove_item">remove_item()</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.DimensionsFloat">DimensionsFloat</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.DimensionsInt">DimensionsInt</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.Point">Point</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.RoundStrategy">RoundStrategy</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#global-variables">Global Variables</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.FDL_SCHEMA_MAJOR">FDL_SCHEMA_MAJOR</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.FDL_SCHEMA_MINOR">FDL_SCHEMA_MINOR</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.FDL_SCHEMA_VERSION">FDL_SCHEMA_VERSION</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../context/">Context</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../errors/">Errors</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fdl/">FDL</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../framing_decision/">Framing Decision</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../framing_intent/">Framing Intent</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../header/">Header</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">PyFDL</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Classes</li>
+      <li class="breadcrumb-item active">Common Classes</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/apetrynet/pyfdl/edit/master/docs/Classes/common.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="common-classes">Common Classes</h1>
+<p>Below is a collection of the common classes that are used by other classes.</p>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h2 id="pyfdl.Base" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">Base</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents first">
+          <p class="doc doc-class-bases">
+            Bases: <code><span title="abc.ABC">ABC</span></code></p>
+
+  
+      <p>Base class not to be instanced directly.</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>*args</code></b>
+                  (<code><span title="typing.Any">Any</span></code>, default:
+                      <code>()</code>
+)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+            <li>
+              <b><code>**kwargs</code></b>
+                  (<code><span title="typing.Any">Any</span></code>, default:
+                      <code>{}</code>
+)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Attributes:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>attributes</code></b>
+              –
+              <div class="doc-md-description">
+                <p>list of attributes described in FDL spec</p>
+              </div>
+            </li>
+            <li>
+              <b><code>kwarg_map</code></b>
+              –
+              <div class="doc-md-description">
+                <p>map attribute names that clash with reserved builtin python functions to safe alternatives
+like: (id -&gt; _id) and (uuid -&gt; _uuid)</p>
+              </div>
+            </li>
+            <li>
+              <b><code>object_map</code></b>
+              –
+              <div class="doc-md-description">
+                <p>map attributes to custom classes</p>
+              </div>
+            </li>
+            <li>
+              <b><code>required</code></b>
+              –
+              <div class="doc-md-description">
+                <p>list of required attributes.
+Supports linked attributes like: "effective_dimensions.effective_anchor_point" where
+"effective_anchor_point" is required if "effective_dimensions" is set</p>
+              </div>
+            </li>
+            <li>
+              <b><code>defaults</code></b>
+              –
+              <div class="doc-md-description">
+                <p>map default values to attributes. In addition to primitive values supports: callable,
+subclasses of <a href="#pyfdl.Base--Base">Base</a></p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h3 id="pyfdl.Base.apply_defaults" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">apply_defaults</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Applies default values defined in the <code>defaults</code> attribute to attributes that are <code>None</code></p>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h3 id="pyfdl.Base.check_required" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">check_required</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Check that required attributes contain values.
+Checks linked attributes like: "effective_dimensions.effective_anchor_point" where
+"effective_anchor_point" is required if "effective_dimensions" is set</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+    <th class="field-name">Returns:</th>
+    <td class="field-body">
+      <ul class="first simple">
+          <li>
+                <code>list</code>
+            –
+            <div class="doc-md-description">
+              <p>a list of missing attributes</p>
+            </div>
+          </li>
+      </ul>
+    </td>
+    </tr>
+  </tbody>
+</table>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h3 id="pyfdl.Base.from_dict" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">from_dict</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Create instances of classes from a provided dict.</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>parent</code></b>
+                  (<code><span title="typing.Any">Any</span></code>, default:
+                      <code>None</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>is used in collections of items</p>
+              </div>
+            </li>
+            <li>
+              <b><code>raw</code></b>
+                  (<code>dict</code>)
+              –
+              <div class="doc-md-description">
+                <p>dictionary to convert to supported classes</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+    <th class="field-name">Returns:</th>
+    <td class="field-body">
+      <ul class="first simple">
+          <li>
+<b><code>cls</code></b>(                <code><span title="typing.Any">Any</span></code>
+)            –
+            <div class="doc-md-description">
+              <p>and instance of the current class</p>
+            </div>
+          </li>
+      </ul>
+    </td>
+    </tr>
+  </tbody>
+</table>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h3 id="pyfdl.Base.to_dict" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">to_dict</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Produce a dictionary representation of the current object along with all sub objects.</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Raises:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+                  <code><a class="autorefs autorefs-internal" title="pyfdl.errors.FDLError" href="../errors/#pyfdl.FDLError">FDLError</a></code>
+              –
+              <div class="doc-md-description">
+                <p>if required keys are missing</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+    <th class="field-name">Returns:</th>
+    <td class="field-body">
+      <ul class="first simple">
+          <li>
+                <code>dict</code>
+            –
+            <div class="doc-md-description">
+              <p>representation of object</p>
+            </div>
+          </li>
+      </ul>
+    </td>
+    </tr>
+  </tbody>
+</table>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h2 id="pyfdl.TypedCollection" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">TypedCollection</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents first">
+
+  
+      <p>Collection only accepting items of a given class.
+In addition, a strict control of unique id's is enforced.</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>cls</code></b>
+                  (<code><span title="typing.Any">Any</span></code>)
+              –
+              <div class="doc-md-description">
+                <p>type of class to be accepted</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h3 id="pyfdl.TypedCollection.add_item" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">add_item</span><span class="p">(</span><span class="n">item</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Add an item to the collection.
+ All items added to a collection get associated to the collection by passing itself
+ as parent</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>item</code></b>
+                  (<code><span title="typing.Any">Any</span></code>)
+              –
+              <div class="doc-md-description">
+                <p>of type passed at instancing of the collection.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Raises:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+                  <code><a class="autorefs autorefs-internal" title="pyfdl.errors.FDLError" href="../errors/#pyfdl.FDLError">FDLError</a></code>
+              –
+              <div class="doc-md-description">
+                <p>for missing id or if a duplicate id is detected</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h3 id="pyfdl.TypedCollection.get_item" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">get_item</span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get an item in the collection</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>item_id</code></b>
+                  (<code>str</code>)
+              –
+              <div class="doc-md-description">
+                <p>id of item you'd like to get</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+    <th class="field-name">Returns:</th>
+    <td class="field-body">
+      <ul class="first simple">
+          <li>
+<b><code>item</code></b>(                <code><span title="typing.Union">Union</span>[<span title="typing.Any">Any</span>, None]</code>
+)            –
+            <div class="doc-md-description">
+              <p>in collection or <code>None</code> if not found</p>
+            </div>
+          </li>
+      </ul>
+    </td>
+    </tr>
+  </tbody>
+</table>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h3 id="pyfdl.TypedCollection.remove_item" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">remove_item</span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Remove an item in the collection if found</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>item_id</code></b>
+                  (<code>str</code>)
+              –
+              <div class="doc-md-description">
+                <p>id of item to be removed</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h2 id="pyfdl.DimensionsFloat" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">DimensionsFloat</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents first">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.base.Base" href="#pyfdl.Base">Base</a></code></p>
+
+  
+      <p>Dimensions properly formatted and stored as floats</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>width</code></b>
+                  (<code>float</code>)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+            <li>
+              <b><code>height</code></b>
+                  (<code>float</code>)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h2 id="pyfdl.DimensionsInt" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">DimensionsInt</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents first">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.base.Base" href="#pyfdl.Base">Base</a></code></p>
+
+  
+      <p>Dimensions properly formatted and stored as ints</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>width</code></b>
+                  (<code>int</code>)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+            <li>
+              <b><code>height</code></b>
+                  (<code>int</code>)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h2 id="pyfdl.Point" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents first">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.base.Base" href="#pyfdl.Base">Base</a></code></p>
+
+  
+      <p>Point properly formatted</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>x</code></b>
+                  (<code>float</code>)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+            <li>
+              <b><code>y</code></b>
+                  (<code>float</code>)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h2 id="pyfdl.RoundStrategy" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">RoundStrategy</span><span class="p">(</span><span class="n">even</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents first">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.base.Base" href="#pyfdl.Base">Base</a></code></p>
+
+  
+      <p>Describes how to handle rounding of values.</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>even</code></b>
+                  (<code>str</code>, default:
+                      <code>None</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>"whole" = to nearest integer,
+"even" = to nearest even-numbered integer</p>
+              </div>
+            </li>
+            <li>
+              <b><code>mode</code></b>
+                  (<code>str</code>, default:
+                      <code>None</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>"up" = always round up,
+"down" = always round down</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Raises:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+                  <code><a class="autorefs autorefs-internal" title="pyfdl.errors.FDLError" href="../errors/#pyfdl.FDLError">FDLError</a></code>
+              –
+              <div class="doc-md-description">
+                <p>if you provide a value other than the ones listed above</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div><h2 id="global-variables">Global Variables</h2>
+<p>Version numbers are used as default values in <a href="../header/">Header</a> and to select a matching json schema file
+if no version is set.</p>
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h2 id="pyfdl.FDL_SCHEMA_MAJOR" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">FDL_SCHEMA_MAJOR</span> <span class="o">=</span> <span class="mi">1</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+</h2>
+
+
+  <div class="doc doc-contents first">
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h2 id="pyfdl.FDL_SCHEMA_MINOR" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">FDL_SCHEMA_MINOR</span> <span class="o">=</span> <span class="mi">0</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+</h2>
+
+
+  <div class="doc doc-contents first">
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h2 id="pyfdl.FDL_SCHEMA_VERSION" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">FDL_SCHEMA_VERSION</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;major&#39;</span><span class="p">:</span> <span class="n">FDL_SCHEMA_MAJOR</span><span class="p">,</span> <span class="s1">&#39;minor&#39;</span><span class="p">:</span> <span class="n">FDL_SCHEMA_MINOR</span><span class="p">}</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+</h2>
+
+
+  <div class="doc doc-contents first">
+  </div>
+
+</div>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../canvas_template/" class="btn btn-neutral float-left" title="Canvas Template"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../context/" class="btn btn-neutral float-right" title="Context">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/apetrynet/pyfdl" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../canvas_template/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../context/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

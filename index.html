@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="None" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>PyFDL</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Welcome to PyFDL";
+        var mkdocs_page_input_path = "index.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="." class="icon icon-home"> PyFDL
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href=".">Welcome to PyFDL</a>
+    <ul class="current">
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="top_level_functions/">Top Level Functions</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Classes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="Classes/canvas/">Canvas</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="Classes/canvas_template/">Canvas Template</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="Classes/common/">Common Classes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="Classes/context/">Context</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="Classes/errors/">Errors</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="Classes/fdl/">FDL</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="Classes/framing_decision/">Framing Decision</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="Classes/framing_intent/">Framing Intent</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="Classes/header/">Header</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">PyFDL</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Welcome to PyFDL</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/apetrynet/pyfdl/edit/master/docs/index.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="welcome-to-pyfdl">Welcome to PyFDL</h1>
+<blockquote>
+<p><strong>NOTE!</strong> PyFDL is under development and should not be used in production </p>
+</blockquote>
+<p>PyFDL is a toolkit to parse and produce <a href="https://theasc.com/society/ascmitc/asc-framing-decision-list">Framing Decision List (FDL)</a> files in python.<br />
+In addition to parsing FDL files, PyFDL aims to provide sample applications/plugins to apply framing intents
+described in the FDL.</p>
+<p>PyFDL is modeled around the official <a href="https://github.com/ascmitc/fdl/tree/main/Specification">spec</a>.</p>
+<h1 id="install">Install</h1>
+<p>Until a package is available on PyPi, you'll need to install PyFDL manually.
+It's recommended to install packages like this in a virtual environment.</p>
+<h2 id="installing-from-pypi">Installing from PyPi</h2>
+<pre><code class="language-shell">pip install pyfdl
+</code></pre>
+<h2 id="installing-directly-from-main-branch-on-github-at-your-own-risk">Installing directly from main branch on GitHub (At your own risk)</h2>
+<pre><code class="language-shell">pip install git+https://github.com/apetrynet/pyfdl.git
+</code></pre>
+<h2 id="when-working-on-a-contribution">When working on a contribution</h2>
+<p>If you're working a contribution to this project you can save some time
+by installing the package like described below. This way you won't need to reinstall
+the package for every change you do to the code.</p>
+<pre><code class="language-shell"># Replace PROJECT_ROOT with the root of this project
+cd [PROJECT_ROOT] 
+pip install -e .
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="getting_started/" class="btn btn-neutral float-right" title="Getting Started">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/apetrynet/pyfdl" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+      <span><a href="getting_started/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.5.3
+Build Date UTC : 2024-03-06 11:40:22.068850+00:00
+-->

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Getting Started - PyFDL</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Getting Started";
+        var mkdocs_page_input_path = "getting_started.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> PyFDL
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Welcome to PyFDL</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Getting Started</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#install">Install</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#create-an-fdl-from-scratch">Create an FDL from scratch</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../top_level_functions/">Top Level Functions</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Classes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../Classes/canvas/">Canvas</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Classes/canvas_template/">Canvas Template</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Classes/common/">Common Classes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Classes/context/">Context</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Classes/errors/">Errors</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Classes/fdl/">FDL</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Classes/framing_decision/">Framing Decision</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Classes/framing_intent/">Framing Intent</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Classes/header/">Header</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">PyFDL</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Getting Started</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/apetrynet/pyfdl/edit/master/docs/getting_started.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="getting-started">Getting Started</h1>
+<h2 id="install">Install</h2>
+<blockquote>
+<p><strong>NOTE!</strong> Please note that at the time of writing this PyFDL is not released on PyPi. 
+Please refer to README.md for instructions. </p>
+</blockquote>
+<pre><code>pip install pyfdl
+</code></pre>
+<h2 id="create-an-fdl-from-scratch">Create an FDL from scratch</h2>
+<pre><code class="language-python">import pyfdl
+from io import StringIO
+
+fdl = pyfdl.FDL()
+
+# Applying defaults will provide you with a valid staring point 
+fdl.apply_defaults()
+
+# Let's create a framing intent
+framing_intent = pyfdl.FramingIntent(
+    label=&quot;1.78-1 Framing&quot;,
+    _id=&quot;FDLSMP03&quot;,
+    aspect_ratio=pyfdl.DimensionsInt(width=16, height=9),
+    protection=0.088
+)
+
+# Add the newly created framing intent to our FDL
+fdl.framing_intents.add_item(framing_intent)
+
+# Now let's create a canvas
+canvas = pyfdl.Canvas(
+    label=&quot;Open Gate RAW&quot;,
+    _id=&quot;20220310&quot;,
+    source_canvas_id=&quot;20220310&quot;,
+    dimensions=pyfdl.DimensionsInt(width=5184, height=4320),
+    effective_dimensions=pyfdl.DimensionsInt(width=5184, height=4320),
+    effective_anchor_point=pyfdl.Point(x=0, y=0),
+    photosite_dimensions=pyfdl.DimensionsInt(5184, height=4320),
+    physical_dimensions=pyfdl.DimensionsFloat(width=25.92, height=21.60),
+    anamorphic_squeeze=1.30
+)
+
+# Let's now add our canvas to the FDL within a context.
+# If no such context exists, one will be created for you.
+fdl.place_canvas_in_context(context_label=&quot;PanavisionDXL2&quot;, canvas=canvas)
+
+# Finally, let's create a framing decision
+canvas.place_framing_intent(framing_intent=framing_intent)
+
+# Validate our FDL and save it (using StringIO as example)
+with StringIO() as f:
+    pyfdl.dump(fdl, f, validate=True)
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="Welcome to PyFDL"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../top_level_functions/" class="btn btn-neutral float-right" title="Top Level Functions">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/apetrynet/pyfdl" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../top_level_functions/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
