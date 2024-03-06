@@ -13,3 +13,4 @@ you can pass a `Header` object as an attribute if you wish.
             - to_dict
             - load_schema
             - header
+            - place_canvas_in_context

@@ -108,47 +108,6 @@ def test_rounding_strategy_default_values():
     assert rs.check_required() == []
 
 
-def test_typed_init_list():
-    vl1 = pyfdl.TypedList(pyfdl.Point)
-    assert isinstance(vl1, pyfdl.TypedList)
-    assert vl1 == []
-
-    point = pyfdl.Point(x=10, y=10)
-    vl2 = pyfdl.TypedList(pyfdl.Point, [point])
-    assert isinstance(vl2, pyfdl.TypedList)
-    assert vl2[0] == point
-
-
-def test_typed_list_raise():
-    vl = pyfdl.TypedList(pyfdl.Point)
-    with pytest.raises(TypeError):
-        vl.append('string')
-
-
-def test_typed_list_append():
-    point = pyfdl.Point(x=10, y=10)
-    vl1 = pyfdl.TypedList(pyfdl.Point)
-    vl1.append(point)
-    assert vl1[0] == point
-
-
-def test_typed_list_extend():
-    points = [pyfdl.Point(x=10, y=10)]
-    vl1 = pyfdl.TypedList(pyfdl.Point)
-    vl1.extend(points)
-    assert len(vl1) == 1
-    assert vl1[0] == points[0]
-
-
-def test_typed_list_insert():
-    points = [pyfdl.Point(x=10, y=10), pyfdl.Point(x=30, y=30)]
-    expected_points = [pyfdl.Point(x=10, y=10), pyfdl.Point(x=20, y=20), pyfdl.Point(x=30, y=30)]
-    vl1 = pyfdl.TypedList(pyfdl.Point, points)
-    vl1.insert(1, pyfdl.Point(x=20, y=20))
-    assert len(vl1) == 3
-    assert repr(vl1) == repr(expected_points)
-
-
 def test_typed_container(sample_framing_intent, sample_framing_intent_kwargs):
     td = pyfdl.TypedCollection(pyfdl.FramingIntent)
     fi = pyfdl.FramingIntent.from_dict(sample_framing_intent)
@@ -173,7 +132,7 @@ def test_typed_container(sample_framing_intent, sample_framing_intent_kwargs):
     with pytest.raises(pyfdl.FDLError) as err:
         td.add_item(fi1)
 
-    assert f"Item must have a valid ID" in str(err.value)
+    assert f"Item must have a valid identifier (\"id\")" in str(err.value)
 
     # Test duplicate id's
     td.add_item(fi)
@@ -183,4 +142,14 @@ def test_typed_container(sample_framing_intent, sample_framing_intent_kwargs):
     with pytest.raises(pyfdl.FDLError) as err:
         td.add_item(fi2)
 
-    assert f"FramingIntent.id ({fi.id}) already exists." in str(err.value)
+    assert f"FramingIntent.id (\"{fi.id}\") already exists." in str(err.value)
+
+    # Test object with alternative id_attribute
+    td1 = pyfdl.TypedCollection(pyfdl.Context)
+    ctx1 = pyfdl.Context(label='context1')
+    td1.add_item(ctx1)
+
+    with pytest.raises(pyfdl.FDLError) as err:
+        td1.add_item(ctx1)
+
+    assert f"Context.label (\"{ctx1.label}\") already exists." in str(err)

@@ -1,15 +1,15 @@
 import json
-import uuid
+
 import jsonschema
 from pathlib import Path
 
 from pyfdl import (
     Base,
+    Canvas,
     Header,
     FramingIntent,
     Context,
     CanvasTemplate,
-    TypedList,
     TypedCollection,
     FDL_SCHEMA_MAJOR,
     FDL_SCHEMA_MINOR,
@@ -30,7 +30,7 @@ class FDL(Base):
     ]
     kwarg_map = {'uuid': '_uuid'}
     required = ['uuid', 'version']
-    defaults = {'uuid': uuid.uuid4, 'fdl_creator': 'PyFDL', 'version': FDL_SCHEMA_VERSION}
+    defaults = {'uuid': Base.generate_uuid, 'fdl_creator': 'PyFDL', 'version': FDL_SCHEMA_VERSION}
     object_map = {
         'framing_intents': FramingIntent,
         'contexts': Context,
@@ -43,18 +43,34 @@ class FDL(Base):
             version: dict = None,
             fdl_creator: str = None,
             default_framing_intent: str = None,
-            framing_intents: TypedList[FramingIntent] = None,
-            contexts: TypedList[Context] = None,
-            canvas_templates: TypedList[CanvasTemplate] = None
+            framing_intents: TypedCollection = None,
+            contexts: TypedCollection = None,
+            canvas_templates: TypedCollection = None
     ):
         self.uuid = _uuid
         self.version = version
         self.fdl_creator = fdl_creator
         self.framing_intents = framing_intents or TypedCollection(FramingIntent)
         self.default_framing_intent = default_framing_intent
-        self.contexts = contexts or TypedList(Context)
+        self.contexts = contexts or TypedCollection(Context)
         self.canvas_templates = canvas_templates or TypedCollection(CanvasTemplate)
         self._schema = None
+
+    def place_canvas_in_context(self, context_label: str, canvas: Canvas):
+        """Place a canvas in a context. If no context with the provided label exist,
+        a new context will be created for you.
+
+        Args:
+            context_label: name of existing or to be created context
+            canvas: to be placed in context
+        """
+
+        context = self.contexts.get_item(context_label)
+        if context is None:
+            context = Context(label=context_label)
+            self.contexts.add_item(context)
+
+        context.canvases.add_item(canvas)
 
     @property
     def header(self) -> Header:

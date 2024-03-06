@@ -93,3 +93,18 @@ def test_setting_default_framing_id(sample_framing_intent):
         fdl.default_framing_intent = 'nogood'
 
     assert "Default framing intent: \"nogood\" not found in" in str(err.value)
+
+
+def test_place_canvas_in_context(sample_canvas, sample_context):
+    fdl = pyfdl.FDL()
+    canvas = pyfdl.Canvas.from_dict(sample_canvas)
+    context = pyfdl.Context.from_dict(sample_context)
+    fdl.contexts.add_item(context)
+
+    fdl.place_canvas_in_context(context_label=context.label, canvas=canvas)
+    assert canvas in fdl.contexts.get_item(context.label).canvases
+
+    fdl.place_canvas_in_context(context_label="nonexistent", canvas=canvas)
+    new_context = fdl.contexts.get_item("nonexistent")
+    assert isinstance(new_context, pyfdl.Context)
+    assert new_context.canvases.get_item(canvas.id) == canvas

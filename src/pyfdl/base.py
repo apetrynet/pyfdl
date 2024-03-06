@@ -1,6 +1,6 @@
+import uuid
 from abc import ABC, abstractmethod
-from collections import UserList
-from typing import Type, Any, Union
+from typing import Any, Union
 
 from pyfdl.errors import FDLError
 
@@ -20,6 +20,8 @@ class Base(ABC):
     required = []
     # Default values for attributes
     defaults = {}
+    # Attribute used as a unique identifier
+    id_attribute = "id"
 
     @abstractmethod
     def __init__(self, *args: Any, **kwargs: Any):
@@ -101,11 +103,11 @@ class Base(ABC):
             # check if empty value should be omitted
             if key not in self.required and not value:
                 # Keys with arrays as values should pass (for now?)
-                if not isinstance(value, (TypedList, TypedCollection)):
+                if not isinstance(value, TypedCollection):
                     continue
 
             # Arrays (aka lists) contain other objects
-            if isinstance(value, (TypedList, TypedCollection)):
+            if isinstance(value, TypedCollection):
                 value = [item.to_dict() for item in value]
 
             # This should cover all known objects
@@ -144,14 +146,11 @@ class Base(ABC):
             if key in cls.object_map:
                 if isinstance(value, list):
                     _cls = cls.object_map[key]
-                    # TODO consider using TypedContainer for all and put the id stuff in there
-                    if 'id' in _cls.attributes:
-                        tc = TypedCollection(_cls)
-                        for item in value:
-                            tc.add_item(_cls.from_dict(item, parent=tc))
-                        value = tc
-                    else:
-                        value = TypedList(_cls, [_cls.from_dict(item) for item in value])
+
+                    tc = TypedCollection(_cls)
+                    for item in value:
+                        tc.add_item(_cls.from_dict(item, parent=tc))
+                    value = tc
                 else:
                     value = cls.object_map[key].from_dict(value)
 
@@ -161,6 +160,11 @@ class Base(ABC):
             kwargs['parent'] = parent
 
         return cls(**kwargs)
+
+    @staticmethod
+    def generate_uuid():
+        return str(uuid.uuid4())
+
 
     @abstractmethod
     def __repr__(self) -> str:
@@ -192,21 +196,24 @@ class TypedCollection:
         Raises:
             FDLError: for missing id or if a duplicate id is detected
         """
+
         if not isinstance(item, self._cls):
             raise TypeError(
                 f"This container does not accept items of type: \"{type(item)}\". "
                 f"Please provide items of type: \"{self._cls}\""
             )
 
-        if item.id:
-            _item = self._data.setdefault(item.id, item)
-            if _item != item:
+        item_id = self._get_item_id(item)
+
+        if item_id:
+            if item_id in self._data:
                 raise FDLError(
-                    f"{item.__class__.__name__}.id ({item.id}) already exists. ID's must be unique."
+                    f"{item.__class__.__name__}.{self._cls.id_attribute} (\"{item_id}\") already exists."
                 )
+            self._data[item_id] = item
 
         else:
-            raise FDLError(f"Item must have a valid ID (not None or empty string)")
+            raise FDLError(f"Item must have a valid identifier (\"{self._cls.id_attribute}\"), not None or empty string")
 
         item.parent = self
 
@@ -230,6 +237,9 @@ class TypedCollection:
         if item_id in self._data:
             del self._data[item_id]
 
+    def _get_item_id(self, item):
+        return getattr(item, self._cls.id_attribute)
+
     def __len__(self):
         return len(self._data)
 
@@ -240,65 +250,11 @@ class TypedCollection:
     def __contains__(self, item: Any) -> bool:
         # We support both looking for an item by item.id and "string" for future use of collection
         try:
-            return item.id in self._data
+            item_id = self._get_item_id(item)
+            return item_id in self._data
 
         except AttributeError:
             return item in self._data
-
-
-class TypedList(UserList):
-    def __init__(self, cls: Type[Base], items: list = None):
-        """A list that only accepts items of a given type
-
-        Args:
-            cls: accepted class for this instance. Example [FramingDecision](framing_decision.md)
-            items: an initial list of items
-        """
-        super().__init__()
-        self._cls = cls
-        if items:
-            self.extend(items)
-
-    def append(self, item: Type[Base]) -> None:
-        """Append an item to the list.
-
-        Args:
-            item: of same class as defined when instanced
-
-        Raises:
-            TypeError: if wrong type of item is provided
-        """
-        self.insert(self.__len__(), item)
-
-    def extend(self, other: list[Type[Base]]) -> None:
-        """Extend list with a list of same type of items
-
-        Args:
-            other: items to merge with this list
-
-        Raises:
-            TypeError: if other list contains items of a different class than this one
-        """
-        for item in other:
-            self.append(item)
-
-    def insert(self, i: int, item: Type[Base]) -> None:
-        """Insert an item at the given position of the list
-
-        Args:
-            i: index a.k.a position of the item
-            item: an item of the given class to insert in this list
-
-        Raises:
-            TypeError: if wrong type of item is provided
-        """
-        if not isinstance(item, self._cls):
-            raise TypeError(
-                f"This list does not accept items of type: \"{type(item)}\". "
-                f"Please provide items of type: \"{self._cls}\""
-            )
-
-        self.data.insert(i, item)
 
 
 class DimensionsFloat(Base):

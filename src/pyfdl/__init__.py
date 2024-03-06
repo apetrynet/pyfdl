@@ -11,8 +11,7 @@ from .base import (
     FDL_SCHEMA_MAJOR,
     FDL_SCHEMA_MINOR,
     FDL_SCHEMA_VERSION,
-    TypedCollection,
-    TypedList
+    TypedCollection
 )
 from .header import Header
 from .framing_intent import FramingIntent
@@ -43,8 +42,7 @@ __all__ = [
     'loads',
     'Point',
     'RoundStrategy',
-    'TypedCollection',
-    'TypedList'
+    'TypedCollection'
 ]
 
 __version__ = "0.1.0"

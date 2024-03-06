@@ -7,7 +7,7 @@ class Header(Base):
     attributes = ['uuid', 'version', 'fdl_creator', 'default_framing_intent']
     kwarg_map = {'uuid': '_uuid'}
     required = ['uuid', 'version']
-    defaults = {'uuid': uuid.uuid4, 'fdl_creator': 'PyFDL', 'version': FDL_SCHEMA_VERSION}
+    defaults = {'uuid': Base.generate_uuid, 'fdl_creator': 'PyFDL', 'version': FDL_SCHEMA_VERSION}
 
     def __init__(
             self,

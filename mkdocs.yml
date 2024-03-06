@@ -1,4 +1,5 @@
 site_name: PyFDL
+repo_url: https://github.com/apetrynet/pyfdl
 
 theme:
   name: "readthedocs"
