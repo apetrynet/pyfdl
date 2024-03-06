@@ -15,12 +15,10 @@ jobs:
       - name: Checkout main
         uses: actions/checkout@v3
 
-      - name: Install dependencies
+      - name: Deploy docs
         run: |
           python -m pip install --upgrade pip
-          python -m pip install mkdocs mktestdocs
 
-      - name: Deploy docs
         uses: mhausenblas/mkdocs-deploy-gh-pages@nomaterial
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
