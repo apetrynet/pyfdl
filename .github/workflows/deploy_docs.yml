@@ -3,12 +3,14 @@ name: Deploy Docs
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
 
 jobs:
   build:
     name: Deploy docs
     runs-on: ubuntu-latest
-    needs: test_pyfdl
     steps:
       - name: Checkout main
         uses: actions/checkout@v3
