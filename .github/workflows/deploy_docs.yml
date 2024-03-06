@@ -19,5 +19,6 @@ jobs:
           python -m pip install mkdocs mktestdocs
 
       - name: Deploy docs
-        run: |
-          mkdocs gh-deploy
+        uses: mhausenblas/mkdocs-deploy-gh-pages@nomaterial
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

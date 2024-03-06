@@ -21,27 +21,11 @@ described in the FDL.
 ✖ Not implemented  
 N/A Not applicable  
 
-# Usage
-```python
-import pyfdl
-from pathlib import Path
-
-# Read from file
-fdl_path = Path('/path/to/fdl/file.fdl')
-with fdl_path.open('r') as fp:
-    fdl = pyfdl.load(fp)
-
-# Write to file
-fdl_path = Path('/path/to/fdl/myfile.fdl')
-with fdl_path.open('w') as fp:
-    pyfdl.dump(fdl, fp)
-```
-
 # Documentation
-You can build the documentation by installing and running `mkdocs build` in the 
-root directory. A "site" folder should appear with an `index.html` file.  
-The documentation is primarily based on docstrings at the moment. 
-More examples and use cases will be added as the project evolves.
+For the latest published documentation please visit these [gh-pages](https://apetrynet.github.io/pyfdl/)
+
+If You'd like a local copy of the documentation you may build it by installing mkdocs and running `mkdocs build` in the
+root directory. A "site" folder should appear with an `index.html` file in it.
 
 # Schema Files
 PyFDL ships with JSON schema definition files kindly provided by [ASC MITC](https://github.com/ascmitc/fdl).  
