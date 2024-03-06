@@ -1,0 +1,8 @@
+build
+mkdocs
+pytest
+jsonschema
+mktestdocs
+mkdocstrings
+mkdocstrings-python
+mkdocs-autorefs
