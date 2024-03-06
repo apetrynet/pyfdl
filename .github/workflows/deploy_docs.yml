@@ -12,14 +12,9 @@ jobs:
     name: Deploy docs
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout main
-        uses: actions/checkout@v3
-      - name: Upgrade pip
-        run: python -m pip install --upgrade pip 
-      - name: Deploy docs
-        uses: mhausenblas/mkdocs-deploy-gh-pages@nomaterial
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CONFIG_FILE: mkdocs.yml
-          EXTRA_PACKAGES: build-base
-          REQUIREMENTS: requirements.txt
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+      - run: pip install -r requirements.txt
+      - run: mkdocs gh-deploy --force --clean --verbose
