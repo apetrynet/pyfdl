@@ -16,22 +16,12 @@ class FramingIntent(Base):
             label: str = None,
             _id: str = None,
             aspect_ratio: DimensionsInt = None,
-            protection: float = None,
-            parent: TypedCollection = None
+            protection: float = None
     ):
-        self.parent = parent
         self.id = _id
         self.label = label
         self.aspect_ratio = aspect_ratio
         self.protection = protection
-
-    @property
-    def parent(self) -> Union[TypedCollection, None]:
-        return self._parent
-
-    @parent.setter
-    def parent(self, parent: TypedCollection):
-        self._parent = parent
 
     def __repr__(self):
         return (f'{self.__class__.__name__}('

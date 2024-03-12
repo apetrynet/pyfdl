@@ -49,10 +49,8 @@ class CanvasTemplate(Base):
             preserve_from_source_canvas: str = None,
             maximum_dimensions: DimensionsInt = None,
             pad_to_maximum: bool = False,
-            _round: RoundStrategy = None,
-            parent: TypedCollection = None
+            _round: RoundStrategy = None
     ):
-        self.parent = parent
         self.label = label
         self.id = _id
         self.target_dimensions = target_dimensions
@@ -65,14 +63,6 @@ class CanvasTemplate(Base):
         self.maximum_dimensions = maximum_dimensions
         self.pad_to_maximum = pad_to_maximum
         self.round = _round
-
-    @property
-    def parent(self) -> Union[TypedCollection, None]:
-        return self._parent
-
-    @parent.setter
-    def parent(self, parent: TypedCollection):
-        self._parent = parent
 
     @property
     def fit_source(self) -> str:

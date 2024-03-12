@@ -123,11 +123,10 @@ class Base(ABC):
         return data
 
     @classmethod
-    def from_dict(cls, raw: dict, parent: Any = None) -> Any:
+    def from_dict(cls, raw: dict) -> Any:
         """Create instances of classes from a provided dict.
 
         Args:
-            parent: is used in collections of items
             raw: dictionary to convert to supported classes
 
         Returns:
@@ -149,22 +148,18 @@ class Base(ABC):
 
                     tc = TypedCollection(_cls)
                     for item in value:
-                        tc.add_item(_cls.from_dict(item, parent=tc))
+                        tc.add_item(_cls.from_dict(item))
                     value = tc
                 else:
                     value = cls.object_map[key].from_dict(value)
 
             kwargs[keyword] = value
 
-        if parent:
-            kwargs['parent'] = parent
-
         return cls(**kwargs)
 
     @staticmethod
     def generate_uuid():
         return str(uuid.uuid4())
-
 
     @abstractmethod
     def __repr__(self) -> str:
@@ -214,8 +209,6 @@ class TypedCollection:
 
         else:
             raise FDLError(f"Item must have a valid identifier (\"{self._cls.id_attribute}\"), not None or empty string")
-
-        item.parent = self
 
     def get_item(self, item_id: str) -> Union[Any, None]:
         """Get an item in the collection
