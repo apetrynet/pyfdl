@@ -108,10 +108,12 @@ def test_rounding_strategy_default_values():
     assert rs.check_required() == []
 
 
-def test_typed_container(sample_framing_intent, sample_framing_intent_kwargs):
+def test_typed_collection(sample_framing_intent, sample_framing_intent_kwargs):
     td = pyfdl.TypedCollection(pyfdl.FramingIntent)
     fi = pyfdl.FramingIntent.from_dict(sample_framing_intent)
     td.add_item(fi)
+
+    assert td.ids == [f"{fi.id}"]
 
     assert fi in td
     assert fi.id in td

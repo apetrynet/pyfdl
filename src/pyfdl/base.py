@@ -180,6 +180,10 @@ class TypedCollection:
         self._cls = cls
         self._data = {}
 
+    @property
+    def ids(self):
+        return list(self._data.keys())
+
     def add_item(self, item: Any):
         """Add an item to the collection.
          All items added to a collection get associated to the collection by passing itself
