@@ -132,7 +132,7 @@ class FDL(Base):
         for canvas in canvases:
             if canvases.get_item(canvas.source_canvas_id) is None:
                 errors.append(
-                    f'{canvas}.source_canvas_id (canvas.source_canvas_id) not found in '
+                    f'{canvas.source_canvas_id} (canvas.source_canvas_id) not found in '
                     f'registered canvases'
                 )
 
@@ -151,7 +151,7 @@ class FDL(Base):
 
         if errors:
             nl = '\n'
-            FDLValidationError(
+            raise FDLValidationError(
                 f"Validation failed!\n"
                 f"{f'{nl}'.join(errors)}"
             )

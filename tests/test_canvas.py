@@ -29,31 +29,25 @@ def test_canvas_linked_requirements(sample_canvas_kwargs):
     assert canvas.check_required() == []
 
 
-def test_source_canvas_id(sample_canvas_kwargs):
-    tc = pyfdl.TypedCollection(pyfdl.Canvas)
+def test_source_canvas_id(sample_canvas_kwargs, sample_canvas):
+    fdl = pyfdl.FDL()
+    fdl.apply_defaults()
 
-    kwargs = sample_canvas_kwargs.copy()
-    _id = kwargs.pop('source_canvas_id')
-    cv1 = pyfdl.Canvas(**kwargs)
-    tc.add_item(cv1)
-    # This should fail because a canvas with id 123 is not in container
-    with pytest.raises(pyfdl.FDLError) as err:
-        cv1.source_canvas_id = '123'
+    canvas1 = pyfdl.Canvas.from_dict(sample_canvas)
 
-    assert '"source_canvas_id" 123 must either be self.id' in str(err.value)
-    cv1.source_canvas_id = _id
+    fdl.place_canvas_in_context(context_label="context1", canvas=canvas1)
+    assert fdl.validate() is None
 
-    kwargs['_id'] = '123'
-    cv2 = pyfdl.Canvas(**kwargs)
+    canvas2 = pyfdl.Canvas.from_dict(sample_canvas)
+    canvas2.id = "456"
+    canvas2.source_canvas_id = "123"
 
-    # This should fail because cv2 is not in a container and id is not equal its own
-    with pytest.raises(pyfdl.FDLError) as err:
-        cv2.source_canvas_id = cv1.id
+    fdl.place_canvas_in_context(context_label="context2", canvas=canvas2)
 
-    assert f'"source_canvas_id" {cv1.id} must either be self.id' in str(err.value)
+    with pytest.raises(pyfdl.FDLValidationError) as err:
+        fdl.validate()
 
-    tc.add_item(cv2)
-    cv2.source_canvas_id = cv1.id
+    assert f'{canvas2.source_canvas_id} (canvas.source_canvas_id) not found in ' in str(err)
 
 
 def test_place_framing_intent(sample_framing_intent, sample_canvas, sample_framing_decision):
