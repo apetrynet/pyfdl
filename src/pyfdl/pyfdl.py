@@ -122,20 +122,26 @@ class FDL(Base):
         errors = []
 
         # Check internal relations
-        for context in self.contexts:
-            for canvas in context.canvases:
-                if canvas.source_canvas_id not in context.canvases:
-                    errors.append(
-                        f'{canvas}.source_canvas_id (canvas.source_canvas_id) not found in '
-                        f'registered canvases'
-                    )
+        canvases = TypedCollection(Canvas)
+        canvas_collections = [context.canvases for context in self.contexts]
 
-                for framing_decision in canvas.framing_decisions:
-                    if framing_decision.framing_intent_id not in self.framing_intents:
-                        errors.append(
-                            f'{framing_decision}.framing_intent_id ({framing_decision.framing_intent_id}) '
-                            f'not found in registered framing intents'
-                        )
+        for canvas_collection in canvas_collections:
+            for canvas in canvas_collection:
+                canvases.add_item(canvas)
+
+        for canvas in canvases:
+            if canvases.get_item(canvas.source_canvas_id) is None:
+                errors.append(
+                    f'{canvas.source_canvas_id} (canvas.source_canvas_id) not found in '
+                    f'registered canvases'
+                )
+
+            for framing_decision in canvas.framing_decisions:
+                if framing_decision.framing_intent_id not in self.framing_intents:
+                    errors.append(
+                        f'{framing_decision}.framing_intent_id ({framing_decision.framing_intent_id}) '
+                        f'not found in registered framing intents'
+                    )
 
         # Check structure and values against json schema
         v = jsonschema.validators.validator_for(self._schema)
@@ -145,7 +151,7 @@ class FDL(Base):
 
         if errors:
             nl = '\n'
-            FDLValidationError(
+            raise FDLValidationError(
                 f"Validation failed!\n"
                 f"{f'{nl}'.join(errors)}"
             )

@@ -40,10 +40,8 @@ class Canvas(Base):
             photosite_dimensions: DimensionsInt = None,
             physical_dimensions: DimensionsFloat = None,
             anamorphic_squeeze: float = None,
-            framing_decisions: TypedCollection = None,
-            parent: TypedCollection = None
+            framing_decisions: TypedCollection = None
     ):
-        self.parent = parent
         self.label = label
         self.id = _id
         self.source_canvas_id = source_canvas_id
@@ -127,32 +125,6 @@ class Canvas(Base):
             return self.effective_dimensions, self.effective_anchor_point
 
         return self.dimensions, Point(x=0, y=0)
-
-    @property
-    def parent(self) -> Union[TypedCollection, None]:
-        return self._parent
-
-    @parent.setter
-    def parent(self, parent: TypedCollection):
-        self._parent = parent
-
-    @property
-    def source_canvas_id(self) -> str:
-        return self._source_canvas_id
-
-    @source_canvas_id.setter
-    def source_canvas_id(self, canvas_id: str):
-        if not canvas_id:
-            return
-
-        if self.parent and canvas_id in self.parent or canvas_id == self.id:
-            self._source_canvas_id = canvas_id
-
-        else:
-            raise FDLError(
-                f'"source_canvas_id" {canvas_id} must either be self.id or the id of another canvas in '
-                f'the registered canvases. {self.parent}'
-            )
 
     def __repr__(self):
         return f'{self.__class__.__name__}(label="{self.label}", id="{self.id}")'
