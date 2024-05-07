@@ -11,18 +11,19 @@ pip install pyfdl
 
 ```python
 import pyfdl
+from pyfdl import FDL, Canvas, FramingIntent, DimensionsInt, DimensionsFloat, Point
 from io import StringIO
 
-fdl = pyfdl.FDL()
+fdl = FDL()
 
 # Applying defaults will provide you with a valid staring point 
 fdl.apply_defaults()
 
 # Let's create a framing intent
-framing_intent = pyfdl.FramingIntent(
+framing_intent = FramingIntent(
     label="1.78-1 Framing",
     _id="FDLSMP03",
-    aspect_ratio=pyfdl.DimensionsInt(width=16, height=9),
+    aspect_ratio=DimensionsInt(width=16, height=9),
     protection=0.088
 )
 
@@ -30,15 +31,15 @@ framing_intent = pyfdl.FramingIntent(
 fdl.framing_intents.add_item(framing_intent)
 
 # Now let's create a canvas
-canvas = pyfdl.Canvas(
+canvas = Canvas(
     label="Open Gate RAW",
     _id="20220310",
     source_canvas_id="20220310",
-    dimensions=pyfdl.DimensionsInt(width=5184, height=4320),
-    effective_dimensions=pyfdl.DimensionsInt(width=5184, height=4320),
-    effective_anchor_point=pyfdl.Point(x=0, y=0),
-    photosite_dimensions=pyfdl.DimensionsInt(5184, height=4320),
-    physical_dimensions=pyfdl.DimensionsFloat(width=25.92, height=21.60),
+    dimensions=DimensionsInt(width=5184, height=4320),
+    effective_dimensions=DimensionsInt(width=5184, height=4320),
+    effective_anchor_point=Point(x=0, y=0),
+    photosite_dimensions=DimensionsInt(5184, height=4320),
+    physical_dimensions=DimensionsFloat(width=25.92, height=21.60),
     anamorphic_squeeze=1.30
 )
 
