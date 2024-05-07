@@ -45,7 +45,7 @@
                 </li>
               </ul>
               <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="./">Getting Started</a>
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Getting Started</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#install">Install</a>
     </li>
@@ -113,18 +113,19 @@ Please refer to README.md for instructions. </p>
 </code></pre>
 <h2 id="create-an-fdl-from-scratch">Create an FDL from scratch</h2>
 <pre><code class="language-python">import pyfdl
+from pyfdl import FDL, Canvas, FramingIntent, DimensionsInt, DimensionsFloat, Point
 from io import StringIO
 
-fdl = pyfdl.FDL()
+fdl = FDL()
 
 # Applying defaults will provide you with a valid staring point 
 fdl.apply_defaults()
 
 # Let's create a framing intent
-framing_intent = pyfdl.FramingIntent(
+framing_intent = FramingIntent(
     label=&quot;1.78-1 Framing&quot;,
     _id=&quot;FDLSMP03&quot;,
-    aspect_ratio=pyfdl.DimensionsInt(width=16, height=9),
+    aspect_ratio=DimensionsInt(width=16, height=9),
     protection=0.088
 )
 
@@ -132,15 +133,15 @@ framing_intent = pyfdl.FramingIntent(
 fdl.framing_intents.add_item(framing_intent)
 
 # Now let's create a canvas
-canvas = pyfdl.Canvas(
+canvas = Canvas(
     label=&quot;Open Gate RAW&quot;,
     _id=&quot;20220310&quot;,
     source_canvas_id=&quot;20220310&quot;,
-    dimensions=pyfdl.DimensionsInt(width=5184, height=4320),
-    effective_dimensions=pyfdl.DimensionsInt(width=5184, height=4320),
-    effective_anchor_point=pyfdl.Point(x=0, y=0),
-    photosite_dimensions=pyfdl.DimensionsInt(5184, height=4320),
-    physical_dimensions=pyfdl.DimensionsFloat(width=25.92, height=21.60),
+    dimensions=DimensionsInt(width=5184, height=4320),
+    effective_dimensions=DimensionsInt(width=5184, height=4320),
+    effective_anchor_point=Point(x=0, y=0),
+    photosite_dimensions=DimensionsInt(5184, height=4320),
+    physical_dimensions=DimensionsFloat(width=25.92, height=21.60),
     anamorphic_squeeze=1.30
 )
 
