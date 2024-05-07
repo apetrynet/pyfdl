@@ -10,8 +10,9 @@ pip install pyfdl
 ## Create an FDL from scratch
 
 ```python
-from io import StringIO
+import pyfdl
 from pyfdl import FDL, Canvas, FramingIntent, DimensionsInt, DimensionsFloat, Point
+from io import StringIO
 
 fdl = FDL()
 
