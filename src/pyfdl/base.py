@@ -244,6 +244,9 @@ class TypedCollection:
         for item in self._data.values():
             yield item
 
+    def __getitem__(self, item):
+        return self.get_item(self.ids[item])
+
     def __contains__(self, item: Any) -> bool:
         # We support both looking for an item by item.id and "string" for future use of collection
         try:
