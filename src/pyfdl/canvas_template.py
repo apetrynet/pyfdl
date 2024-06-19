@@ -1,3 +1,4 @@
+import math
 from collections import namedtuple
 from typing import Union, NamedTuple, Tuple
 
@@ -26,9 +27,16 @@ class CanvasTemplate(Base):
     object_map = {
         'target_dimensions': DimensionsInt,
         'maximum_dimensions': DimensionsInt,
-        'rounding': RoundStrategy
+        'round': RoundStrategy
     }
-    required = ['id', 'target_dimensions', 'target_anamorphic_squeeze', 'fit_source', 'fit_method']
+    required = [
+        'id',
+        'target_dimensions',
+        'target_anamorphic_squeeze',
+        'fit_source',
+        'fit_method',
+        'pad_to_maximum.maximum_dimensions'
+    ]
     defaults = {
         'target_anamorphic_squeeze': 1,
         'fit_source': 'framing_decision.dimensions',
@@ -50,7 +58,7 @@ class CanvasTemplate(Base):
             alignment_method_horizontal: str = None,
             preserve_from_source_canvas: str = None,
             maximum_dimensions: DimensionsInt = None,
-            pad_to_maximum: bool = False,
+            pad_to_maximum: bool = None,
             _round: RoundStrategy = None
     ):
         self.label = label
@@ -209,6 +217,26 @@ class CanvasTemplate(Base):
         size = type(self.target_dimensions)(width=width, height=height)
         # TODO consider returning crop True/False
         return size, scale_factor
+
+    def round_canvas_dimensions(self, dimensions: DimensionsInt) -> DimensionsInt:
+        print(type(self.round))
+        even = self.round.even
+        mode = self.round.mode
+
+        mode_map = {
+            'up': math.ceil,
+            'down': math.floor,
+            'round': round
+        }
+
+        width = mode_map[mode](dimensions.width)
+        height = mode_map[mode](dimensions.height)
+
+        if even == 'even':
+            width = round_to_even(width)
+            height = round_to_even(height)
+
+        return DimensionsInt(width=width, height=height)
 
     def __repr__(self):
         return f'{self.__class__.__name__}(label="{self.label}", id="{self.id})"'
