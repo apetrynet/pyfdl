@@ -9,6 +9,21 @@ FDL_SCHEMA_MINOR = 0
 FDL_SCHEMA_VERSION = {'major': FDL_SCHEMA_MAJOR, 'minor': FDL_SCHEMA_MINOR}
 
 
+def round_to_even(value: float) -> Union[int, float]:
+    """
+    This will make sure we always end up with an even number
+
+    Args:
+        value: initial value to round
+
+    Returns:
+        value: even number
+    """
+
+    half = value / 2
+    return round(half) * 2
+
+
 class Base(ABC):
     # Holds a list of known attributes
     attributes = []
@@ -271,6 +286,13 @@ class DimensionsFloat(Base):
         self.width = width
         self.height = height
 
+    def scale_by(self, factor: float) -> None:
+        self.width = round_to_even(self.width * factor)
+        self.height = round_to_even(self.height * factor)
+
+    def copy(self) -> 'DimensionsFloat':
+        return DimensionsFloat(width=self.width, height=self.height)
+
     def __eq__(self, other):
         return self.width == other.width and self.height == other.height
 
@@ -291,6 +313,13 @@ class DimensionsInt(Base):
         """
         self.width = width.__int__()
         self.height = height.__int__()
+
+    def scale_by(self, factor: float) -> None:
+        self.width = round_to_even(self.width * factor).__int__()
+        self.height = round_to_even(self.height * factor).__int__()
+
+    def copy(self) -> 'DimensionsInt':
+        return DimensionsInt(width=self.width, height=self.height)
 
     def __eq__(self, other):
         return self.width == other.width and self.height == other.height
