@@ -1,6 +1,8 @@
-from typing import Union
+from collections import namedtuple
+from typing import Union, NamedTuple, Tuple
 
 from pyfdl import Base, DimensionsInt, RoundStrategy, TypedCollection
+from pyfdl.base import round_to_even, DimensionsFloat
 from pyfdl.errors import FDLError
 
 
@@ -149,6 +151,64 @@ class CanvasTemplate(Base):
             )
 
         self._preserve_from_source_canvas = value
+
+    def get_desqueezed_width(self, source_width: Union[float, int], squeeze_factor: float) -> Union[float, int]:
+        width = source_width
+
+        # target_anamorphic_squeeze of 0 is considered "same as source"
+        if self.target_anamorphic_squeeze > 0:
+            width = width * squeeze_factor / self.target_anamorphic_squeeze
+
+        return width
+
+    def fit_source_to_target(
+            self,
+            source_dimensions: Union[DimensionsInt, DimensionsFloat],
+            source_anamorphic_squeeze: float
+    ) -> Tuple[Union[DimensionsInt, DimensionsFloat], float]:
+
+        source_width = self.get_desqueezed_width(source_dimensions.width, source_anamorphic_squeeze)
+        scale_factor = self.target_dimensions.width / source_width
+
+        # In case of fit_mode == fill
+        width = self.target_dimensions.width
+        height = self.target_dimensions.height
+
+        if self.fit_method == 'width':
+            width = self.target_dimensions.width
+            # If scaled height exceeds target height, we crop the excess
+            height = min(
+                source_dimensions.height * scale_factor,
+                # round_to_even(source_dimensions.height * scale_factor),
+                self.target_dimensions.height
+            )
+            height = source_dimensions.height * scale_factor
+            if height > self.target_dimensions.height:
+                print("CROPPING HEIGHT", height)
+
+        elif self.fit_method == 'height':
+            height = self.target_dimensions.height
+            # If scaled width exceeds target width, we crop the excess
+            width = min(
+                # round_to_even(source_width * scale_factor),
+                source_width * scale_factor,
+                self.target_dimensions.width
+            )
+            width = source_width * scale_factor
+            if width > self.target_dimensions.width:
+                print("CROPPING WIDTH", width)
+
+        elif self.fit_method == 'fit_all':
+            height = self.target_dimensions.height
+            width = source_width * scale_factor
+            if width > self.target_dimensions.width:
+                adjustment_scale = self.target_dimensions.width / width
+                height *= adjustment_scale
+                width *= adjustment_scale
+
+        size = type(self.target_dimensions)(width=width, height=height)
+        # TODO consider returning crop True/False
+        return size, scale_factor
 
     def __repr__(self):
         return f'{self.__class__.__name__}(label="{self.label}", id="{self.id})"'
