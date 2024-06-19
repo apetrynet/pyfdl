@@ -1,3 +1,4 @@
+import math
 from typing import Tuple, Type, Union, List
 
 from pyfdl import Base, DimensionsInt, Point, DimensionsFloat, FramingDecision, TypedCollection, FramingIntent
@@ -110,7 +111,7 @@ class Canvas(Base):
         def get_steps(beg: str, end: str) -> List:
             keys = list(steps.keys())
             first = keys.index(beg) + 1
-            last = keys.index(end)
+            last = keys.index(end) + 1
             return keys[first:last]
 
         canvas = Canvas(
@@ -119,6 +120,13 @@ class Canvas(Base):
             source_canvas_id=source_canvas.id,
             anamorphic_squeeze=canvas_template.target_anamorphic_squeeze
         )
+
+        framing_decision = FramingDecision(
+            label=source_framing_decision.label,
+            _id=f'{canvas.id}-{source_framing_decision.framing_intent_id}',
+            framing_intent_id=source_framing_decision.framing_intent_id
+        )
+        canvas.framing_decisions.add_item(framing_decision)
 
         source_map = {
             'framing_decision': source_framing_decision,
@@ -135,6 +143,8 @@ class Canvas(Base):
             source_dimensions,
             source_canvas.anamorphic_squeeze
         )
+        # TODO Why is this more precise than using framing intent? check fd dimensions in test
+        setattr(framing_decision, source_attribute, scaled_size)
 
         # If preserve_from_source_canvas contains "canvas", scale canvas dimensions first and apply to
         preserve = canvas_template.preserve_from_source_canvas
@@ -149,9 +159,21 @@ class Canvas(Base):
             canvas_dimensions.width *= source_canvas.anamorphic_squeeze
             canvas_dimensions.scale_by(scale_factor)
 
+        # TODO implement maximum_dimensions
+        # TODO implement pad_to_maximum
+        if canvas_template.maximum_dimensions is not None:
+            canvas_dimensions = min(canvas_template.maximum_dimensions, canvas_dimensions)
+            if canvas_template.pad_to_maximum:
+                canvas_dimensions = canvas_template.maximum_dimensions
+
+        # TODO: implement rounding of canvas dimensions
+        if canvas_template.round is not None:
+            canvas_dimensions = canvas_template.round_canvas_dimensions(canvas_dimensions)
+
         canvas.dimensions = canvas_dimensions
-        framing_decision_id = canvas.place_framing_intent(framing_intent)
-        framing_decision = canvas.framing_decisions.get_item(framing_decision_id)
+        # TODO: create a framing_decision from scratch again
+        # framing_decision_id = canvas.place_framing_intent(framing_intent)
+        # framing_decision = canvas.framing_decisions.get_item(framing_decision_id)
 
         dest_map = {
             'framing_decision': framing_decision,
@@ -167,10 +189,8 @@ class Canvas(Base):
             value.scale_by(scale_factor)
             setattr(dest_map[source_type], source_attribute, value)
 
-        # TODO: implement align horizonatal/vertical
-        # TODO implement maximum_dimensions
-        # TODO implement pad_to_maximum
-        # TODO implement round
+        # TODO: implement align horizonatal/vertical - affects framing_decision
+        #  NOTE! FramingDecisions may be shifted. This is to override/align them
         canvas.adjust_effective_anchor_point()
         framing_decision.adjust_protection_anchor_point(canvas)
         framing_decision.adjust_anchor_point(canvas)
