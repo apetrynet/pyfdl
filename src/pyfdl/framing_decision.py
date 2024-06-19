@@ -56,22 +56,18 @@ class FramingDecision(Base):
         canvas_aspect = active_dimensions.width / active_dimensions.height
         if intent_aspect >= canvas_aspect:
             width = active_dimensions.width
-            height = round_to_even((width * canvas.anamorphic_squeeze) / intent_aspect)
-            # height = (width * self.anamorphic_squeeze) / intent_aspect
+            # height = round_to_even((width * canvas.anamorphic_squeeze) / intent_aspect)
+            height = (width * canvas.anamorphic_squeeze) / intent_aspect
 
         else:
-            width = round_to_even(active_dimensions.height * intent_aspect)
-            # width = active_dimensions.height * intent_aspect
+            # width = round_to_even(active_dimensions.height * intent_aspect)
+            width = active_dimensions.height * intent_aspect
             height = active_dimensions.height
 
         if framing_intent.protection > 0:
             protection_dimensions = DimensionsFloat(width=width, height=height)
-            protection_anchor_point = Point(
-                x=active_anchor_point.x + (active_dimensions.width - protection_dimensions.width) / 2,
-                y=active_anchor_point.y + (active_dimensions.height - protection_dimensions.height) / 2
-            )
             framing_decision.protection_dimensions = protection_dimensions
-            framing_decision.protection_anchor_point = protection_anchor_point
+            framing_decision.adjust_protection_anchor_point(canvas)
 
         # We use the protection dimensions as base for dimensions if they're set
         if framing_decision.protection_dimensions is not None:
@@ -79,21 +75,37 @@ class FramingDecision(Base):
             height = framing_decision.protection_dimensions.height
 
         dimensions = DimensionsFloat(
-            width=round_to_even(width * (1 - framing_intent.protection)),
-            height=round_to_even(height * (1 - framing_intent.protection))
+            # width=round_to_even(width * (1 - framing_intent.protection)),
+            width=width * (1 - framing_intent.protection),
+            # height=round_to_even(height * (1 - framing_intent.protection))
+            height=height * (1 - framing_intent.protection)
         )
         framing_decision.dimensions = dimensions
-
-        offset_point = framing_decision.protection_anchor_point or active_anchor_point
-        offset_dimensions = framing_decision.protection_dimensions or dimensions
-
-        anchor_point = Point(
-            x=offset_point.x + (offset_dimensions.width - dimensions.width) / 2,
-            y=offset_point.y + (offset_dimensions.height - dimensions.height) / 2
-        )
-        framing_decision.anchor_point = anchor_point
+        framing_decision.adjust_anchor_point(canvas)
 
         return framing_decision
+
+    def adjust_anchor_point(self, canvas: 'Canvas'):
+        _, active_anchor_point = canvas.get_dimensions()
+
+        offset_point = self.protection_anchor_point or active_anchor_point
+        offset_dimensions = self.protection_dimensions or self.dimensions
+
+        anchor_point = Point(
+            x=offset_point.x + (offset_dimensions.width - self.dimensions.width) / 2,
+            y=offset_point.y + (offset_dimensions.height - self.dimensions.height) / 2
+        )
+        self.anchor_point = anchor_point
+
+    def adjust_protection_anchor_point(self, canvas: 'Canvas'):
+        if self.protection_dimensions is None:
+            return
+
+        active_dimensions, active_anchor_point = canvas.get_dimensions()
+        self.protection_anchor_point = Point(
+            x=active_anchor_point.x + (active_dimensions.width - self.protection_dimensions.width) / 2,
+            y=active_anchor_point.y + (active_dimensions.height - self.protection_dimensions.height) / 2
+        )
 
     def __eq__(self, other):
         return (
