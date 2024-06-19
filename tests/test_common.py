@@ -108,6 +108,13 @@ def test_rounding_strategy_default_values():
     assert rs.check_required() == []
 
 
+def test_rounding_strategy_from_dict(sample_rounding_strategy):
+    rs = pyfdl.RoundStrategy.from_dict(sample_rounding_strategy)
+    assert isinstance(rs, pyfdl.RoundStrategy)
+    assert rs.even == "even"
+    assert rs.mode == "up"
+
+
 def test_typed_collection(sample_framing_intent, sample_framing_intent_kwargs):
     td = pyfdl.TypedCollection(pyfdl.FramingIntent)
     fi = pyfdl.FramingIntent.from_dict(sample_framing_intent)
