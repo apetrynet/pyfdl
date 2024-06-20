@@ -1,3 +1,4 @@
+import math
 import uuid
 from abc import ABC, abstractmethod
 from typing import Any, Union
@@ -401,6 +402,25 @@ class RoundStrategy(Base):
             )
 
         self._mode = value
+
+    def round_dimensions(self, dimensions: DimensionsInt) -> DimensionsInt:
+        even = self.even
+        mode = self.mode
+
+        mode_map = {
+            'up': math.ceil,
+            'down': math.floor,
+            'round': round
+        }
+
+        width = mode_map[mode](dimensions.width)
+        height = mode_map[mode](dimensions.height)
+
+        if even == 'even':
+            width = round_to_even(width)
+            height = round_to_even(height)
+
+        return DimensionsInt(width=width, height=height)
 
     def __repr__(self):
         return f'{self.__class__.__name__}(even="{self.even}", mode="{self.mode}")'
