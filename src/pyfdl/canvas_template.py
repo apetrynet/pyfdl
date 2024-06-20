@@ -1,9 +1,7 @@
-import math
-from collections import namedtuple
 from typing import Union, NamedTuple, Tuple
 
-from pyfdl import Base, DimensionsInt, RoundStrategy, TypedCollection
-from pyfdl.base import round_to_even, DimensionsFloat
+from pyfdl import Base, DimensionsInt, DimensionsFloat, RoundStrategy
+from pyfdl.base import round_to_even
 from pyfdl.errors import FDLError
 
 
@@ -169,14 +167,44 @@ class CanvasTemplate(Base):
 
         return width
 
+    def get_scale_factor(
+            self,
+            source_dimensions: Union[DimensionsInt, DimensionsFloat],
+            source_anamorphic_squeeze: float
+    ) -> float:
+
+        # We default to fit_method "width"
+        source_width = self.get_desqueezed_width(source_dimensions.width, source_anamorphic_squeeze)
+        scale_factor = self.target_dimensions.width / source_width
+
+        target_aspect = self.target_dimensions.width / self.target_dimensions.height
+        source_aspect = source_width / source_dimensions.height
+
+        if self.fit_method == 'height':
+            scale_factor = self.target_dimensions.height / source_dimensions.height
+
+        elif self.fit_method == 'fit_all':
+            if target_aspect > source_aspect:
+                # Target wider than source
+                scale_factor = self.target_dimensions.height / source_dimensions.height
+
+        elif self.fit_method == 'fill':
+            # What's left outside the target dimensions due to fill?
+            if target_aspect < source_aspect:
+                # Source wider than target
+                scale_factor = self.target_dimensions.height / source_dimensions.height
+
+        return scale_factor
+
     def fit_source_to_target(
             self,
             source_dimensions: Union[DimensionsInt, DimensionsFloat],
             source_anamorphic_squeeze: float
     ) -> Tuple[Union[DimensionsInt, DimensionsFloat], float]:
+        # TODO: Add tests to see if this method actually does the right thing
 
+        scale_factor = self.get_scale_factor(source_dimensions, source_anamorphic_squeeze)
         source_width = self.get_desqueezed_width(source_dimensions.width, source_anamorphic_squeeze)
-        scale_factor = self.target_dimensions.width / source_width
 
         # In case of fit_mode == fill
         width = self.target_dimensions.width
@@ -186,25 +214,26 @@ class CanvasTemplate(Base):
             width = self.target_dimensions.width
             # If scaled height exceeds target height, we crop the excess
             height = min(
-                source_dimensions.height * scale_factor,
                 # round_to_even(source_dimensions.height * scale_factor),
+                source_dimensions.height * scale_factor,
                 self.target_dimensions.height
             )
-            height = source_dimensions.height * scale_factor
-            if height > self.target_dimensions.height:
-                print("CROPPING HEIGHT", height)
+            # height = source_dimensions.height * scale_factor
+            # if height > self.target_dimensions.height:
+            #     print("CROPPING HEIGHT", height)
 
         elif self.fit_method == 'height':
             height = self.target_dimensions.height
+            scale_factor = height / source_dimensions.height
             # If scaled width exceeds target width, we crop the excess
             width = min(
                 # round_to_even(source_width * scale_factor),
                 source_width * scale_factor,
                 self.target_dimensions.width
             )
-            width = source_width * scale_factor
-            if width > self.target_dimensions.width:
-                print("CROPPING WIDTH", width)
+            # width = source_width * scale_factor
+            # if width > self.target_dimensions.width:
+            #     print("CROPPING WIDTH", width)
 
         elif self.fit_method == 'fit_all':
             height = self.target_dimensions.height
@@ -216,27 +245,8 @@ class CanvasTemplate(Base):
 
         size = type(self.target_dimensions)(width=width, height=height)
         # TODO consider returning crop True/False
-        return size, scale_factor
-
-    def round_canvas_dimensions(self, dimensions: DimensionsInt) -> DimensionsInt:
-        print(type(self.round))
-        even = self.round.even
-        mode = self.round.mode
-
-        mode_map = {
-            'up': math.ceil,
-            'down': math.floor,
-            'round': round
-        }
-
-        width = mode_map[mode](dimensions.width)
-        height = mode_map[mode](dimensions.height)
-
-        if even == 'even':
-            width = round_to_even(width)
-            height = round_to_even(height)
-
-        return DimensionsInt(width=width, height=height)
+        #  or at least coordinates outside of frame like data window vs display window
+        return size
 
     def __repr__(self):
         return f'{self.__class__.__name__}(label="{self.label}", id="{self.id})"'
