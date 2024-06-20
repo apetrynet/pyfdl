@@ -9,6 +9,9 @@ FDL_SCHEMA_MAJOR = 1
 FDL_SCHEMA_MINOR = 0
 FDL_SCHEMA_VERSION = {'major': FDL_SCHEMA_MAJOR, 'minor': FDL_SCHEMA_MINOR}
 
+# Global variable determining if we round values to even numbers or not
+BE_PRECISE = False
+
 
 def round_to_even(value: float) -> Union[int, float]:
     """
@@ -20,6 +23,9 @@ def round_to_even(value: float) -> Union[int, float]:
     Returns:
         value: even number
     """
+    global BE_PRECISE
+    if BE_PRECISE:
+        return value
 
     half = value / 2
     return round(half) * 2
@@ -417,8 +423,10 @@ class RoundStrategy(Base):
         height = mode_map[mode](dimensions.height)
 
         if even == 'even':
-            width = round_to_even(width)
-            height = round_to_even(height)
+            # width = round_to_even(width)
+            # height = round_to_even(height)
+            width = round(width / 2) * 2
+            height = round(height / 2) * 2
 
         return DimensionsInt(width=width, height=height)
 

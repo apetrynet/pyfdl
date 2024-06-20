@@ -56,12 +56,12 @@ class FramingDecision(Base):
         canvas_aspect = active_dimensions.width / active_dimensions.height
         if intent_aspect >= canvas_aspect:
             width = active_dimensions.width
-            # height = round_to_even((width * canvas.anamorphic_squeeze) / intent_aspect)
-            height = (width * canvas.anamorphic_squeeze) / intent_aspect
+            height = round_to_even((width * canvas.anamorphic_squeeze) / intent_aspect)
+            # height = (width * canvas.anamorphic_squeeze) / intent_aspect
 
         else:
-            # width = round_to_even(active_dimensions.height * intent_aspect)
-            width = active_dimensions.height * intent_aspect
+            width = round_to_even(active_dimensions.height * intent_aspect)
+            # width = active_dimensions.height * intent_aspect
             height = active_dimensions.height
 
         if framing_intent.protection > 0:
@@ -75,10 +75,10 @@ class FramingDecision(Base):
             height = framing_decision.protection_dimensions.height
 
         dimensions = DimensionsFloat(
-            # width=round_to_even(width * (1 - framing_intent.protection)),
-            width=width * (1 - framing_intent.protection),
-            # height=round_to_even(height * (1 - framing_intent.protection))
-            height=height * (1 - framing_intent.protection)
+            width=round_to_even(width * (1 - framing_intent.protection)),
+            # width=width * (1 - framing_intent.protection),
+            height=round_to_even(height * (1 - framing_intent.protection))
+            # height=height * (1 - framing_intent.protection)
         )
         framing_decision.dimensions = dimensions
         framing_decision.adjust_anchor_point(canvas)
