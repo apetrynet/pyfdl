@@ -94,24 +94,46 @@ class Canvas(Base):
             cls,
             canvas_template: 'CanvasTemplate',
             source_canvas: 'Canvas',
-            source_framing_decision: Union[FramingDecision, int] = 0,
-            framing_intent: FramingIntent = None
+            source_framing_decision: Union[FramingDecision, int] = 0
     ) -> 'Canvas':
 
         if type(source_framing_decision) is int:
             source_framing_decision = source_canvas.framing_decisions[source_framing_decision]
 
-        steps = {
-            "framing_decision.dimensions": source_framing_decision.dimensions,
-            "framing_decision.protection_dimensions": source_framing_decision.protection_dimensions,
-            "canvas.effective_dimensions": source_canvas.effective_dimensions,
-            "canvas.dimensions": source_canvas.dimensions,
+        dimension_routing_map = {
+            "framing_decision.dimensions": {
+                "framing_decision.dimensions": source_framing_decision.dimensions,
+                "framing_decision.protection_dimensions": source_framing_decision.protection_dimensions,
+                "canvas.effective_dimensions": source_canvas.effective_dimensions,
+                "canvas.dimensions": source_canvas.dimensions
+            },
+            "framing_decision.protection_dimensions": {
+                "framing_decision.protection_dimensions": source_framing_decision.protection_dimensions,
+                "framing_decision.dimensions": source_framing_decision.dimensions,
+                "canvas.effective_dimensions": source_canvas.effective_dimensions,
+                "canvas.dimensions": source_canvas.dimensions
+            },
+            "canvas.effective_dimensions": {
+                "canvas.effective_dimensions": source_canvas.effective_dimensions,
+                "framing_decision.protection_dimensions": source_framing_decision.protection_dimensions,
+                "framing_decision.dimensions": source_framing_decision.dimensions,
+                "canvas.dimensions": source_canvas.dimensions
+            },
+            "canvas.dimensions": {
+                "canvas.dimensions": source_canvas.dimensions,
+                "framing_decision.protection_dimensions": source_framing_decision.protection_dimensions,
+                "framing_decision.dimensions": source_framing_decision.dimensions,
+                "canvas.effective_dimensions": source_canvas.effective_dimensions
+            }
         }
 
-        def get_steps(beg: str, end: str) -> List:
-            keys = list(steps.keys())
-            first = keys.index(beg) + 1
+        def get_dimension_keys(route: dict, beg: str, end: str) -> List[str]:
+            keys = list(route.keys())
+            first = keys.index(beg)
             last = keys.index(end) + 1
+            if first == last:
+                return [keys[first]]
+
             return keys[first:last]
 
         canvas = Canvas(
@@ -133,67 +155,81 @@ class Canvas(Base):
             'canvas': source_canvas
         }
 
-        # Figure out what dimensions to use
-        fit_source = canvas_template.fit_source
-        source_type, source_attribute = fit_source.split('.')
-
-        # Map fit_source into target dimensions
-        source_dimensions = getattr(source_map[source_type], source_attribute)
-        scaled_size, scale_factor = canvas_template.fit_source_to_target(
-            source_dimensions,
-            source_canvas.anamorphic_squeeze
-        )
-        # TODO Why is this more precise than using framing intent? check fd dimensions in test
-        setattr(framing_decision, source_attribute, scaled_size)
-
-        # If preserve_from_source_canvas contains "canvas", scale canvas dimensions first and apply to
-        preserve = canvas_template.preserve_from_source_canvas
-        if preserve is None or preserve == 'none':
-            canvas_dimensions = canvas_template.target_dimensions.copy()
-
-        else:
-            preserve_source_type, preserve_source_attribute = preserve.split('.')
-            source_canvas_dimensions = getattr(source_map[preserve_source_type], preserve_source_attribute).copy()
-
-            canvas_dimensions = source_canvas_dimensions.copy()
-            canvas_dimensions.width *= source_canvas.anamorphic_squeeze
-            canvas_dimensions.scale_by(scale_factor)
-
-        # TODO implement maximum_dimensions
-        # TODO implement pad_to_maximum
-        if canvas_template.maximum_dimensions is not None:
-            canvas_dimensions = min(canvas_template.maximum_dimensions, canvas_dimensions)
-            if canvas_template.pad_to_maximum:
-                canvas_dimensions = canvas_template.maximum_dimensions
-
-        # TODO: implement rounding of canvas dimensions
-        if canvas_template.round is not None:
-            canvas_dimensions = canvas_template.round_canvas_dimensions(canvas_dimensions)
-
-        canvas.dimensions = canvas_dimensions
-        # TODO: create a framing_decision from scratch again
-        # framing_decision_id = canvas.place_framing_intent(framing_intent)
-        # framing_decision = canvas.framing_decisions.get_item(framing_decision_id)
-
         dest_map = {
             'framing_decision': framing_decision,
             'canvas': canvas
         }
 
-        # Add remaining dimensions
-        keys = get_steps(fit_source, preserve)
-        for step in keys:
-            source_type, source_attribute = step.split('.')
-            value = getattr(source_map[source_type], source_attribute).copy()
-            value.width = canvas_template.get_desqueezed_width(value.width, source_canvas.anamorphic_squeeze)
-            value.scale_by(scale_factor)
-            setattr(dest_map[source_type], source_attribute, value)
+        # Figure out what dimensions to use
+        fit_source = canvas_template.fit_source
+        source_type, source_attribute = fit_source.split('.')
+        preserve = canvas_template.preserve_from_source_canvas or fit_source
+        if preserve in [None, 'none']:
+            preserve = fit_source
 
-        # TODO: implement align horizonatal/vertical - affects framing_decision
-        #  NOTE! FramingDecisions may be shifted. This is to override/align them
+        # Get the scale factor
+        source_dimensions = getattr(source_map[source_type], source_attribute)
+        scale_factor = canvas_template.get_scale_factor(
+            source_dimensions,
+            source_canvas.anamorphic_squeeze
+        )
+
+        # Dummy dimensions to test against if we received a proper value
+        dummy_dimensions = DimensionsFloat(width=0, height=0)
+
+        # Get the available values between fit_source and preserve_from_canvas
+        route_map = dimension_routing_map[fit_source]
+
+        # Copy and scale dimensions from source to target
+        for dimension_key in get_dimension_keys(route_map, fit_source, preserve):
+            if dimension_key == fit_source:
+                setattr(dest_map[source_type], source_attribute, canvas_template.target_dimensions)
+                continue
+
+            dimension_source_type, dimension_source_attribute = dimension_key.split('.')
+            dimensions = getattr(
+                source_map[dimension_source_type],
+                dimension_source_attribute,
+                dummy_dimensions
+            ).copy()
+
+            if dimensions == dummy_dimensions:
+                continue
+
+            dimensions.width = canvas_template.get_desqueezed_width(
+                dimensions.width,
+                source_canvas.anamorphic_squeeze
+            )
+            dimensions.scale_by(scale_factor)
+            setattr(dest_map[dimension_source_type], dimension_source_attribute, dimensions)
+
+        # Make sure the canvas has dimensions
+        if canvas.dimensions is None:
+            preserve_source_type, preserve_source_attribute = preserve.split('.')
+            canvas.dimensions = getattr(dest_map[preserve_source_type], preserve_source_attribute).copy()
+
+        # Round values according to rules defined in the template
+        if canvas_template.round is not None:
+            canvas.dimensions = canvas_template.round.round_dimensions(canvas.dimensions)
+
+        # Override canvas dimensions to maximum defined in template
+        if canvas_template.maximum_dimensions is not None:
+            canvas.dimensions = min(canvas_template.maximum_dimensions, canvas.dimensions)
+            if canvas_template.pad_to_maximum:
+                canvas.dimensions = canvas_template.maximum_dimensions
+
+        # Make sure all anchor points are correct according to new sizes
         canvas.adjust_effective_anchor_point()
-        framing_decision.adjust_protection_anchor_point(canvas)
-        framing_decision.adjust_anchor_point(canvas)
+        framing_decision.adjust_protection_anchor_point(
+            canvas,
+            canvas_template.alignment_method_horizontal,
+            canvas_template.alignment_method_vertical
+        )
+        framing_decision.adjust_anchor_point(
+            canvas,
+            canvas_template.alignment_method_horizontal,
+            canvas_template.alignment_method_vertical
+        )
 
         print(canvas.to_dict())
 
