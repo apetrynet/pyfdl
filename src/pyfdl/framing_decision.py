@@ -85,27 +85,56 @@ class FramingDecision(Base):
 
         return framing_decision
 
-    def adjust_anchor_point(self, canvas: 'Canvas'):
+    def adjust_anchor_point(self, canvas: 'Canvas', h_method: str = 'center', v_method: str = 'center'):
+        # TODO check if anchor point is shifted before centering
         _, active_anchor_point = canvas.get_dimensions()
 
         offset_point = self.protection_anchor_point or active_anchor_point
         offset_dimensions = self.protection_dimensions or self.dimensions
 
-        anchor_point = Point(
-            x=offset_point.x + (offset_dimensions.width - self.dimensions.width) / 2,
-            y=offset_point.y + (offset_dimensions.height - self.dimensions.height) / 2
-        )
-        self.anchor_point = anchor_point
+        x = offset_point.x
+        y = offset_point.y
 
-    def adjust_protection_anchor_point(self, canvas: 'Canvas'):
+        if self.protection_anchor_point:
+            x += (offset_dimensions.width - self.dimensions.width) / 2
+            y += (offset_dimensions.height - self.dimensions.height) / 2
+
+        else:
+            if h_method == 'center':
+                x += (offset_dimensions.width - self.dimensions.width) / 2
+
+            elif h_method == 'right':
+                x += (offset_dimensions.width - self.dimensions.width)
+
+            if v_method == 'center':
+                y += (offset_dimensions.height - self.dimensions.height) / 2
+
+            elif v_method == 'bottom':
+                y += (offset_dimensions.height - self.dimensions.height)
+
+        self.anchor_point = Point(x=x, y=y)
+
+    def adjust_protection_anchor_point(self, canvas: 'Canvas', h_method: str = 'center', v_method: str = 'center'):
         if self.protection_dimensions is None:
             return
 
         active_dimensions, active_anchor_point = canvas.get_dimensions()
-        self.protection_anchor_point = Point(
-            x=active_anchor_point.x + (active_dimensions.width - self.protection_dimensions.width) / 2,
-            y=active_anchor_point.y + (active_dimensions.height - self.protection_dimensions.height) / 2
-        )
+        x = active_anchor_point.x
+        y = active_anchor_point.y
+
+        if h_method == 'center':
+            x += (active_dimensions.width - self.protection_dimensions.width) / 2
+
+        elif h_method == 'right':
+            x += (active_dimensions.width - self.protection_dimensions.width)
+
+        if v_method == 'center':
+            y += (active_dimensions.height - self.protection_dimensions.height) / 2
+
+        elif v_method == 'bottom':
+            y += (active_dimensions.height - self.protection_dimensions.height)
+
+        self.protection_anchor_point = Point(x=x, y=y)
 
     def __eq__(self, other):
         return (
