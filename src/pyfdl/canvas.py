@@ -101,9 +101,9 @@ class Canvas(Base):
         based on a [CanvasTemplate](canvas_template.md#Canvas Template)
 
         Args:
-            canvas_template:
-            source_canvas:
-            source_framing_decision:
+            canvas_template: describing how to handle incoming `Canvas` and `FramingDecision`
+            source_canvas: to use as base for new canvas
+            source_framing_decision: either a `FramingDecision` from the source canvas or the index (`int`) of one.
 
         Returns:
             canvas: based on the provided canvas template and sources
@@ -114,7 +114,7 @@ class Canvas(Base):
 
         canvas = Canvas(
             label=canvas_template.label,
-            _id=Base.generate_uuid().strip('-'),
+            _id=Base.generate_uuid().replace('-', ''),
             source_canvas_id=source_canvas.id,
             anamorphic_squeeze=canvas_template.target_anamorphic_squeeze
         )

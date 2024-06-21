@@ -11,10 +11,10 @@ pip install pyfdl
 
 ```python
 import pyfdl
-from pyfdl import FDL, Canvas, FramingIntent, DimensionsInt, DimensionsFloat, Point
+from pyfdl import Canvas, FramingIntent, DimensionsInt, DimensionsFloat, Point
 from io import StringIO
 
-fdl = FDL()
+fdl = pyfdl.FDL()
 
 # Applying defaults will provide you with a valid staring point 
 fdl.apply_defaults()
@@ -51,6 +51,34 @@ fdl.place_canvas_in_context(context_label="PanavisionDXL2", canvas=canvas)
 canvas.place_framing_intent(framing_intent=framing_intent)
 
 # Validate our FDL and save it (using StringIO as example)
+with StringIO() as f:
+    pyfdl.dump(fdl, f, validate=True)
+```
+
+## Create a Canvas from a Canvas Template
+```python
+import pyfdl
+from io import StringIO
+from pathlib import Path
+
+fdl_file = Path('tests/sample_data/Scenario-9__OriginalFDL_UsedToMakePlate.fdl')
+with fdl_file.open('r') as f:
+    fdl = pyfdl.load(f)
+
+# Select the first canvas in the first context
+source_canvas = fdl.contexts[0].canvases[0]
+
+# Select the first canvas template
+canvas_template = fdl.canvas_templates[0]
+
+# We know we want to use the first framing decision of the source canvas, so we pass 0
+# You may also pass the actual `FramingDecision` source_canvas.framing_decisions[0]
+new_canvas = pyfdl.Canvas.from_canvas_template(canvas_template, source_canvas, 0)
+
+# Place the new canvas along side the source 
+fdl.contexts[0].canvases.add_item(new_canvas)
+
+# Validate and "save"
 with StringIO() as f:
     pyfdl.dump(fdl, f, validate=True)
 ```
