@@ -92,8 +92,8 @@ class Canvas(Base):
     @classmethod
     def from_canvas_template(
             cls,
-            canvas_template: Type['CanvasTemplate'],
-            source_canvas: Type['Canvas'],
+            canvas_template: 'CanvasTemplate',
+            source_canvas: 'Canvas',
             source_framing_decision: Union[FramingDecision, int] = 0
     ) -> 'Canvas':
         """
