@@ -158,7 +158,25 @@ class CanvasTemplate(Base):
 
         self._preserve_from_source_canvas = value
 
-    def get_desqueezed_width(self, source_width: Union[float, int], squeeze_factor: float) -> Union[float, int]:
+    def get_desqueezed_width(
+            self,
+            source_width: Union[float, int],
+            squeeze_factor: float
+    ) -> Union[float, int]:
+        """
+        Get the de-squeezed width also considering the `target_anamorphic_squeeze`.
+        Used to calculate scaling of canvases and framing decisions.
+        If `target_anamorphic_squeeze` is 0, it's considered "same as source" and no de-squeeze
+        is applied.
+
+        Args:
+            source_width: from source `Canvas` or `FramingDecision`
+            squeeze_factor: source `Canvas.anamorphic_squeeze`
+
+        Returns:
+            width: scaled to size
+        """
+
         width = source_width
 
         # target_anamorphic_squeeze of 0 is considered "same as source"
@@ -172,6 +190,16 @@ class CanvasTemplate(Base):
             source_dimensions: Union[DimensionsInt, DimensionsFloat],
             source_anamorphic_squeeze: float
     ) -> float:
+        """
+        Calculate the scale factor used when creating a new `Canvas` and `FramingDecision`
+
+        Args:
+            source_dimensions:
+            source_anamorphic_squeeze:
+
+        Returns:
+            scale_factor:
+        """
 
         # We default to fit_method "width"
         source_width = self.get_desqueezed_width(source_dimensions.width, source_anamorphic_squeeze)
@@ -200,7 +228,17 @@ class CanvasTemplate(Base):
             self,
             source_dimensions: Union[DimensionsInt, DimensionsFloat],
             source_anamorphic_squeeze: float
-    ) -> Tuple[Union[DimensionsInt, DimensionsFloat], float]:
+    ) -> Union[DimensionsInt, DimensionsFloat]:
+        """
+        Calculate the dimensions of `fit_source` inside `target_dimensions` based on `fit_mode`
+
+        Args:
+            source_dimensions:
+            source_anamorphic_squeeze:
+
+        Returns:
+            size:
+        """
         # TODO: Add tests to see if this method actually does the right thing
 
         scale_factor = self.get_scale_factor(source_dimensions, source_anamorphic_squeeze)
@@ -246,9 +284,18 @@ class CanvasTemplate(Base):
         size = type(self.target_dimensions)(width=width, height=height)
         # TODO consider returning crop True/False
         #  or at least coordinates outside of frame like data window vs display window
+
         return size
 
     def get_transfer_keys(self) -> List[str]:
+        """
+        Get a list of attributes to transfer from source to destination in the order that
+        preserves all attributes between `fit_source` and `preserve_from_canvas`
+
+        Returns:
+            keys:
+        """
+
         dimension_routing_map = {
             "framing_decision.dimensions": [
                 "framing_decision.dimensions",
