@@ -61,8 +61,8 @@ class Canvas(Base):
         collection of framing decisions.
 
         The framing decision's properties are calculated for you.
-        If the canvas has effective dimensions set, these will be used for the calculations. Otherwise, we use the
-        dimensions
+        If the canvas has effective dimensions set, these will be used for the calculations.
+        Otherwise, we use the dimensions
 
         Args:
             framing_intent: framing intent to place in canvas
@@ -96,7 +96,19 @@ class Canvas(Base):
             source_canvas: 'Canvas',
             source_framing_decision: Union[FramingDecision, int] = 0
     ) -> 'Canvas':
+        """
+        Create a new `Canvas` from the provided `source_canvas` and `framing_decision`
+        based on a [CanvasTemplate](canvas_template.md#Canvas Template)
 
+        Args:
+            canvas_template:
+            source_canvas:
+            source_framing_decision:
+
+        Returns:
+            canvas: based on the provided canvas template and sources
+
+        """
         if type(source_framing_decision) is int:
             source_framing_decision = source_canvas.framing_decisions[source_framing_decision]
 
@@ -200,6 +212,10 @@ class Canvas(Base):
         return canvas
 
     def adjust_effective_anchor_point(self) -> None:
+        """
+        Adjust the `effective_anchor_point` of this `Canvas` if `effective_dimensions` are set
+        """
+
         if self.effective_dimensions is None:
             return
 
