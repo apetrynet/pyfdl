@@ -1,6 +1,8 @@
-from typing import Union, Tuple, Type
+import math
+from typing import Tuple, Type, Union, List
 
 from pyfdl import Base, DimensionsInt, Point, DimensionsFloat, FramingDecision, TypedCollection, FramingIntent
+from pyfdl.base import round_to_even
 from pyfdl.errors import FDLError
 
 
@@ -59,8 +61,8 @@ class Canvas(Base):
         collection of framing decisions.
 
         The framing decision's properties are calculated for you.
-        If the canvas has effective dimensions set, these will be used for the calculations. Otherwise, we use the
-        dimensions
+        If the canvas has effective dimensions set, these will be used for the calculations.
+        Otherwise, we use the dimensions
 
         Args:
             framing_intent: framing intent to place in canvas
@@ -69,49 +71,10 @@ class Canvas(Base):
             framing_decision_id: id of the newly created framing decision
 
         """
-        active_dimensions, active_anchor_point = self.get_dimensions()
-
-        # Compare aspect ratios of canvas and framing intent
-        intent_quotient = framing_intent.aspect_ratio.width / framing_intent.aspect_ratio.height
-        canvas_quotient = active_dimensions.width / active_dimensions.height
-        if intent_quotient >= canvas_quotient:
-            # Need to calculate height
-            aspect_quotient = framing_intent.aspect_ratio.height / framing_intent.aspect_ratio.width
-            width = active_dimensions.width
-            # This trick was mentioned in a ASC MITC FDL meeting by someone, but I can't recall by whom
-            height = round((width * self.anamorphic_squeeze * aspect_quotient) / 2) * 2
-
-        else:
-            # Need to calculate width
-            width = round((active_dimensions.height * intent_quotient) / 2) * 2
-            height = active_dimensions.height
-
-        decision_id = f'{self.id}-{framing_intent.id}'
-        protection_dimensions = DimensionsFloat(width=width, height=height)
-        protection_anchor_point = Point(
-            x=(active_dimensions.width - protection_dimensions.width) / 2,
-            y=(active_dimensions.height - protection_dimensions.height) / 2
-        )
-        dimensions = DimensionsFloat(
-            width=round(protection_dimensions.width * (1 - framing_intent.protection) / 2) * 2,
-            height=round(protection_dimensions.height * (1 - framing_intent.protection) / 2) * 2
-        )
-        anchor_point = Point(
-            x=protection_anchor_point.x + (protection_dimensions.width - dimensions.width) / 2,
-            y=protection_anchor_point.y + (protection_dimensions.height - dimensions.height) / 2
-        )
-        framing_decision = FramingDecision(
-            _id=decision_id,
-            label=framing_intent.label,
-            framing_intent_id=framing_intent.id,
-            dimensions=dimensions,
-            anchor_point=anchor_point,
-            protection_dimensions=protection_dimensions,
-            protection_anchor_point=protection_anchor_point
-        )
+        framing_decision = FramingDecision.from_framing_intent(self, framing_intent)
         self.framing_decisions.add_item(framing_decision)
 
-        return decision_id
+        return framing_decision.id
 
     def get_dimensions(self) -> Tuple[DimensionsInt, Point]:
         """ Get the most relevant dimensions and anchor point for the canvas.
@@ -121,10 +84,145 @@ class Canvas(Base):
             (dimensions, anchor_point):
 
         """
-        if self.effective_dimensions:
+        if self.effective_dimensions is not None:
             return self.effective_dimensions, self.effective_anchor_point
 
         return self.dimensions, Point(x=0, y=0)
+
+    @classmethod
+    def from_canvas_template(
+            cls,
+            canvas_template: 'CanvasTemplate',
+            source_canvas: 'Canvas',
+            source_framing_decision: Union[FramingDecision, int] = 0
+    ) -> 'Canvas':
+        """
+        Create a new `Canvas` from the provided `source_canvas` and `framing_decision`
+        based on a [CanvasTemplate](canvas_template.md#Canvas Template)
+
+        Args:
+            canvas_template:
+            source_canvas:
+            source_framing_decision:
+
+        Returns:
+            canvas: based on the provided canvas template and sources
+
+        """
+        if type(source_framing_decision) is int:
+            source_framing_decision = source_canvas.framing_decisions[source_framing_decision]
+
+        canvas = Canvas(
+            label=canvas_template.label,
+            _id=Base.generate_uuid().strip('-'),
+            source_canvas_id=source_canvas.id,
+            anamorphic_squeeze=canvas_template.target_anamorphic_squeeze
+        )
+
+        framing_decision = FramingDecision(
+            label=source_framing_decision.label,
+            _id=f'{canvas.id}-{source_framing_decision.framing_intent_id}',
+            framing_intent_id=source_framing_decision.framing_intent_id
+        )
+        canvas.framing_decisions.add_item(framing_decision)
+
+        source_map = {
+            'framing_decision': source_framing_decision,
+            'canvas': source_canvas
+        }
+
+        dest_map = {
+            'framing_decision': framing_decision,
+            'canvas': canvas
+        }
+
+        # Figure out what dimensions to use
+        fit_source = canvas_template.fit_source
+        source_type, source_attribute = fit_source.split('.')
+        preserve = canvas_template.preserve_from_source_canvas or fit_source
+        if preserve in [None, 'none']:
+            preserve = fit_source
+
+        # Get the scale factor
+        source_dimensions = getattr(source_map[source_type], source_attribute)
+        scale_factor = canvas_template.get_scale_factor(
+            source_dimensions,
+            source_canvas.anamorphic_squeeze
+        )
+
+        # Dummy dimensions to test against if we received a proper value
+        dummy_dimensions = DimensionsFloat(width=0, height=0)
+
+        # Copy and scale dimensions from source to target
+        for transfer_key in canvas_template.get_transfer_keys():
+            if transfer_key == fit_source:
+                target_size = canvas_template.fit_source_to_target(
+                    source_dimensions,
+                    source_canvas.anamorphic_squeeze
+                )
+                setattr(dest_map[source_type], source_attribute, target_size)
+                continue
+
+            source_type, dimension_source_attribute = transfer_key.split('.')
+            dimensions = getattr(
+                source_map[source_type],
+                dimension_source_attribute,
+                dummy_dimensions
+            ).copy()
+
+            if dimensions == dummy_dimensions:
+                # Source canvas/framing decision is missing this dimension. Let's move on
+                continue
+
+            dimensions.width = canvas_template.get_desqueezed_width(
+                dimensions.width,
+                source_canvas.anamorphic_squeeze
+            )
+            dimensions.scale_by(scale_factor)
+            setattr(dest_map[source_type], dimension_source_attribute, dimensions)
+
+        # Make sure the canvas has dimensions
+        if canvas.dimensions is None:
+            preserve_source_type, preserve_source_attribute = preserve.split('.')
+            canvas.dimensions = getattr(dest_map[preserve_source_type], preserve_source_attribute).copy()
+
+        # Round values according to rules defined in the template
+        if canvas_template.round is not None:
+            canvas.dimensions = canvas_template.round.round_dimensions(canvas.dimensions)
+
+        # Override canvas dimensions to maximum defined in template
+        if canvas_template.maximum_dimensions is not None:
+            canvas.dimensions = min(canvas_template.maximum_dimensions, canvas.dimensions)
+            if canvas_template.pad_to_maximum:
+                canvas.dimensions = canvas_template.maximum_dimensions
+
+        # Make sure all anchor points are correct according to new sizes
+        canvas.adjust_effective_anchor_point()
+        framing_decision.adjust_protection_anchor_point(
+            canvas,
+            canvas_template.alignment_method_horizontal,
+            canvas_template.alignment_method_vertical
+        )
+        framing_decision.adjust_anchor_point(
+            canvas,
+            canvas_template.alignment_method_horizontal,
+            canvas_template.alignment_method_vertical
+        )
+
+        return canvas
+
+    def adjust_effective_anchor_point(self) -> None:
+        """
+        Adjust the `effective_anchor_point` of this `Canvas` if `effective_dimensions` are set
+        """
+
+        if self.effective_dimensions is None:
+            return
+
+        self.effective_anchor_point = Point(
+            x=(self.dimensions.width - self.effective_dimensions.width) / 2,
+            y=(self.dimensions.height - self.effective_dimensions.height) / 2
+        )
 
     def __repr__(self):
         return f'{self.__class__.__name__}(label="{self.label}", id="{self.id}")'

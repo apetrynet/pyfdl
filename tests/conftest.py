@@ -169,3 +169,8 @@ def sample_canvas_template_kwargs() -> dict:
         "_round": {"even": "even", "mode": "up"}
     }
     return canvas_template
+
+
+@pytest.fixture
+def sample_rounding_strategy() -> dict:
+    return {"even": "even", "mode": "up"}

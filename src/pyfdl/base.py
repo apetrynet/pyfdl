@@ -1,3 +1,4 @@
+import math
 import uuid
 from abc import ABC, abstractmethod
 from typing import Any, Union
@@ -7,6 +8,27 @@ from pyfdl.errors import FDLError
 FDL_SCHEMA_MAJOR = 1
 FDL_SCHEMA_MINOR = 0
 FDL_SCHEMA_VERSION = {'major': FDL_SCHEMA_MAJOR, 'minor': FDL_SCHEMA_MINOR}
+
+# Global variable determining if we round values to even numbers or not
+BE_PRECISE = False
+
+
+def round_to_even(value: float) -> Union[int, float]:
+    """
+    This will make sure we always end up with an even number
+
+    Args:
+        value: initial value to round
+
+    Returns:
+        value: even number
+    """
+    global BE_PRECISE
+    if BE_PRECISE:
+        return value
+
+    half = value / 2
+    return round(half) * 2
 
 
 class Base(ABC):
@@ -180,6 +202,10 @@ class TypedCollection:
         self._cls = cls
         self._data = {}
 
+    @property
+    def ids(self):
+        return list(self._data.keys())
+
     def add_item(self, item: Any):
         """Add an item to the collection.
          All items added to a collection get associated to the collection by passing itself
@@ -230,7 +256,16 @@ class TypedCollection:
         if item_id in self._data:
             del self._data[item_id]
 
-    def _get_item_id(self, item):
+    def _get_item_id(self, item: Any) -> str:
+        """
+        Get the "id" of the item based on the item's `id_attribute`
+
+        Args:
+            item:
+
+        Returns:
+            id:
+        """
         return getattr(item, self._cls.id_attribute)
 
     def __len__(self):
@@ -239,6 +274,9 @@ class TypedCollection:
     def __iter__(self):
         for item in self._data.values():
             yield item
+
+    def __getitem__(self, item):
+        return self.get_item(self.ids[item])
 
     def __contains__(self, item: Any) -> bool:
         # We support both looking for an item by item.id and "string" for future use of collection
@@ -264,6 +302,25 @@ class DimensionsFloat(Base):
         self.width = width
         self.height = height
 
+    def scale_by(self, factor: float) -> None:
+        """
+        Scale the dimensions by the provider factor
+
+        Args:
+            factor:
+        """
+        self.width = round_to_even(self.width * factor)
+        self.height = round_to_even(self.height * factor)
+
+    def copy(self) -> 'DimensionsFloat':
+        """
+        Create a copy of these dimensions
+
+        Returns:
+            copy: of these dimensions
+        """
+        return DimensionsFloat(width=self.width, height=self.height)
+
     def __eq__(self, other):
         return self.width == other.width and self.height == other.height
 
@@ -284,6 +341,25 @@ class DimensionsInt(Base):
         """
         self.width = width.__int__()
         self.height = height.__int__()
+
+    def scale_by(self, factor: float) -> None:
+        """
+        Scale the dimensions by the provider factor
+
+        Args:
+            factor:
+        """
+        self.width = round_to_even(self.width * factor).__int__()
+        self.height = round_to_even(self.height * factor).__int__()
+
+    def copy(self) -> 'DimensionsInt':
+        """
+        Create a copy of these dimensions
+
+        Returns:
+            copy: of these dimensions
+        """
+        return DimensionsInt(width=self.width, height=self.height)
 
     def __eq__(self, other):
         return self.width == other.width and self.height == other.height
@@ -365,6 +441,37 @@ class RoundStrategy(Base):
             )
 
         self._mode = value
+
+    def round_dimensions(self, dimensions: DimensionsInt) -> DimensionsInt:
+        """
+        Round the provided dimensions based on the rules defined in this object
+
+        Args:
+            dimensions:
+
+        Returns:
+            dimensions: rounded based on rules
+
+        """
+        even = self.even
+        mode = self.mode
+
+        mode_map = {
+            'up': math.ceil,
+            'down': math.floor,
+            'round': round
+        }
+
+        width = mode_map[mode](dimensions.width)
+        height = mode_map[mode](dimensions.height)
+
+        if even == 'even':
+            # width = round_to_even(width)
+            # height = round_to_even(height)
+            width = round(width / 2) * 2
+            height = round(height / 2) * 2
+
+        return DimensionsInt(width=width, height=height)
 
     def __repr__(self):
         return f'{self.__class__.__name__}(even="{self.even}", mode="{self.mode}")'
