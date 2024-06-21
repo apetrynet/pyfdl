@@ -78,3 +78,5 @@ def test_preserve_from_source_canvas_enum_validation(sample_canvas_template):
         canvas_template.preserve_from_source_canvas = faulty_value
 
     assert f'"{faulty_value}" is not a valid option for "preserve_from_source_canvas"' in str(err.value)
+
+# TODO: Add more tests for all the variations of fit_methods etc.
