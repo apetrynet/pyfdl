@@ -100,42 +100,6 @@ class Canvas(Base):
         if type(source_framing_decision) is int:
             source_framing_decision = source_canvas.framing_decisions[source_framing_decision]
 
-        dimension_routing_map = {
-            "framing_decision.dimensions": {
-                "framing_decision.dimensions": source_framing_decision.dimensions,
-                "framing_decision.protection_dimensions": source_framing_decision.protection_dimensions,
-                "canvas.effective_dimensions": source_canvas.effective_dimensions,
-                "canvas.dimensions": source_canvas.dimensions
-            },
-            "framing_decision.protection_dimensions": {
-                "framing_decision.protection_dimensions": source_framing_decision.protection_dimensions,
-                "framing_decision.dimensions": source_framing_decision.dimensions,
-                "canvas.effective_dimensions": source_canvas.effective_dimensions,
-                "canvas.dimensions": source_canvas.dimensions
-            },
-            "canvas.effective_dimensions": {
-                "canvas.effective_dimensions": source_canvas.effective_dimensions,
-                "framing_decision.protection_dimensions": source_framing_decision.protection_dimensions,
-                "framing_decision.dimensions": source_framing_decision.dimensions,
-                "canvas.dimensions": source_canvas.dimensions
-            },
-            "canvas.dimensions": {
-                "canvas.dimensions": source_canvas.dimensions,
-                "framing_decision.protection_dimensions": source_framing_decision.protection_dimensions,
-                "framing_decision.dimensions": source_framing_decision.dimensions,
-                "canvas.effective_dimensions": source_canvas.effective_dimensions
-            }
-        }
-
-        def get_dimension_keys(route: dict, beg: str, end: str) -> List[str]:
-            keys = list(route.keys())
-            first = keys.index(beg)
-            last = keys.index(end) + 1
-            if first == last:
-                return [keys[first]]
-
-            return keys[first:last]
-
         canvas = Canvas(
             label=canvas_template.label,
             _id=Base.generate_uuid().strip('-'),
@@ -177,12 +141,9 @@ class Canvas(Base):
         # Dummy dimensions to test against if we received a proper value
         dummy_dimensions = DimensionsFloat(width=0, height=0)
 
-        # Get the available values between fit_source and preserve_from_canvas
-        route_map = dimension_routing_map[fit_source]
-
         # Copy and scale dimensions from source to target
-        for dimension_key in get_dimension_keys(route_map, fit_source, preserve):
-            if dimension_key == fit_source:
+        for transfer_key in canvas_template.get_transfer_keys():
+            if transfer_key == fit_source:
                 target_size = canvas_template.fit_source_to_target(
                     source_dimensions,
                     source_canvas.anamorphic_squeeze
@@ -190,14 +151,15 @@ class Canvas(Base):
                 setattr(dest_map[source_type], source_attribute, target_size)
                 continue
 
-            dimension_source_type, dimension_source_attribute = dimension_key.split('.')
+            source_type, dimension_source_attribute = transfer_key.split('.')
             dimensions = getattr(
-                source_map[dimension_source_type],
+                source_map[source_type],
                 dimension_source_attribute,
                 dummy_dimensions
             ).copy()
 
             if dimensions == dummy_dimensions:
+                # Source canvas/framing decision is missing this dimension. Let's move on
                 continue
 
             dimensions.width = canvas_template.get_desqueezed_width(
@@ -205,7 +167,7 @@ class Canvas(Base):
                 source_canvas.anamorphic_squeeze
             )
             dimensions.scale_by(scale_factor)
-            setattr(dest_map[dimension_source_type], dimension_source_attribute, dimensions)
+            setattr(dest_map[source_type], dimension_source_attribute, dimensions)
 
         # Make sure the canvas has dimensions
         if canvas.dimensions is None:

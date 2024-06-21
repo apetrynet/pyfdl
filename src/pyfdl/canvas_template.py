@@ -1,4 +1,4 @@
-from typing import Union, NamedTuple, Tuple
+from typing import Union, NamedTuple, Tuple, List
 
 from pyfdl import Base, DimensionsInt, DimensionsFloat, RoundStrategy
 from pyfdl.base import round_to_even
@@ -247,6 +247,46 @@ class CanvasTemplate(Base):
         # TODO consider returning crop True/False
         #  or at least coordinates outside of frame like data window vs display window
         return size
+
+    def get_transfer_keys(self) -> List[str]:
+        dimension_routing_map = {
+            "framing_decision.dimensions": [
+                "framing_decision.dimensions",
+                "framing_decision.protection_dimensions",
+                "canvas.effective_dimensions",
+                "canvas.dimensions"
+            ],
+            "framing_decision.protection_dimensions": [
+                "framing_decision.protection_dimensions",
+                "framing_decision.dimensions",
+                "canvas.effective_dimensions",
+                "canvas.dimensions"
+            ],
+            "canvas.effective_dimensions": [
+                "canvas.effective_dimensions",
+                "framing_decision.protection_dimensions",
+                "framing_decision.dimensions",
+                "canvas.dimensions"
+            ],
+            "canvas.dimensions": [
+                "canvas.dimensions",
+                "framing_decision.protection_dimensions",
+                "framing_decision.dimensions",
+                "canvas.effective_dimensions"
+            ]
+        }
+        keys = dimension_routing_map[self.fit_source]
+        preserve = self.preserve_from_source_canvas
+
+        if preserve in [None, 'none']:
+            preserve = self.fit_source
+
+        first = keys.index(self.fit_source)
+        last = keys.index(preserve) + 1
+        if first == last:
+            return [keys[first]]
+
+        return keys[first:last]
 
     def __repr__(self):
         return f'{self.__class__.__name__}(label="{self.label}", id="{self.id})"'
