@@ -83,12 +83,28 @@
         </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#pyfdl.DimensionsFloat">DimensionsFloat</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.DimensionsFloat.copy">copy</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.DimensionsFloat.scale_by">scale_by</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#pyfdl.DimensionsInt">DimensionsInt</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.DimensionsInt.copy">copy</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.DimensionsInt.scale_by">scale_by</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#pyfdl.Point">Point</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#pyfdl.RoundStrategy">RoundStrategy</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.RoundStrategy.round_dimensions">round_dimensions</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#global-variables">Global Variables</a>
     </li>
@@ -147,18 +163,17 @@
 
 
 <h2 id="pyfdl.Base" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.Base(*args, **kwargs)</code>
+              <code class="highlight language-python">pyfdl.Base(*args, **kwargs)</code>
 
 </h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="abc.ABC">ABC</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="abc.ABC">ABC</span></code></p>
 
-  
+
       <p>Base class not to be instanced directly.</p>
-
 
 
 <table class="field-list">
@@ -196,7 +211,6 @@
     </tr>
   </tbody>
 </table>
-
 
 <table class="field-list">
   <colgroup>
@@ -253,7 +267,7 @@ subclasses of <a href="#pyfdl.Base--Base">Base</a></p>
   </tbody>
 </table>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -265,42 +279,37 @@ subclasses of <a href="#pyfdl.Base--Base">Base</a></p>
 
 
 
-
 <div class="doc doc-object doc-function">
-
 
 
 <h3 id="pyfdl.Base.apply_defaults" class="doc doc-heading">
-          <code class="highlight language-python">apply_defaults()</code>
+            <code class="highlight language-python">apply_defaults()</code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Applies default values defined in the <code>defaults</code> attribute to attributes that are <code>None</code></p>
 
-  </div>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pyfdl.Base.check_required" class="doc doc-heading">
-          <code class="highlight language-python">check_required()</code>
+            <code class="highlight language-python">check_required()</code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Check that required attributes contain values.
 Checks linked attributes like: "effective_dimensions.effective_anchor_point" where
 "effective_anchor_point" is required if "effective_dimensions" is set</p>
-
 
 
 <table class="field-list">
@@ -310,33 +319,31 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
   </colgroup>
   <tbody valign="top">
     <tr class="field">
-    <th class="field-name">Returns:</th>
-    <td class="field-body">
-      <ul class="first simple">
-          <li>
-                <code>list</code>
-            –
-            <div class="doc-md-description">
-              <p>a list of missing attributes</p>
-            </div>
-          </li>
-      </ul>
-    </td>
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+                  <code>list</code>
+              –
+              <div class="doc-md-description">
+                <p>a list of missing attributes</p>
+              </div>
+            </li>
+        </ul>
+      </td>
     </tr>
   </tbody>
 </table>
-  </div>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pyfdl.Base.from_dict" class="doc doc-heading">
-          <code class="highlight language-python">from_dict(raw)</code>
-  
+            <code class="highlight language-python">from_dict(raw)</code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
   </span>
@@ -344,10 +351,9 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Create instances of classes from a provided dict.</p>
+    <div class="doc doc-contents ">
 
+      <p>Create instances of classes from a provided dict.</p>
 
 
 <table class="field-list">
@@ -374,7 +380,6 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
   </tbody>
 </table>
 
-
 <table class="field-list">
   <colgroup>
     <col class="field-name" />
@@ -382,40 +387,37 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
   </colgroup>
   <tbody valign="top">
     <tr class="field">
-    <th class="field-name">Returns:</th>
-    <td class="field-body">
-      <ul class="first simple">
-          <li>
-<b><code>cls</code></b>(                <code><span title="typing.Any">Any</span></code>
-)            –
-            <div class="doc-md-description">
-              <p>and instance of the current class</p>
-            </div>
-          </li>
-      </ul>
-    </td>
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>cls</code></b>(                  <code><span title="typing.Any">Any</span></code>
+)              –
+              <div class="doc-md-description">
+                <p>and instance of the current class</p>
+              </div>
+            </li>
+        </ul>
+      </td>
     </tr>
   </tbody>
 </table>
-  </div>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pyfdl.Base.to_dict" class="doc doc-heading">
-          <code class="highlight language-python">to_dict()</code>
+            <code class="highlight language-python">to_dict()</code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Produce a dictionary representation of the current object along with all sub objects.</p>
+    <div class="doc doc-contents ">
 
+      <p>Produce a dictionary representation of the current object along with all sub objects.</p>
 
 
 <table class="field-list">
@@ -441,7 +443,6 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
   </tbody>
 </table>
 
-
 <table class="field-list">
   <colgroup>
     <col class="field-name" />
@@ -449,22 +450,22 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
   </colgroup>
   <tbody valign="top">
     <tr class="field">
-    <th class="field-name">Returns:</th>
-    <td class="field-body">
-      <ul class="first simple">
-          <li>
-                <code>dict</code>
-            –
-            <div class="doc-md-description">
-              <p>representation of object</p>
-            </div>
-          </li>
-      </ul>
-    </td>
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+                  <code>dict</code>
+              –
+              <div class="doc-md-description">
+                <p>representation of object</p>
+              </div>
+            </li>
+        </ul>
+      </td>
     </tr>
   </tbody>
 </table>
-  </div>
+    </div>
 
 </div>
 
@@ -472,8 +473,7 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -482,17 +482,16 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
 
 
 <h2 id="pyfdl.TypedCollection" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.TypedCollection(cls)</code>
+              <code class="highlight language-python">pyfdl.TypedCollection(cls)</code>
 
 </h2>
 
 
-  <div class="doc doc-contents first">
+    <div class="doc doc-contents first">
 
-  
+
       <p>Collection only accepting items of a given class.
 In addition, a strict control of unique id's is enforced.</p>
-
 
 
 <table class="field-list">
@@ -519,10 +518,9 @@ In addition, a strict control of unique id's is enforced.</p>
   </tbody>
 </table>
 
-  
+
 
   <div class="doc doc-children">
-
 
 
 
@@ -535,19 +533,17 @@ In addition, a strict control of unique id's is enforced.</p>
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pyfdl.TypedCollection.add_item" class="doc doc-heading">
-          <code class="highlight language-python">add_item(item)</code>
+            <code class="highlight language-python">add_item(item)</code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Add an item to the collection.
  All items added to a collection get associated to the collection by passing itself
  as parent</p>
-
 
 
 <table class="field-list">
@@ -574,7 +570,6 @@ In addition, a strict control of unique id's is enforced.</p>
   </tbody>
 </table>
 
-
 <table class="field-list">
   <colgroup>
     <col class="field-name" />
@@ -597,25 +592,22 @@ In addition, a strict control of unique id's is enforced.</p>
     </tr>
   </tbody>
 </table>
-  </div>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pyfdl.TypedCollection.get_item" class="doc doc-heading">
-          <code class="highlight language-python">get_item(item_id)</code>
+            <code class="highlight language-python">get_item(item_id)</code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Get an item in the collection</p>
+    <div class="doc doc-contents ">
 
+      <p>Get an item in the collection</p>
 
 
 <table class="field-list">
@@ -642,7 +634,6 @@ In addition, a strict control of unique id's is enforced.</p>
   </tbody>
 </table>
 
-
 <table class="field-list">
   <colgroup>
     <col class="field-name" />
@@ -650,40 +641,37 @@ In addition, a strict control of unique id's is enforced.</p>
   </colgroup>
   <tbody valign="top">
     <tr class="field">
-    <th class="field-name">Returns:</th>
-    <td class="field-body">
-      <ul class="first simple">
-          <li>
-<b><code>item</code></b>(                <code><span title="typing.Union">Union</span>[<span title="typing.Any">Any</span>, None]</code>
-)            –
-            <div class="doc-md-description">
-              <p>in collection or <code>None</code> if not found</p>
-            </div>
-          </li>
-      </ul>
-    </td>
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>item</code></b>(                  <code><span title="typing.Union">Union</span>[<span title="typing.Any">Any</span>, None]</code>
+)              –
+              <div class="doc-md-description">
+                <p>in collection or <code>None</code> if not found</p>
+              </div>
+            </li>
+        </ul>
+      </td>
     </tr>
   </tbody>
 </table>
-  </div>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pyfdl.TypedCollection.remove_item" class="doc doc-heading">
-          <code class="highlight language-python">remove_item(item_id)</code>
+            <code class="highlight language-python">remove_item(item_id)</code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Remove an item in the collection if found</p>
+    <div class="doc doc-contents ">
 
+      <p>Remove an item in the collection if found</p>
 
 
 <table class="field-list">
@@ -709,7 +697,7 @@ In addition, a strict control of unique id's is enforced.</p>
     </tr>
   </tbody>
 </table>
-  </div>
+    </div>
 
 </div>
 
@@ -717,8 +705,7 @@ In addition, a strict control of unique id's is enforced.</p>
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -727,18 +714,17 @@ In addition, a strict control of unique id's is enforced.</p>
 
 
 <h2 id="pyfdl.DimensionsFloat" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.DimensionsFloat(width, height)</code>
+              <code class="highlight language-python">pyfdl.DimensionsFloat(width, height)</code>
 
 </h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.base.Base" href="#pyfdl.Base">Base</a></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.base.Base" href="#pyfdl.Base">Base</a></code></p>
 
-  
+
       <p>Dimensions properly formatted and stored as floats</p>
-
 
 
 <table class="field-list">
@@ -773,7 +759,7 @@ In addition, a strict control of unique id's is enforced.</p>
   </tbody>
 </table>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -785,12 +771,92 @@ In addition, a strict control of unique id's is enforced.</p>
 
 
 
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pyfdl.DimensionsFloat.copy" class="doc doc-heading">
+            <code class="highlight language-python">copy()</code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Create a copy of these dimensions</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>copy</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.base.DimensionsFloat" href="#pyfdl.DimensionsFloat">DimensionsFloat</a></code>
+)              –
+              <div class="doc-md-description">
+                <p>of these dimensions</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pyfdl.DimensionsFloat.scale_by" class="doc doc-heading">
+            <code class="highlight language-python">scale_by(factor)</code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Scale the dimensions by the provider factor</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>factor</code></b>
+                  (<code>float</code>)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</div>
+
 
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -799,18 +865,17 @@ In addition, a strict control of unique id's is enforced.</p>
 
 
 <h2 id="pyfdl.DimensionsInt" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.DimensionsInt(width, height)</code>
+              <code class="highlight language-python">pyfdl.DimensionsInt(width, height)</code>
 
 </h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.base.Base" href="#pyfdl.Base">Base</a></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.base.Base" href="#pyfdl.Base">Base</a></code></p>
 
-  
+
       <p>Dimensions properly formatted and stored as ints</p>
-
 
 
 <table class="field-list">
@@ -845,7 +910,7 @@ In addition, a strict control of unique id's is enforced.</p>
   </tbody>
 </table>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -857,12 +922,92 @@ In addition, a strict control of unique id's is enforced.</p>
 
 
 
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pyfdl.DimensionsInt.copy" class="doc doc-heading">
+            <code class="highlight language-python">copy()</code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Create a copy of these dimensions</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>copy</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.base.DimensionsInt" href="#pyfdl.DimensionsInt">DimensionsInt</a></code>
+)              –
+              <div class="doc-md-description">
+                <p>of these dimensions</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pyfdl.DimensionsInt.scale_by" class="doc doc-heading">
+            <code class="highlight language-python">scale_by(factor)</code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Scale the dimensions by the provider factor</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>factor</code></b>
+                  (<code>float</code>)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</div>
+
 
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -871,18 +1016,17 @@ In addition, a strict control of unique id's is enforced.</p>
 
 
 <h2 id="pyfdl.Point" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.Point(x, y)</code>
+              <code class="highlight language-python">pyfdl.Point(x, y)</code>
 
 </h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.base.Base" href="#pyfdl.Base">Base</a></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.base.Base" href="#pyfdl.Base">Base</a></code></p>
 
-  
+
       <p>Point properly formatted</p>
-
 
 
 <table class="field-list">
@@ -917,7 +1061,7 @@ In addition, a strict control of unique id's is enforced.</p>
   </tbody>
 </table>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -933,8 +1077,7 @@ In addition, a strict control of unique id's is enforced.</p>
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -943,18 +1086,17 @@ In addition, a strict control of unique id's is enforced.</p>
 
 
 <h2 id="pyfdl.RoundStrategy" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.RoundStrategy(even=None, mode=None)</code>
+              <code class="highlight language-python">pyfdl.RoundStrategy(even=None, mode=None)</code>
 
 </h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.base.Base" href="#pyfdl.Base">Base</a></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.base.Base" href="#pyfdl.Base">Base</a></code></p>
 
-  
+
       <p>Describes how to handle rounding of values.</p>
-
 
 
 <table class="field-list">
@@ -995,7 +1137,6 @@ In addition, a strict control of unique id's is enforced.</p>
   </tbody>
 </table>
 
-
 <table class="field-list">
   <colgroup>
     <col class="field-name" />
@@ -1019,7 +1160,7 @@ In addition, a strict control of unique id's is enforced.</p>
   </tbody>
 </table>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -1031,12 +1172,75 @@ In addition, a strict control of unique id's is enforced.</p>
 
 
 
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pyfdl.RoundStrategy.round_dimensions" class="doc doc-heading">
+            <code class="highlight language-python">round_dimensions(dimensions)</code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Round the provided dimensions based on the rules defined in this object</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>dimensions</code></b>
+                  (<code><a class="autorefs autorefs-internal" title="pyfdl.base.DimensionsInt" href="#pyfdl.DimensionsInt">DimensionsInt</a></code>)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>dimensions</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.base.DimensionsInt" href="#pyfdl.DimensionsInt">DimensionsInt</a></code>
+)              –
+              <div class="doc-md-description">
+                <p>rounded based on rules</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</div>
+
 
 
   </div>
 
-  </div>
-
+    </div>
 
 </div><h2 id="global-variables">Global Variables</h2>
 <p>Version numbers are used as default values in <a href="../header/">Header</a> and to select a matching json schema file
@@ -1048,8 +1252,8 @@ if no version is set.</p>
 
 
 <h2 id="pyfdl.FDL_SCHEMA_MAJOR" class="doc doc-heading">
-          <code class="highlight language-python">pyfdl.FDL_SCHEMA_MAJOR = 1</code>
-  
+            <code class="highlight language-python">pyfdl.FDL_SCHEMA_MAJOR = 1</code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
   </span>
@@ -1057,8 +1261,8 @@ if no version is set.</p>
 </h2>
 
 
-  <div class="doc doc-contents first">
-  </div>
+    <div class="doc doc-contents first">
+    </div>
 
 </div>
 
@@ -1067,8 +1271,8 @@ if no version is set.</p>
 
 
 <h2 id="pyfdl.FDL_SCHEMA_MINOR" class="doc doc-heading">
-          <code class="highlight language-python">pyfdl.FDL_SCHEMA_MINOR = 0</code>
-  
+            <code class="highlight language-python">pyfdl.FDL_SCHEMA_MINOR = 0</code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
   </span>
@@ -1076,8 +1280,8 @@ if no version is set.</p>
 </h2>
 
 
-  <div class="doc doc-contents first">
-  </div>
+    <div class="doc doc-contents first">
+    </div>
 
 </div>
 
@@ -1086,8 +1290,8 @@ if no version is set.</p>
 
 
 <h2 id="pyfdl.FDL_SCHEMA_VERSION" class="doc doc-heading">
-          <code class="highlight language-python">pyfdl.FDL_SCHEMA_VERSION = {'major': FDL_SCHEMA_MAJOR, 'minor': FDL_SCHEMA_MINOR}</code>
-  
+            <code class="highlight language-python">pyfdl.FDL_SCHEMA_VERSION = {'major': FDL_SCHEMA_MAJOR, 'minor': FDL_SCHEMA_MINOR}</code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
   </span>
@@ -1095,8 +1299,8 @@ if no version is set.</p>
 </h2>
 
 
-  <div class="doc doc-contents first">
-  </div>
+    <div class="doc doc-contents first">
+    </div>
 
 </div>
               

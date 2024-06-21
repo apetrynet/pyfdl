@@ -131,18 +131,18 @@ you can pass a <code>Header</code> object as an attribute if you wish.  </p>
 
 
 <h2 id="pyfdl.FDL" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.FDL(_uuid=None, version=None, fdl_creator=None, default_framing_intent=None, framing_intents=None, contexts=None, canvas_templates=None)</code>
+              <code class="highlight language-python">pyfdl.FDL(_uuid=None, version=None, fdl_creator=None, default_framing_intent=None, framing_intents=None, contexts=None, canvas_templates=None)</code>
 
 </h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.Base" href="../common/#pyfdl.Base">Base</a></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.Base" href="../common/#pyfdl.Base">Base</a></code></p>
 
 
 
-  
+
 
   <div class="doc doc-children">
 
@@ -157,8 +157,8 @@ you can pass a <code>Header</code> object as an attribute if you wish.  </p>
 
 
 <h3 id="pyfdl.FDL.header" class="doc doc-heading">
-          <code class="highlight language-python">header: Header</code>
-  
+            <code class="highlight language-python">header: Header</code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
       <small class="doc doc-label doc-label-writable"><code>writable</code></small>
@@ -167,8 +167,7 @@ you can pass a <code>Header</code> object as an attribute if you wish.  </p>
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
 
 
 
@@ -179,64 +178,59 @@ you can pass a <code>Header</code> object as an attribute if you wish.  </p>
   </colgroup>
   <tbody valign="top">
     <tr class="field">
-    <th class="field-name">Returns:</th>
-    <td class="field-body">
-      <ul class="first simple">
-          <li>
-<b><code>Header</code></b>(                <code><a class="autorefs autorefs-internal" title="pyfdl.Header" href="../header/#pyfdl.Header">Header</a></code>
-)            –
-            <div class="doc-md-description">
-              <p>based on attributes</p>
-            </div>
-          </li>
-      </ul>
-    </td>
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>Header</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.Header" href="../header/#pyfdl.Header">Header</a></code>
+)              –
+              <div class="doc-md-description">
+                <p>based on attributes</p>
+              </div>
+            </li>
+        </ul>
+      </td>
     </tr>
   </tbody>
-</table>  </div>
+</table>    </div>
 
 </div>
 
 
 
-
 <div class="doc doc-object doc-function">
-
 
 
 <h3 id="pyfdl.FDL.apply_defaults" class="doc doc-heading">
-          <code class="highlight language-python">apply_defaults()</code>
+            <code class="highlight language-python">apply_defaults()</code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Applies default values defined in the <code>defaults</code> attribute to attributes that are <code>None</code></p>
 
-  </div>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pyfdl.FDL.check_required" class="doc doc-heading">
-          <code class="highlight language-python">check_required()</code>
+            <code class="highlight language-python">check_required()</code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Check that required attributes contain values.
 Checks linked attributes like: "effective_dimensions.effective_anchor_point" where
 "effective_anchor_point" is required if "effective_dimensions" is set</p>
 
 
-
 <table class="field-list">
   <colgroup>
     <col class="field-name" />
@@ -244,42 +238,39 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
   </colgroup>
   <tbody valign="top">
     <tr class="field">
-    <th class="field-name">Returns:</th>
-    <td class="field-body">
-      <ul class="first simple">
-          <li>
-                <code>list</code>
-            –
-            <div class="doc-md-description">
-              <p>a list of missing attributes</p>
-            </div>
-          </li>
-      </ul>
-    </td>
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+                  <code>list</code>
+              –
+              <div class="doc-md-description">
+                <p>a list of missing attributes</p>
+              </div>
+            </li>
+        </ul>
+      </td>
     </tr>
   </tbody>
 </table>
-  </div>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pyfdl.FDL.validate" class="doc doc-heading">
-          <code class="highlight language-python">validate()</code>
+            <code class="highlight language-python">validate()</code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Validate the current state of the FDL.
  ID's and relationships between items are checked and values are
  validated against the json schema.</p>
-
 
 
 <table class="field-list">
@@ -304,18 +295,16 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
     </tr>
   </tbody>
 </table>
-  </div>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pyfdl.FDL.from_dict" class="doc doc-heading">
-          <code class="highlight language-python">from_dict(raw)</code>
-  
+            <code class="highlight language-python">from_dict(raw)</code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
   </span>
@@ -323,10 +312,9 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Create instances of classes from a provided dict.</p>
+    <div class="doc doc-contents ">
 
+      <p>Create instances of classes from a provided dict.</p>
 
 
 <table class="field-list">
@@ -353,7 +341,6 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
   </tbody>
 </table>
 
-
 <table class="field-list">
   <colgroup>
     <col class="field-name" />
@@ -361,40 +348,37 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
   </colgroup>
   <tbody valign="top">
     <tr class="field">
-    <th class="field-name">Returns:</th>
-    <td class="field-body">
-      <ul class="first simple">
-          <li>
-<b><code>cls</code></b>(                <code><span title="typing.Any">Any</span></code>
-)            –
-            <div class="doc-md-description">
-              <p>and instance of the current class</p>
-            </div>
-          </li>
-      </ul>
-    </td>
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>cls</code></b>(                  <code><span title="typing.Any">Any</span></code>
+)              –
+              <div class="doc-md-description">
+                <p>and instance of the current class</p>
+              </div>
+            </li>
+        </ul>
+      </td>
     </tr>
   </tbody>
 </table>
-  </div>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pyfdl.FDL.to_dict" class="doc doc-heading">
-          <code class="highlight language-python">to_dict()</code>
+            <code class="highlight language-python">to_dict()</code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Produce a dictionary representation of the current object along with all sub objects.</p>
+    <div class="doc doc-contents ">
 
+      <p>Produce a dictionary representation of the current object along with all sub objects.</p>
 
 
 <table class="field-list">
@@ -420,7 +404,6 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
   </tbody>
 </table>
 
-
 <table class="field-list">
   <colgroup>
     <col class="field-name" />
@@ -428,43 +411,40 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
   </colgroup>
   <tbody valign="top">
     <tr class="field">
-    <th class="field-name">Returns:</th>
-    <td class="field-body">
-      <ul class="first simple">
-          <li>
-                <code>dict</code>
-            –
-            <div class="doc-md-description">
-              <p>representation of object</p>
-            </div>
-          </li>
-      </ul>
-    </td>
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+                  <code>dict</code>
+              –
+              <div class="doc-md-description">
+                <p>representation of object</p>
+              </div>
+            </li>
+        </ul>
+      </td>
     </tr>
   </tbody>
 </table>
-  </div>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pyfdl.FDL.load_schema" class="doc doc-heading">
-          <code class="highlight language-python">load_schema()</code>
+            <code class="highlight language-python">load_schema()</code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Load a jsonschema based on the version in <code>Header</code> or default to current version
 set in <a href="../common/">base</a></p>
 
 
-
 <table class="field-list">
   <colgroup>
     <col class="field-name" />
@@ -472,41 +452,38 @@ set in <a href="../common/">base</a></p>
   </colgroup>
   <tbody valign="top">
     <tr class="field">
-    <th class="field-name">Returns:</th>
-    <td class="field-body">
-      <ul class="first simple">
-          <li>
-<b><code>schema</code></b>(                <code>dict</code>
-)            –
-            <div class="doc-md-description">
-              
-            </div>
-          </li>
-      </ul>
-    </td>
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>schema</code></b>(                  <code>dict</code>
+)              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
     </tr>
   </tbody>
 </table>
-  </div>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pyfdl.FDL.place_canvas_in_context" class="doc doc-heading">
-          <code class="highlight language-python">place_canvas_in_context(context_label, canvas)</code>
+            <code class="highlight language-python">place_canvas_in_context(context_label, canvas)</code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Place a canvas in a context. If no context with the provided label exist,
 a new context will be created for you.</p>
-
 
 
 <table class="field-list">
@@ -540,7 +517,7 @@ a new context will be created for you.</p>
     </tr>
   </tbody>
 </table>
-  </div>
+    </div>
 
 </div>
 
@@ -548,8 +525,7 @@ a new context will be created for you.</p>
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
               

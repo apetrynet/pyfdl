@@ -59,6 +59,16 @@
                   <li class="toctree-l1 current"><a class="reference internal current" href="#">Canvas Template</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#pyfdl.CanvasTemplate">CanvasTemplate</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.CanvasTemplate.fit_source_to_target">fit_source_to_target</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.CanvasTemplate.get_desqueezed_width">get_desqueezed_width</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.CanvasTemplate.get_scale_factor">get_scale_factor</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.CanvasTemplate.get_transfer_keys">get_transfer_keys</a>
+    </li>
+        </ul>
     </li>
     </ul>
                   </li>
@@ -110,18 +120,18 @@
 
 
 <h2 id="pyfdl.CanvasTemplate" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.CanvasTemplate(label=None, _id=None, target_dimensions=None, target_anamorphic_squeeze=None, fit_source=None, fit_method=None, alignment_method_vertical=None, alignment_method_horizontal=None, preserve_from_source_canvas=None, maximum_dimensions=None, pad_to_maximum=False, _round=None)</code>
+              <code class="highlight language-python">pyfdl.CanvasTemplate(label=None, _id=None, target_dimensions=None, target_anamorphic_squeeze=None, fit_source=None, fit_method=None, alignment_method_vertical=None, alignment_method_horizontal=None, preserve_from_source_canvas=None, maximum_dimensions=None, pad_to_maximum=None, _round=None)</code>
 
 </h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.Base" href="../common/#pyfdl.Base">Base</a></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.Base" href="../common/#pyfdl.Base">Base</a></code></p>
 
 
 
-  
+
 
   <div class="doc doc-children">
 
@@ -133,12 +143,271 @@
 
 
 
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pyfdl.CanvasTemplate.fit_source_to_target" class="doc doc-heading">
+            <code class="highlight language-python">fit_source_to_target(source_dimensions, source_anamorphic_squeeze)</code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Calculate the dimensions of <code>fit_source</code> inside <code>target_dimensions</code> based on <code>fit_mode</code></p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>source_dimensions</code></b>
+                  (<code><span title="typing.Union">Union</span>[<a class="autorefs autorefs-internal" title="pyfdl.DimensionsInt" href="../common/#pyfdl.DimensionsInt">DimensionsInt</a>, <a class="autorefs autorefs-internal" title="pyfdl.DimensionsFloat" href="../common/#pyfdl.DimensionsFloat">DimensionsFloat</a>]</code>)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+            <li>
+              <b><code>source_anamorphic_squeeze</code></b>
+                  (<code>float</code>)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>size</code></b>(                  <code><span title="typing.Union">Union</span>[<a class="autorefs autorefs-internal" title="pyfdl.DimensionsInt" href="../common/#pyfdl.DimensionsInt">DimensionsInt</a>, <a class="autorefs autorefs-internal" title="pyfdl.DimensionsFloat" href="../common/#pyfdl.DimensionsFloat">DimensionsFloat</a>]</code>
+)              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pyfdl.CanvasTemplate.get_desqueezed_width" class="doc doc-heading">
+            <code class="highlight language-python">get_desqueezed_width(source_width, squeeze_factor)</code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Get the de-squeezed width also considering the <code>target_anamorphic_squeeze</code>.
+Used to calculate scaling of canvases and framing decisions.
+If <code>target_anamorphic_squeeze</code> is 0, it's considered "same as source" and no de-squeeze
+is applied.</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>source_width</code></b>
+                  (<code><span title="typing.Union">Union</span>[float, int]</code>)
+              –
+              <div class="doc-md-description">
+                <p>from source <code>Canvas</code> or <code>FramingDecision</code></p>
+              </div>
+            </li>
+            <li>
+              <b><code>squeeze_factor</code></b>
+                  (<code>float</code>)
+              –
+              <div class="doc-md-description">
+                <p>source <code>Canvas.anamorphic_squeeze</code></p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>width</code></b>(                  <code><span title="typing.Union">Union</span>[float, int]</code>
+)              –
+              <div class="doc-md-description">
+                <p>scaled to size</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pyfdl.CanvasTemplate.get_scale_factor" class="doc doc-heading">
+            <code class="highlight language-python">get_scale_factor(source_dimensions, source_anamorphic_squeeze)</code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Calculate the scale factor used when creating a new <code>Canvas</code> and <code>FramingDecision</code></p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>source_dimensions</code></b>
+                  (<code><span title="typing.Union">Union</span>[<a class="autorefs autorefs-internal" title="pyfdl.DimensionsInt" href="../common/#pyfdl.DimensionsInt">DimensionsInt</a>, <a class="autorefs autorefs-internal" title="pyfdl.DimensionsFloat" href="../common/#pyfdl.DimensionsFloat">DimensionsFloat</a>]</code>)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+            <li>
+              <b><code>source_anamorphic_squeeze</code></b>
+                  (<code>float</code>)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>scale_factor</code></b>(                  <code>float</code>
+)              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pyfdl.CanvasTemplate.get_transfer_keys" class="doc doc-heading">
+            <code class="highlight language-python">get_transfer_keys()</code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Get a list of attributes to transfer from source to destination in the order that
+preserves all attributes between <code>fit_source</code> and <code>preserve_from_canvas</code></p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>keys</code></b>(                  <code><span title="typing.List">List</span>[str]</code>
+)              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</div>
+
 
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
               

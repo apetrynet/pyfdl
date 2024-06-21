@@ -58,6 +58,10 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#pyfdl.Canvas">Canvas</a>
         <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Canvas.adjust_effective_anchor_point">adjust_effective_anchor_point</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Canvas.from_canvas_template">from_canvas_template</a>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Canvas.get_dimensions">get_dimensions</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Canvas.place_framing_intent">place_framing_intent</a>
@@ -116,18 +120,18 @@
 
 
 <h2 id="pyfdl.Canvas" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.Canvas(label=None, _id=None, source_canvas_id=None, dimensions=None, effective_dimensions=None, effective_anchor_point=None, photosite_dimensions=None, physical_dimensions=None, anamorphic_squeeze=None, framing_decisions=None)</code>
+              <code class="highlight language-python">pyfdl.Canvas(label=None, _id=None, source_canvas_id=None, dimensions=None, effective_dimensions=None, effective_anchor_point=None, photosite_dimensions=None, physical_dimensions=None, anamorphic_squeeze=None, framing_decisions=None)</code>
 
 </h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.Base" href="../common/#pyfdl.Base">Base</a></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.Base" href="../common/#pyfdl.Base">Base</a></code></p>
 
 
 
-  
+
 
   <div class="doc doc-children">
 
@@ -139,22 +143,40 @@
 
 
 
-
 <div class="doc doc-object doc-function">
 
 
-
-<h3 id="pyfdl.Canvas.get_dimensions" class="doc doc-heading">
-          <code class="highlight language-python">get_dimensions()</code>
+<h3 id="pyfdl.Canvas.adjust_effective_anchor_point" class="doc doc-heading">
+            <code class="highlight language-python">adjust_effective_anchor_point()</code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Get the most relevant dimensions and anchor point for the canvas.
-<code>effective_dimensions</code> and <code>effective_anchor_point</code> win over <code>dimensions</code></p>
+    <div class="doc doc-contents ">
 
+      <p>Adjust the <code>effective_anchor_point</code> of this <code>Canvas</code> if <code>effective_dimensions</code> are set</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pyfdl.Canvas.from_canvas_template" class="doc doc-heading">
+            <code class="highlight language-python">from_canvas_template(canvas_template, source_canvas, source_framing_decision=0)</code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Create a new <code>Canvas</code> from the provided <code>source_canvas</code> and <code>framing_decision</code>
+based on a <a href="../canvas_template/#Canvas Template">CanvasTemplate</a></p>
 
 
 <table class="field-list">
@@ -164,45 +186,125 @@
   </colgroup>
   <tbody valign="top">
     <tr class="field">
-    <th class="field-name">Returns:</th>
-    <td class="field-body">
-      <ul class="first simple">
-          <li>
-                <code>(<span title="pyfdl.canvas.Canvas.dimensions">dimensions</span>, anchor_point)</code>
-            –
-            <div class="doc-md-description">
-              
-            </div>
-          </li>
-      </ul>
-    </td>
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>canvas_template</code></b>
+                  (<code><a class="autorefs autorefs-internal" title="pyfdl.canvas_template.CanvasTemplate" href="../canvas_template/#pyfdl.CanvasTemplate">CanvasTemplate</a></code>)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+            <li>
+              <b><code>source_canvas</code></b>
+                  (<code><a class="autorefs autorefs-internal" title="pyfdl.canvas.Canvas" href="#pyfdl.Canvas">Canvas</a></code>)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+            <li>
+              <b><code>source_framing_decision</code></b>
+                  (<code><span title="typing.Union">Union</span>[<a class="autorefs autorefs-internal" title="pyfdl.FramingDecision" href="../framing_decision/#pyfdl.FramingDecision">FramingDecision</a>, int]</code>, default:
+                      <code>0</code>
+)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
     </tr>
   </tbody>
 </table>
-  </div>
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>canvas</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.canvas.Canvas" href="#pyfdl.Canvas">Canvas</a></code>
+)              –
+              <div class="doc-md-description">
+                <p>based on the provided canvas template and sources</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
-<h3 id="pyfdl.Canvas.place_framing_intent" class="doc doc-heading">
-          <code class="highlight language-python">place_framing_intent(framing_intent)</code>
+<h3 id="pyfdl.Canvas.get_dimensions" class="doc doc-heading">
+            <code class="highlight language-python">get_dimensions()</code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
+      <p>Get the most relevant dimensions and anchor point for the canvas.
+<code>effective_dimensions</code> and <code>effective_anchor_point</code> win over <code>dimensions</code></p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+                  <code>(<span title="pyfdl.canvas.Canvas.dimensions">dimensions</span>, anchor_point)</code>
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pyfdl.Canvas.place_framing_intent" class="doc doc-heading">
+            <code class="highlight language-python">place_framing_intent(framing_intent)</code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
       <p>Create a new <a href="../framing_decision/#Framing Decision">FramingDecision</a> based on the provided
 <a href="../framing_intent/#Framing Intent">FramingIntent</a> and add it to the
 collection of framing decisions.</p>
 <p>The framing decision's properties are calculated for you.
-If the canvas has effective dimensions set, these will be used for the calculations. Otherwise, we use the
-dimensions</p>
-
+If the canvas has effective dimensions set, these will be used for the calculations.
+Otherwise, we use the dimensions</p>
 
 
 <table class="field-list">
@@ -229,7 +331,6 @@ dimensions</p>
   </tbody>
 </table>
 
-
 <table class="field-list">
   <colgroup>
     <col class="field-name" />
@@ -237,22 +338,22 @@ dimensions</p>
   </colgroup>
   <tbody valign="top">
     <tr class="field">
-    <th class="field-name">Returns:</th>
-    <td class="field-body">
-      <ul class="first simple">
-          <li>
-<b><code>framing_decision_id</code></b>(                <code>str</code>
-)            –
-            <div class="doc-md-description">
-              <p>id of the newly created framing decision</p>
-            </div>
-          </li>
-      </ul>
-    </td>
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>framing_decision_id</code></b>(                  <code>str</code>
+)              –
+              <div class="doc-md-description">
+                <p>id of the newly created framing decision</p>
+              </div>
+            </li>
+        </ul>
+      </td>
     </tr>
   </tbody>
 </table>
-  </div>
+    </div>
 
 </div>
 
@@ -260,8 +361,7 @@ dimensions</p>
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
               

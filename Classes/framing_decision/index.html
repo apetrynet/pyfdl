@@ -69,6 +69,14 @@
                   <li class="toctree-l1 current"><a class="reference internal current" href="#">Framing Decision</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#pyfdl.FramingDecision">FramingDecision</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.FramingDecision.adjust_anchor_point">adjust_anchor_point</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.FramingDecision.adjust_protection_anchor_point">adjust_protection_anchor_point</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.FramingDecision.from_framing_intent">from_framing_intent</a>
+    </li>
+        </ul>
     </li>
     </ul>
                   </li>
@@ -110,18 +118,18 @@
 
 
 <h2 id="pyfdl.FramingDecision" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.FramingDecision(label=None, _id=None, framing_intent_id=None, dimensions=None, anchor_point=None, protection_dimensions=None, protection_anchor_point=None)</code>
+              <code class="highlight language-python">pyfdl.FramingDecision(label=None, _id=None, framing_intent_id=None, dimensions=None, anchor_point=None, protection_dimensions=None, protection_anchor_point=None)</code>
 
 </h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.Base" href="../common/#pyfdl.Base">Base</a></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.Base" href="../common/#pyfdl.Base">Base</a></code></p>
 
 
 
-  
+
 
   <div class="doc doc-children">
 
@@ -133,12 +141,218 @@
 
 
 
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pyfdl.FramingDecision.adjust_anchor_point" class="doc doc-heading">
+            <code class="highlight language-python">adjust_anchor_point(canvas, h_method='center', v_method='center')</code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Adjust this object's <code>anchor_point</code> either relative to <code>protection_anchor_point</code>
+or <code>canvas.effective_anchor_point</code>
+Please note that the <code>h_method</code> and <code>v_method</code> arguments only apply if no
+<code>protection_anchor_point</code> is present.</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>canvas</code></b>
+                  (<code><a class="autorefs autorefs-internal" title="pyfdl.canvas.Canvas" href="../canvas/#pyfdl.Canvas">Canvas</a></code>)
+              –
+              <div class="doc-md-description">
+                <p>to fetch anchor point from in case protection_anchor_point is not set</p>
+              </div>
+            </li>
+            <li>
+              <b><code>h_method</code></b>
+                  (<code>str</code>, default:
+                      <code>&#39;center&#39;</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>horizontal alignment ('left', 'center', 'right')</p>
+              </div>
+            </li>
+            <li>
+              <b><code>v_method</code></b>
+                  (<code>str</code>, default:
+                      <code>&#39;center&#39;</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>vertical alignment ('top', 'center', 'bottom')</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pyfdl.FramingDecision.adjust_protection_anchor_point" class="doc doc-heading">
+            <code class="highlight language-python">adjust_protection_anchor_point(canvas, h_method='center', v_method='center')</code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Adjust this object's <code>protection_anchor_point</code> if <code>protection_dimensions</code> are set.
+Please note that the <code>h_method</code> and <code>v_method</code> are primarily used when creating a canvas based on
+a <a href="../canvas/#from_canvas_template">canvas template</a></p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>canvas</code></b>
+                  (<code><a class="autorefs autorefs-internal" title="pyfdl.canvas.Canvas" href="../canvas/#pyfdl.Canvas">Canvas</a></code>)
+              –
+              <div class="doc-md-description">
+                <p>to fetch anchor point from in case protection_anchor_point is not set</p>
+              </div>
+            </li>
+            <li>
+              <b><code>h_method</code></b>
+                  (<code>str</code>, default:
+                      <code>&#39;center&#39;</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>horizontal alignment ('left', 'center', 'right')</p>
+              </div>
+            </li>
+            <li>
+              <b><code>v_method</code></b>
+                  (<code>str</code>, default:
+                      <code>&#39;center&#39;</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>vertical alignment ('top', 'center', 'bottom')</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pyfdl.FramingDecision.from_framing_intent" class="doc doc-heading">
+            <code class="highlight language-python">from_framing_intent(canvas, framing_intent)</code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Create a new <a href="./#Framing Decision">FramingDecision</a> based on the provided
+<a href="../canvas/#Canvas">Canvas</a> and <a href="../framing_intent/#Framing Intent">FramingIntent</a></p>
+<p>The framing decision's properties are calculated for you.
+If the canvas has effective dimensions set, these will be used for the calculations.
+Otherwise, we use the dimensions</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>canvas</code></b>
+                  (<code><a class="autorefs autorefs-internal" title="pyfdl.canvas.Canvas" href="../canvas/#pyfdl.Canvas">Canvas</a></code>)
+              –
+              <div class="doc-md-description">
+                <p>canvas to base framing decision on</p>
+              </div>
+            </li>
+            <li>
+              <b><code>framing_intent</code></b>
+                  (<code><a class="autorefs autorefs-internal" title="pyfdl.framing_intent.FramingIntent" href="../framing_intent/#pyfdl.FramingIntent">FramingIntent</a></code>)
+              –
+              <div class="doc-md-description">
+                <p>framing intent to place in canvas</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>framing_decision</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.framing_decision.FramingDecision" href="#pyfdl.FramingDecision">FramingDecision</a></code>
+)              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</div>
+
 
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
               
