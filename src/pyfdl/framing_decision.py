@@ -43,6 +43,22 @@ class FramingDecision(Base):
 
     @classmethod
     def from_framing_intent(cls, canvas: 'Canvas', framing_intent: 'FramingIntent') -> 'FramingDecision':
+        """
+        Create a new [FramingDecision](framing_decision.md#Framing Decision) based on the provided
+        [Canvas](canvas.md#Canvas) and [FramingIntent](framing_intent.md#Framing Intent)
+
+        The framing decision's properties are calculated for you.
+        If the canvas has effective dimensions set, these will be used for the calculations.
+        Otherwise, we use the dimensions
+
+        Args:
+            canvas: canvas to base framing decision on
+            framing_intent: framing intent to place in canvas
+
+        Returns:
+            framing_decision:
+
+        """
         framing_decision = FramingDecision(
             _id=f'{canvas.id}-{framing_intent.id}',
             label=framing_intent.label,
@@ -85,7 +101,23 @@ class FramingDecision(Base):
 
         return framing_decision
 
-    def adjust_anchor_point(self, canvas: 'Canvas', h_method: str = 'center', v_method: str = 'center'):
+    def adjust_anchor_point(
+            self, canvas: 'Canvas',
+            h_method: str = 'center',
+            v_method: str = 'center'
+    ) -> None:
+        """
+        Adjust this object's `anchor_point` either relative to `protection_anchor_point`
+        or `canvas.effective_anchor_point`
+        Please note that the `h_method` and `v_method` arguments only apply if no
+        `protection_anchor_point` is present.
+
+        Args:
+            canvas: to fetch anchor point from in case protection_anchor_point is not set
+            h_method: horizontal alignment ('left', 'center', 'right')
+            v_method: vertical alignment ('top', 'center', 'bottom')
+        """
+
         # TODO check if anchor point is shifted before centering
         _, active_anchor_point = canvas.get_dimensions()
 
@@ -114,7 +146,23 @@ class FramingDecision(Base):
 
         self.anchor_point = Point(x=x, y=y)
 
-    def adjust_protection_anchor_point(self, canvas: 'Canvas', h_method: str = 'center', v_method: str = 'center'):
+    def adjust_protection_anchor_point(
+            self,
+            canvas: 'Canvas',
+            h_method: str = 'center',
+            v_method: str = 'center'
+    ) -> None:
+        """
+        Adjust this object's `protection_anchor_point` if `protection_dimensions` are set.
+        Please note that the `h_method` and `v_method` are primarily used when creating a canvas based on
+        a [canvas template](canvas.md#from_canvas_template)
+
+        Args:
+            canvas: to fetch anchor point from in case protection_anchor_point is not set
+            h_method: horizontal alignment ('left', 'center', 'right')
+            v_method: vertical alignment ('top', 'center', 'bottom')
+        """
+
         if self.protection_dimensions is None:
             return
 
