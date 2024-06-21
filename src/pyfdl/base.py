@@ -256,7 +256,16 @@ class TypedCollection:
         if item_id in self._data:
             del self._data[item_id]
 
-    def _get_item_id(self, item):
+    def _get_item_id(self, item: Any) -> str:
+        """
+        Get the "id" of the item based on the item's `id_attribute`
+
+        Args:
+            item:
+
+        Returns:
+            id:
+        """
         return getattr(item, self._cls.id_attribute)
 
     def __len__(self):
@@ -294,10 +303,22 @@ class DimensionsFloat(Base):
         self.height = height
 
     def scale_by(self, factor: float) -> None:
+        """
+        Scale the dimensions by the provider factor
+
+        Args:
+            factor:
+        """
         self.width = round_to_even(self.width * factor)
         self.height = round_to_even(self.height * factor)
 
     def copy(self) -> 'DimensionsFloat':
+        """
+        Create a copy of these dimensions
+
+        Returns:
+            copy: of these dimensions
+        """
         return DimensionsFloat(width=self.width, height=self.height)
 
     def __eq__(self, other):
@@ -322,10 +343,22 @@ class DimensionsInt(Base):
         self.height = height.__int__()
 
     def scale_by(self, factor: float) -> None:
+        """
+        Scale the dimensions by the provider factor
+
+        Args:
+            factor:
+        """
         self.width = round_to_even(self.width * factor).__int__()
         self.height = round_to_even(self.height * factor).__int__()
 
     def copy(self) -> 'DimensionsInt':
+        """
+        Create a copy of these dimensions
+
+        Returns:
+            copy: of these dimensions
+        """
         return DimensionsInt(width=self.width, height=self.height)
 
     def __eq__(self, other):
@@ -410,6 +443,16 @@ class RoundStrategy(Base):
         self._mode = value
 
     def round_dimensions(self, dimensions: DimensionsInt) -> DimensionsInt:
+        """
+        Round the provided dimensions based on the rules defined in this object
+
+        Args:
+            dimensions:
+
+        Returns:
+            dimensions: rounded based on rules
+
+        """
         even = self.even
         mode = self.mode
 
