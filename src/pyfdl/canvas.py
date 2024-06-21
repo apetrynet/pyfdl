@@ -183,7 +183,11 @@ class Canvas(Base):
         # Copy and scale dimensions from source to target
         for dimension_key in get_dimension_keys(route_map, fit_source, preserve):
             if dimension_key == fit_source:
-                setattr(dest_map[source_type], source_attribute, canvas_template.target_dimensions)
+                target_size = canvas_template.fit_source_to_target(
+                    source_dimensions,
+                    source_canvas.anamorphic_squeeze
+                )
+                setattr(dest_map[source_type], source_attribute, target_size)
                 continue
 
             dimension_source_type, dimension_source_attribute = dimension_key.split('.')
@@ -230,8 +234,6 @@ class Canvas(Base):
             canvas_template.alignment_method_horizontal,
             canvas_template.alignment_method_vertical
         )
-
-        print(canvas.to_dict())
 
         return canvas
 
