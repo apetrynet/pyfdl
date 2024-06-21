@@ -60,3 +60,17 @@ def test_place_framing_intent(sample_framing_intent, sample_canvas, sample_frami
     decision = canvas.framing_decisions.get_item(decision_id)
     facit_decision = pyfdl.FramingDecision.from_dict(sample_framing_decision)
     assert decision == facit_decision
+
+
+def test_from_canvas_template(sample_canvas, sample_framing_decision, sample_canvas_template):
+    canvas = pyfdl.Canvas.from_dict(sample_canvas)
+    canvas_template = pyfdl.CanvasTemplate.from_dict(sample_canvas_template)
+    framing_decision = pyfdl.FramingDecision.from_dict(sample_framing_decision)
+    new_canvas = pyfdl.Canvas.from_canvas_template(
+        canvas_template,
+        canvas,
+        framing_decision
+    )
+
+    assert isinstance(new_canvas, pyfdl.Canvas)
+    assert new_canvas.dimensions != canvas.dimensions
