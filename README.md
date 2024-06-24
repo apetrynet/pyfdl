@@ -1,4 +1,5 @@
-> **Note!**  PyFDL is under development and should not be used in production. 
+> **Warning!**  PyFDL is still under development and parts of the API may still change.
+> Please consider this before using it production. 
 
 # PyFDL
 PyFDL is a toolkit to parse and produce [FDL](https://theasc.com/society/ascmitc/asc-framing-decision-list) files in python.  
