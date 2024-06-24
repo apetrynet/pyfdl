@@ -21,7 +21,7 @@ class CanvasTemplate(Base):
         'round'
     ]
 
-    kwarg_map = {'id': '_id', 'round': '_round'}
+    kwarg_map = {'id': 'id_', 'round': '_round'}
     object_map = {
         'target_dimensions': DimensionsInt,
         'maximum_dimensions': DimensionsInt,
@@ -47,7 +47,7 @@ class CanvasTemplate(Base):
     def __init__(
             self,
             label: str = None,
-            _id: str = None,
+            id_: str = None,
             target_dimensions: DimensionsInt = None,
             target_anamorphic_squeeze: float = None,
             fit_source: str = None,
@@ -60,7 +60,7 @@ class CanvasTemplate(Base):
             _round: RoundStrategy = None
     ):
         self.label = label
-        self.id = _id
+        self.id = id_
         self.target_dimensions = target_dimensions
         self.target_anamorphic_squeeze = target_anamorphic_squeeze
         self.fit_source = fit_source

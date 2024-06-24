@@ -34,7 +34,7 @@ def round_to_even(value: float) -> Union[int, float]:
 class Base(ABC):
     # Holds a list of known attributes
     attributes = []
-    # Maps attribute names that clash with reserved builtin functions to safe alternatives (id -> _id)
+    # Maps attribute names that clash with reserved builtin functions to safe alternatives (id -> id_)
     kwarg_map = {}
     # Map keys to custom classes
     object_map = {}
@@ -56,7 +56,7 @@ class Base(ABC):
             Attributes:
                 attributes: list of attributes described in FDL spec
                 kwarg_map: map attribute names that clash with reserved builtin python functions to safe alternatives
-                    like: (id -> _id) and (uuid -> _uuid)
+                    like: (id -> id_) and (uuid -> _uuid)
                 object_map: map attributes to custom classes
                 required: list of required attributes.
                     Supports linked attributes like: "effective_dimensions.effective_anchor_point" where

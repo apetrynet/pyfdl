@@ -19,7 +19,7 @@ class Canvas(Base):
         'anamorphic_squeeze',
         'framing_decisions'
     ]
-    kwarg_map = {'id': '_id'}
+    kwarg_map = {'id': 'id_'}
     object_map = {
         'dimensions': DimensionsInt,
         'effective_dimensions': DimensionsInt,
@@ -34,7 +34,7 @@ class Canvas(Base):
     def __init__(
             self,
             label: str = None,
-            _id: str = None,
+            id_: str = None,
             source_canvas_id: str = None,
             dimensions: DimensionsInt = None,
             effective_dimensions: DimensionsInt = None,
@@ -45,7 +45,7 @@ class Canvas(Base):
             framing_decisions: TypedCollection = None
     ):
         self.label = label
-        self.id = _id
+        self.id = id_
         self.source_canvas_id = source_canvas_id
         self.dimensions = dimensions
         self.effective_dimensions = effective_dimensions
@@ -114,14 +114,14 @@ class Canvas(Base):
 
         canvas = Canvas(
             label=canvas_template.label,
-            _id=Base.generate_uuid().replace('-', ''),
+            id_=Base.generate_uuid().replace('-', ''),
             source_canvas_id=source_canvas.id,
             anamorphic_squeeze=canvas_template.target_anamorphic_squeeze
         )
 
         framing_decision = FramingDecision(
             label=source_framing_decision.label,
-            _id=f'{canvas.id}-{source_framing_decision.framing_intent_id}',
+            id_=f'{canvas.id}-{source_framing_decision.framing_intent_id}',
             framing_intent_id=source_framing_decision.framing_intent_id
         )
         canvas.framing_decisions.add_item(framing_decision)
