@@ -21,7 +21,7 @@ class CanvasTemplate(Base):
         'round'
     ]
 
-    kwarg_map = {'id': 'id_', 'round': '_round'}
+    kwarg_map = {'id': 'id_', 'round': 'round_'}
     object_map = {
         'target_dimensions': DimensionsInt,
         'maximum_dimensions': DimensionsInt,
@@ -57,7 +57,7 @@ class CanvasTemplate(Base):
             preserve_from_source_canvas: str = None,
             maximum_dimensions: DimensionsInt = None,
             pad_to_maximum: bool = None,
-            _round: RoundStrategy = None
+            round_: RoundStrategy = None
     ):
         self.label = label
         self.id = id_
@@ -70,7 +70,7 @@ class CanvasTemplate(Base):
         self.preserve_from_source_canvas = preserve_from_source_canvas
         self.maximum_dimensions = maximum_dimensions
         self.pad_to_maximum = pad_to_maximum
-        self.round = _round
+        self.round = round_
 
     @property
     def fit_source(self) -> str:

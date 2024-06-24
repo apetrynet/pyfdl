@@ -166,7 +166,7 @@ def sample_canvas_template_kwargs() -> dict:
         "alignment_method_vertical": "center",
         "alignment_method_horizontal": "center",
         "preserve_from_source_canvas": "canvas.dimensions",
-        "_round": {"even": "even", "mode": "up"}
+        "round_": {"even": "even", "mode": "up"}
     }
     return canvas_template
 
