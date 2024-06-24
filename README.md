@@ -22,7 +22,7 @@ described in the FDL.
 N/A Not applicable  
 
 # Documentation
-For the latest published documentation please visit these [gh-pages](https://apetrynet.github.io/pyfdl/)
+You'll find the latest published documentation [here](https://apetrynet.github.io/pyfdl/)
 
 If You'd like a local copy of the documentation you may build it by installing mkdocs and running `mkdocs build` in the
 root directory. A "site" folder should appear with an `index.html` file in it.
