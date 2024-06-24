@@ -130,7 +130,7 @@ class Base(ABC):
 
             # Arrays (aka lists) contain other objects
             if isinstance(value, TypedCollection):
-                value = [item.to_dict() for item in value]
+                value = value.to_list()
 
             # This should cover all known objects
             elif isinstance(value, Base):
@@ -255,6 +255,9 @@ class TypedCollection:
         """
         if item_id in self._data:
             del self._data[item_id]
+
+    def to_list(self):
+        return [item.to_dict() for item in self]
 
     def _get_item_id(self, item: Any) -> str:
         """
