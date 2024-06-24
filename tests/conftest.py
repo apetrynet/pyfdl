@@ -56,7 +56,7 @@ def sample_framing_intent() -> dict:
 def sample_framing_intent_kwargs() -> dict:
     framing_intent = {
         "label": "1.78-1 Framing",
-        "_id": "FDLSMP03",
+        "id_": "FDLSMP03",
         "aspect_ratio": {"width": 16, "height": 9},
         "protection": 0.088
     }
@@ -81,7 +81,7 @@ def sample_framing_decision() -> dict:
 def sample_framing_decision_kwargs() -> dict:
     fd = {
         "label": "1.78-1 Framing",
-        "_id": "20220310-FDLSMP03",
+        "id_": "20220310-FDLSMP03",
         "framing_intent_id": "FDLSMP03",
         "dimensions": {"width": 4728, "height": 3456},
         "anchor_point": {"x": 228, "y": 432},
@@ -113,7 +113,7 @@ def sample_canvas() -> dict:
 def sample_canvas_kwargs() -> dict:
     canvas = {
         "label": "Open Gate RAW",
-        "_id": "20220310",
+        "id_": "20220310",
         "source_canvas_id": "20220310",
         "dimensions": {"width": 5184, "height": 4320},
         "effective_dimensions": {"width": 5184, "height": 4320},
@@ -158,7 +158,7 @@ def sample_canvas_template() -> dict:
 def sample_canvas_template_kwargs() -> dict:
     canvas_template = {
         "label": "VFX Pull",
-        "_id": "VX220310",
+        "id_": "VX220310",
         "target_dimensions": {"width": 4096, "height": 2304},
         "target_anamorphic_squeeze": 1.00,
         "fit_source": "framing_decision.dimensions",
@@ -166,7 +166,7 @@ def sample_canvas_template_kwargs() -> dict:
         "alignment_method_vertical": "center",
         "alignment_method_horizontal": "center",
         "preserve_from_source_canvas": "canvas.dimensions",
-        "_round": {"even": "even", "mode": "up"}
+        "round_": {"even": "even", "mode": "up"}
     }
     return canvas_template
 

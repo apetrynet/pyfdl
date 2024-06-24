@@ -22,7 +22,7 @@ fdl.apply_defaults()
 # Let's create a framing intent
 framing_intent = FramingIntent(
     label="1.78-1 Framing",
-    _id="FDLSMP03",
+    id_="FDLSMP03",
     aspect_ratio=DimensionsInt(width=16, height=9),
     protection=0.088
 )
@@ -33,7 +33,7 @@ fdl.framing_intents.add_item(framing_intent)
 # Now let's create a canvas
 canvas = Canvas(
     label="Open Gate RAW",
-    _id="20220310",
+    id_="20220310",
     source_canvas_id="20220310",
     dimensions=DimensionsInt(width=5184, height=4320),
     effective_dimensions=DimensionsInt(width=5184, height=4320),

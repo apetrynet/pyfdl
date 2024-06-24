@@ -14,7 +14,7 @@ class FramingDecision(Base):
         'protection_dimensions',
         'protection_anchor_point'
     ]
-    kwarg_map = {'id': '_id'}
+    kwarg_map = {'id': 'id_'}
     object_map = {
         'dimensions': DimensionsFloat,
         'anchor_point': Point,
@@ -26,7 +26,7 @@ class FramingDecision(Base):
     def __init__(
             self,
             label: str = None,
-            _id: str = None,
+            id_: str = None,
             framing_intent_id: str = None,
             dimensions: DimensionsFloat = None,
             anchor_point: Point = None,
@@ -34,7 +34,7 @@ class FramingDecision(Base):
             protection_anchor_point: Point = None
     ):
         self.label = label
-        self.id = _id
+        self.id = id_
         self.framing_intent_id = framing_intent_id
         self.dimensions = dimensions
         self.anchor_point = anchor_point
@@ -60,7 +60,7 @@ class FramingDecision(Base):
 
         """
         framing_decision = FramingDecision(
-            _id=f'{canvas.id}-{framing_intent.id}',
+            id_=f'{canvas.id}-{framing_intent.id}',
             label=framing_intent.label,
             framing_intent_id=framing_intent.id
         )
