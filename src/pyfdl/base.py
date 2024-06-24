@@ -398,7 +398,8 @@ class RoundStrategy(Base):
     defaults = {'even': 'even', 'mode': 'up'}
 
     def __init__(self, even: str = None, mode: str = None):
-        """Describes how to handle rounding of values.
+        """Describes how to handle rounding canvas dimensions when applying a
+        [CanvasTemplate](canvas_template.md#canvas_template).
 
         Args:
             even:
