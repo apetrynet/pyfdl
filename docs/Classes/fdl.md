@@ -14,3 +14,4 @@ you can pass a `Header` object as an attribute if you wish.
             - load_schema
             - header
             - place_canvas_in_context
+            - set_rounding_strategy

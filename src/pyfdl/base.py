@@ -164,7 +164,30 @@ class Base(ABC):
         return cls(**kwargs)
 
     @classmethod
-    def set_rounding_strategy(cls, rules: dict) -> None:
+    def set_rounding_strategy(cls, rules: Union[dict, None] = None) -> None:
+        """
+        Set the global rounding strategy for dimensions. The rules are the same as in
+        `CanvasTemplate.round` but are passed as a dictionary.
+
+        Default rules are: `{'even': 'even', 'mode': 'round'}`
+
+        Available options:
+
+        even:
+            "whole" = to nearest integer,
+            "even" = to nearest even-numbered integer
+
+        mode:
+            "up" = always round up,
+            "down" = always round down
+            "round" = standard rounding, >= +0.5 rounds up,< +0.5 rounds down
+
+        Args:
+            rules: will default to `{'even': 'even', 'mode': 'round'}` if rules is `None`
+        """
+        if rules is None:
+            rules = DEFAULT_ROUNDING_STRATEGY
+
         cls.rounding_strategy = RoundStrategy(**rules)
 
     @staticmethod
