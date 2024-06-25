@@ -56,6 +56,10 @@ class FDL(Base):
         self.canvas_templates = canvas_templates or TypedCollection(CanvasTemplate)
         self._schema = None
 
+        # This is the default behavior for rounding dimensions
+        if Base.rounding_strategy is None:
+            Base.set_rounding_strategy()
+
     def place_canvas_in_context(self, context_label: str, canvas: Canvas):
         """Place a canvas in a context. If no context with the provided label exist,
         a new context will be created for you.

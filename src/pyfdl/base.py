@@ -9,26 +9,7 @@ FDL_SCHEMA_MAJOR = 1
 FDL_SCHEMA_MINOR = 0
 FDL_SCHEMA_VERSION = {'major': FDL_SCHEMA_MAJOR, 'minor': FDL_SCHEMA_MINOR}
 
-# Global variable determining if we round values to even numbers or not
-BE_PRECISE = False
-
-
-def round_to_even(value: float) -> Union[int, float]:
-    """
-    This will make sure we always end up with an even number
-
-    Args:
-        value: initial value to round
-
-    Returns:
-        value: even number
-    """
-    global BE_PRECISE
-    if BE_PRECISE:
-        return value
-
-    half = value / 2
-    return round(half) * 2
+DEFAULT_ROUNDING_STRATEGY = {'even': 'even', 'mode': 'round'}
 
 
 class Base(ABC):
@@ -44,6 +25,9 @@ class Base(ABC):
     defaults = {}
     # Attribute used as a unique identifier
     id_attribute = "id"
+
+    # The rounding strategy is used when rounding dimensions
+    rounding_strategy = None
 
     @abstractmethod
     def __init__(self, *args: Any, **kwargs: Any):
@@ -130,7 +114,7 @@ class Base(ABC):
 
             # Arrays (aka lists) contain other objects
             if isinstance(value, TypedCollection):
-                value = [item.to_dict() for item in value]
+                value = value.to_list()
 
             # This should cover all known objects
             elif isinstance(value, Base):
@@ -178,6 +162,33 @@ class Base(ABC):
             kwargs[keyword] = value
 
         return cls(**kwargs)
+
+    @classmethod
+    def set_rounding_strategy(cls, rules: Union[dict, None] = None) -> None:
+        """
+        Set the global rounding strategy for dimensions. The rules are the same as in
+        `CanvasTemplate.round` but are passed as a dictionary.
+
+        Default rules are: `{'even': 'even', 'mode': 'round'}`
+
+        Available options:
+
+        even:
+            "whole" = to nearest integer,
+            "even" = to nearest even-numbered integer
+
+        mode:
+            "up" = always round up,
+            "down" = always round down
+            "round" = standard rounding, >= +0.5 rounds up,< +0.5 rounds down
+
+        Args:
+            rules: will default to `{'even': 'even', 'mode': 'round'}` if rules is `None`
+        """
+        if rules is None:
+            rules = DEFAULT_ROUNDING_STRATEGY
+
+        cls.rounding_strategy = RoundStrategy(**rules)
 
     @staticmethod
     def generate_uuid():
@@ -256,6 +267,9 @@ class TypedCollection:
         if item_id in self._data:
             del self._data[item_id]
 
+    def to_list(self) -> list[dict]:
+        return [item.to_dict() for item in self]
+
     def _get_item_id(self, item: Any) -> str:
         """
         Get the "id" of the item based on the item's `id_attribute`
@@ -302,6 +316,9 @@ class DimensionsFloat(Base):
         self.width = width
         self.height = height
 
+        if Base.rounding_strategy is None:
+            Base.set_rounding_strategy(DEFAULT_ROUNDING_STRATEGY)
+
     def scale_by(self, factor: float) -> None:
         """
         Scale the dimensions by the provider factor
@@ -309,8 +326,8 @@ class DimensionsFloat(Base):
         Args:
             factor:
         """
-        self.width = round_to_even(self.width * factor)
-        self.height = round_to_even(self.height * factor)
+        self.width = self.width * factor
+        self.height = self.height * factor
 
     def copy(self) -> 'DimensionsFloat':
         """
@@ -320,6 +337,9 @@ class DimensionsFloat(Base):
             copy: of these dimensions
         """
         return DimensionsFloat(width=self.width, height=self.height)
+
+    def __iter__(self):
+        return iter((self.width, self.height))
 
     def __eq__(self, other):
         return self.width == other.width and self.height == other.height
@@ -342,6 +362,9 @@ class DimensionsInt(Base):
         self.width = width.__int__()
         self.height = height.__int__()
 
+        if Base.rounding_strategy is None:
+            Base.set_rounding_strategy(DEFAULT_ROUNDING_STRATEGY)
+
     def scale_by(self, factor: float) -> None:
         """
         Scale the dimensions by the provider factor
@@ -349,8 +372,9 @@ class DimensionsInt(Base):
         Args:
             factor:
         """
-        self.width = round_to_even(self.width * factor).__int__()
-        self.height = round_to_even(self.height * factor).__int__()
+        self.width *= factor
+        self.height *= factor
+        self.width, self.height = self.rounding_strategy.round_dimensions(self)
 
     def copy(self) -> 'DimensionsInt':
         """
@@ -360,6 +384,9 @@ class DimensionsInt(Base):
             copy: of these dimensions
         """
         return DimensionsInt(width=self.width, height=self.height)
+
+    def __iter__(self):
+        return iter((self.width, self.height))
 
     def __eq__(self, other):
         return self.width == other.width and self.height == other.height
@@ -382,6 +409,9 @@ class Point(Base):
         self.x = x
         self.y = y
 
+    def __iter__(self):
+        return iter((self.x, self.y))
+
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y
 
@@ -395,7 +425,8 @@ class RoundStrategy(Base):
     defaults = {'even': 'even', 'mode': 'up'}
 
     def __init__(self, even: str = None, mode: str = None):
-        """Describes how to handle rounding of values.
+        """Describes how to handle rounding canvas dimensions when applying a
+        [CanvasTemplate](canvas_template.md#canvas_template).
 
         Args:
             even:
@@ -405,6 +436,7 @@ class RoundStrategy(Base):
             mode:
                 "up" = always round up,
                 "down" = always round down
+                "round" = standard rounding, >= +0.5 rounds up,< +0.5 rounds down
 
         Raises:
             FDLError: if you provide a value other than the ones listed above
@@ -442,7 +474,10 @@ class RoundStrategy(Base):
 
         self._mode = value
 
-    def round_dimensions(self, dimensions: DimensionsInt) -> DimensionsInt:
+    def round_dimensions(
+            self,
+            dimensions: Union[DimensionsInt, DimensionsFloat]
+    ) -> Union[DimensionsInt, DimensionsFloat]:
         """
         Round the provided dimensions based on the rules defined in this object
 
@@ -453,8 +488,6 @@ class RoundStrategy(Base):
             dimensions: rounded based on rules
 
         """
-        even = self.even
-        mode = self.mode
 
         mode_map = {
             'up': math.ceil,
@@ -462,16 +495,18 @@ class RoundStrategy(Base):
             'round': round
         }
 
-        width = mode_map[mode](dimensions.width)
-        height = mode_map[mode](dimensions.height)
+        width = dimensions.width
+        height = dimensions.height
 
-        if even == 'even':
-            # width = round_to_even(width)
-            # height = round_to_even(height)
-            width = round(width / 2) * 2
-            height = round(height / 2) * 2
+        adjust = 1
+        if self.even == 'even':
+            adjust = 2
 
-        return DimensionsInt(width=width, height=height)
+        if self.mode is not None:
+            width = mode_map[self.mode](width / adjust) * adjust
+            height = mode_map[self.mode](height / adjust) * adjust
+
+        return type(dimensions)(width=width, height=height)
 
     def __repr__(self):
         return f'{self.__class__.__name__}(even="{self.even}", mode="{self.mode}")'

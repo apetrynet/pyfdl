@@ -1,7 +1,6 @@
-from typing import Union, NamedTuple, Tuple, List
+from typing import Union, List
 
 from pyfdl import Base, DimensionsInt, DimensionsFloat, RoundStrategy
-from pyfdl.base import round_to_even
 from pyfdl.errors import FDLError
 
 
@@ -256,9 +255,6 @@ class CanvasTemplate(Base):
                 source_dimensions.height * scale_factor,
                 self.target_dimensions.height
             )
-            # height = source_dimensions.height * scale_factor
-            # if height > self.target_dimensions.height:
-            #     print("CROPPING HEIGHT", height)
 
         elif self.fit_method == 'height':
             height = self.target_dimensions.height
@@ -269,9 +265,6 @@ class CanvasTemplate(Base):
                 source_width * scale_factor,
                 self.target_dimensions.width
             )
-            # width = source_width * scale_factor
-            # if width > self.target_dimensions.width:
-            #     print("CROPPING WIDTH", width)
 
         elif self.fit_method == 'fit_all':
             height = self.target_dimensions.height

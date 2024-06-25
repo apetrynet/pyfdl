@@ -1,9 +1,15 @@
-import math
-from typing import Tuple, Type, Union, List
+from typing import Tuple, Union
 
-from pyfdl import Base, DimensionsInt, Point, DimensionsFloat, FramingDecision, TypedCollection, FramingIntent
-from pyfdl.base import round_to_even
-from pyfdl.errors import FDLError
+from pyfdl import (
+    Base,
+    DimensionsInt,
+    Point,
+    DimensionsFloat,
+    FramingDecision,
+    TypedCollection,
+    FramingIntent,
+    DEFAULT_ROUNDING_STRATEGY
+)
 
 
 class Canvas(Base):
@@ -54,6 +60,10 @@ class Canvas(Base):
         self.physical_dimensions = physical_dimensions
         self.anamorphic_squeeze = anamorphic_squeeze
         self.framing_decisions = framing_decisions or TypedCollection(FramingDecision)
+
+        # Make sure we have a rounding strategy
+        if Base.rounding_strategy is None:
+            Base.set_rounding_strategy(DEFAULT_ROUNDING_STRATEGY)
 
     def place_framing_intent(self, framing_intent: FramingIntent) -> str:
         """Create a new [FramingDecision](framing_decision.md#Framing Decision) based on the provided

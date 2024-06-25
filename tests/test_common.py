@@ -120,6 +120,7 @@ def test_typed_collection(sample_framing_intent, sample_framing_intent_kwargs):
     fi = pyfdl.FramingIntent.from_dict(sample_framing_intent)
     td.add_item(fi)
 
+    assert td.to_list() == [fi.to_dict()]
     assert td.ids == [f"{fi.id}"]
 
     assert fi in td
