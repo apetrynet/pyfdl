@@ -1,4 +1,4 @@
-from pyfdl import Base, DimensionsFloat, Point, DEFAULT_ROUNDING_STRATEGY
+from pyfdl import Base, DimensionsFloat, Point
 
 
 class FramingDecision(Base):
@@ -40,7 +40,7 @@ class FramingDecision(Base):
 
         # Make sure we have a rounding strategy
         if Base.rounding_strategy is None:
-            Base.set_rounding_strategy(DEFAULT_ROUNDING_STRATEGY)
+            Base.set_rounding_strategy()
 
     @classmethod
     def from_framing_intent(cls, canvas: 'Canvas', framing_intent: 'FramingIntent') -> 'FramingDecision':

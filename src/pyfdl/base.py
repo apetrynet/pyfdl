@@ -92,7 +92,7 @@ class Base(ABC):
 
         return missing
 
-    def to_dict(self, rounding: 'RoundStrategy' = None) -> dict:
+    def to_dict(self) -> dict:
         """
         Produce a dictionary representation of the current object along with all sub objects.
 
@@ -114,11 +114,11 @@ class Base(ABC):
 
             # Arrays (aka lists) contain other objects
             if isinstance(value, TypedCollection):
-                value = value.to_list(rounding)
+                value = value.to_list()
 
             # This should cover all known objects
             elif isinstance(value, Base):
-                value = value.to_dict(rounding)
+                value = value.to_dict()
 
             data[key] = value
 
@@ -267,8 +267,8 @@ class TypedCollection:
         if item_id in self._data:
             del self._data[item_id]
 
-    def to_list(self, rounding: 'RoundStrategy' = None) -> list[dict]:
-        return [item.to_dict(rounding) for item in self]
+    def to_list(self) -> list[dict]:
+        return [item.to_dict() for item in self]
 
     def _get_item_id(self, item: Any) -> str:
         """

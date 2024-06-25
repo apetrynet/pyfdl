@@ -87,13 +87,7 @@ def loads(s: str, validate: bool = True) -> FDL:
     return fdl
 
 
-def dump(
-        obj: FDL,
-        fp: IO,
-        validate: bool = True,
-        indent: Union[int, None] = 2,
-        rounding: RoundStrategy = RoundStrategy()
-):
+def dump(obj: FDL, fp: IO, validate: bool = True, indent: Union[int, None] = 2):
     """Dump an FDL to a file.
 
     Args:
@@ -101,26 +95,17 @@ def dump(
         fp: file pointer
         validate: validate outgoing json with jsonschema
         indent: amount of spaces
-        rounding: what (RoundingStrategy)[common.md#rounding_strategy) to apply to dimensions.
-            Defaults to keeping values as is for keeping better precision.
     """
-    fp.write(dumps(obj, validate=validate, indent=indent, rounding=rounding))
+    fp.write(dumps(obj, validate=validate, indent=indent))
 
 
-def dumps(
-        obj: FDL,
-        validate: bool = True,
-        indent: Union[int, None] = 2,
-        rounding: RoundStrategy = RoundStrategy()
-) -> str:
+def dumps(obj: FDL, validate: bool = True, indent: Union[int, None] = 2) -> str:
     """Dump an FDL to string
 
     Args:
         obj: object to serialize
         validate: validate outgoing json with jsonschema
         indent: amount of spaces
-        rounding: what (RoundingStrategy)[common.md#rounding_strategy) to apply to dimensions.
-            Defaults to keeping values as is for keeping better precision.
 
     Returns:
         string: representation of the resulting json
@@ -128,4 +113,4 @@ def dumps(
     if validate:
         obj.validate()
 
-    return json.dumps(obj.to_dict(rounding), indent=indent, sort_keys=False)
+    return json.dumps(obj.to_dict(), indent=indent, sort_keys=False)
