@@ -66,17 +66,22 @@ with fdl_file.open('r') as f:
     fdl = pyfdl.load(f)
 
 # Select the first canvas in the first context
-source_canvas = fdl.contexts[0].canvases[0]
+context = fdl.contexts[0]
+source_canvas = context.canvases[0]
 
 # Select the first canvas template
 canvas_template = fdl.canvas_templates[0]
 
-# We know we want to use the first framing decision of the source canvas, so we pass 0
+# We know we want to use the first framing decision of the source canvas, so we pass index 0
 # You may also pass the actual `FramingDecision` source_canvas.framing_decisions[0]
-new_canvas = pyfdl.Canvas.from_canvas_template(canvas_template, source_canvas, 0)
+new_canvas = pyfdl.Canvas.from_canvas_template(
+    canvas_template=canvas_template,
+    source_canvas=source_canvas,
+    source_framing_decision=0
+)
 
 # Place the new canvas along side the source 
-fdl.contexts[0].canvases.add_item(new_canvas)
+fdl.place_canvas_in_context(context_label=context.label, canvas=new_canvas)
 
 # Validate and "save"
 with StringIO() as f:
