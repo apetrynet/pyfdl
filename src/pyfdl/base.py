@@ -9,6 +9,8 @@ FDL_SCHEMA_MAJOR = 1
 FDL_SCHEMA_MINOR = 0
 FDL_SCHEMA_VERSION = {'major': FDL_SCHEMA_MAJOR, 'minor': FDL_SCHEMA_MINOR}
 
+DEFAULT_ROUNDING_STRATEGY = {'even': 'even', 'mode': 'round'}
+
 
 class Base(ABC):
     # Holds a list of known attributes
@@ -162,8 +164,8 @@ class Base(ABC):
         return cls(**kwargs)
 
     @classmethod
-    def set_rounding_strategy(cls, rounding: 'RoundStrategy') -> None:
-        cls.rounding_strategy = rounding
+    def set_rounding_strategy(cls, rules: dict) -> None:
+        cls.rounding_strategy = RoundStrategy(**rules)
 
     @staticmethod
     def generate_uuid():
@@ -485,6 +487,3 @@ class RoundStrategy(Base):
 
     def __repr__(self):
         return f'{self.__class__.__name__}(even="{self.even}", mode="{self.mode}")'
-
-
-DEFAULT_ROUNDING_STRATEGY = RoundStrategy(even='even', mode='round')
