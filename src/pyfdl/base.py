@@ -409,6 +409,7 @@ class RoundStrategy(Base):
             mode:
                 "up" = always round up,
                 "down" = always round down
+                "round" = standard rounding, >= +0.5 rounds up,< +0.5 rounds down
 
         Raises:
             FDLError: if you provide a value other than the ones listed above
@@ -470,8 +471,6 @@ class RoundStrategy(Base):
         height = mode_map[mode](dimensions.height)
 
         if even == 'even':
-            # width = round_to_even(width)
-            # height = round_to_even(height)
             width = round(width / 2) * 2
             height = round(height / 2) * 2
 
