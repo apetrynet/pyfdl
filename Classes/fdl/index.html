@@ -84,6 +84,8 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#pyfdl.FDL.place_canvas_in_context">place_canvas_in_context</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.FDL.set_rounding_strategy">set_rounding_strategy</a>
+    </li>
         </ul>
     </li>
     </ul>
@@ -510,6 +512,69 @@ a new context will be created for you.</p>
               –
               <div class="doc-md-description">
                 <p>to be placed in context</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pyfdl.FDL.set_rounding_strategy" class="doc doc-heading">
+            <code class="highlight language-python">set_rounding_strategy(rules=None)</code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Set the global rounding strategy for dimensions. The rules are the same as in
+<code>CanvasTemplate.round</code> but are passed as a dictionary.</p>
+<p>Default rules are: <code>{'even': 'even', 'mode': 'round'}</code></p>
+<p>Available options:</p>
+
+
+<details class="even" open>
+  <summary>even</summary>
+  <p>"whole" = to nearest integer,
+"even" = to nearest even-numbered integer</p>
+</details>
+
+<details class="mode" open>
+  <summary>mode</summary>
+  <p>"up" = always round up,
+"down" = always round down
+"round" = standard rounding, &gt;= +0.5 rounds up,&lt; +0.5 rounds down</p>
+</details>
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>rules</code></b>
+                  (<code><span title="typing.Union">Union</span>[dict, None]</code>, default:
+                      <code>None</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>will default to <code>{'even': 'even', 'mode': 'round'}</code> if rules is <code>None</code></p>
               </div>
             </li>
         </ul>
