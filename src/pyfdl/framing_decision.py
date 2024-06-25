@@ -38,6 +38,7 @@ class FramingDecision(Base):
         self.protection_dimensions = protection_dimensions
         self.protection_anchor_point = protection_anchor_point
 
+        # Make sure we have a rounding strategy
         if Base.rounding_strategy is None:
             Base.set_rounding_strategy(DEFAULT_ROUNDING_STRATEGY)
 
