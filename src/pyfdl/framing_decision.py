@@ -1,7 +1,4 @@
-from typing import Union
-
-from pyfdl import Base, DimensionsFloat, Point, TypedCollection
-from pyfdl.base import round_to_even
+from pyfdl import Base, DimensionsFloat, Point, DEFAULT_ROUNDING_STRATEGY
 
 
 class FramingDecision(Base):
@@ -41,6 +38,9 @@ class FramingDecision(Base):
         self.protection_dimensions = protection_dimensions
         self.protection_anchor_point = protection_anchor_point
 
+        if Base.rounding_strategy is None:
+            Base.set_rounding_strategy(DEFAULT_ROUNDING_STRATEGY)
+
     @classmethod
     def from_framing_intent(cls, canvas: 'Canvas', framing_intent: 'FramingIntent') -> 'FramingDecision':
         """
@@ -72,17 +72,17 @@ class FramingDecision(Base):
         canvas_aspect = active_dimensions.width / active_dimensions.height
         if intent_aspect >= canvas_aspect:
             width = active_dimensions.width
-            height = round_to_even((width * canvas.anamorphic_squeeze) / intent_aspect)
-            # height = (width * canvas.anamorphic_squeeze) / intent_aspect
+            height = (width * canvas.anamorphic_squeeze) / intent_aspect
 
         else:
-            width = round_to_even(active_dimensions.height * intent_aspect)
-            # width = active_dimensions.height * intent_aspect
+            width = active_dimensions.height * intent_aspect
             height = active_dimensions.height
 
         if framing_intent.protection > 0:
             protection_dimensions = DimensionsFloat(width=width, height=height)
-            framing_decision.protection_dimensions = protection_dimensions
+            framing_decision.protection_dimensions = cls.rounding_strategy.round_dimensions(
+                protection_dimensions
+            )
             framing_decision.adjust_protection_anchor_point(canvas)
 
         # We use the protection dimensions as base for dimensions if they're set
@@ -91,12 +91,10 @@ class FramingDecision(Base):
             height = framing_decision.protection_dimensions.height
 
         dimensions = DimensionsFloat(
-            width=round_to_even(width * (1 - framing_intent.protection)),
-            # width=width * (1 - framing_intent.protection),
-            height=round_to_even(height * (1 - framing_intent.protection))
-            # height=height * (1 - framing_intent.protection)
+            width=width * (1 - framing_intent.protection),
+            height=height * (1 - framing_intent.protection)
         )
-        framing_decision.dimensions = dimensions
+        framing_decision.dimensions = cls.rounding_strategy.round_dimensions(dimensions)
         framing_decision.adjust_anchor_point(canvas)
 
         return framing_decision

@@ -13,7 +13,8 @@ from pyfdl import (
     TypedCollection,
     FDL_SCHEMA_MAJOR,
     FDL_SCHEMA_MINOR,
-    FDL_SCHEMA_VERSION
+    FDL_SCHEMA_VERSION,
+    DEFAULT_ROUNDING_STRATEGY
 )
 from pyfdl.errors import FDLError, FDLValidationError
 
@@ -55,6 +56,10 @@ class FDL(Base):
         self.contexts = contexts or TypedCollection(Context)
         self.canvas_templates = canvas_templates or TypedCollection(CanvasTemplate)
         self._schema = None
+
+        # This is the default behavior for rounding dimensions
+        if Base.rounding_strategy is None:
+            Base.set_rounding_strategy(DEFAULT_ROUNDING_STRATEGY)
 
     def place_canvas_in_context(self, context_label: str, canvas: Canvas):
         """Place a canvas in a context. If no context with the provided label exist,
