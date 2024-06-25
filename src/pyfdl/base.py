@@ -470,21 +470,16 @@ class RoundStrategy(Base):
             'round': round
         }
 
-        if isinstance(dimensions, Point):
-            width = dimensions.x
-            height = dimensions.y
+        width = dimensions.width
+        height = dimensions.height
 
-        else:
-            width = dimensions.width
-            height = dimensions.height
-
-        trick = 1
+        adjust = 1
         if self.even == 'even':
-            trick = 2
+            adjust = 2
 
         if self.mode is not None:
-            width = mode_map[self.mode](width / trick) * trick
-            height = mode_map[self.mode](height / trick) * trick
+            width = mode_map[self.mode](width / adjust) * adjust
+            height = mode_map[self.mode](height / adjust) * adjust
 
         return type(dimensions)(width=width, height=height)
 
