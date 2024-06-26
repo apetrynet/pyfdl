@@ -7,6 +7,35 @@
 pip install pyfdl
 ```
 
+## About rounding
+As different parts of a pipeline requires different levels of precision we have an option to 
+round values of dimensions accordingly.  
+A canvas+framing decision for a "raw" camera canvas should in theory keep more precision than a 
+canvas+framing decision for a conformed VFX plate. 
+
+The rules for rounding strategy are the same as for [CanvasTemplate.round](Classes/common.md#pyfdl.RoundStrategy)
+
+
+The [default](Classes/common.md#pyfdl.DEFAULT_ROUNDING_STRATEGY) strategy is to round dimensions to 
+even numbers, but this may be overridden by setting the rounding strategy to 
+[`NO_ROUNDING`](Classes/common.md#pyfdl.NO_ROUNDING)
+
+Here are a couple examples of setting the rounding strategy:
+```python
+import pyfdl
+
+fdl = pyfdl.FDL()
+
+# No rounding may either be set by passing the NO_ROUNDING variable
+fdl.set_rounding_strategy(pyfdl.NO_ROUNDING)
+
+# Or by explicitly passing None
+fdl.set_rounding_strategy(None)
+
+# For other requirements pass a dictionary with the rules
+fdl.set_rounding_strategy({'even': 'whole', 'mode': 'up'})
+```
+
 ## Examples
 ### Create an FDL from scratch
 
