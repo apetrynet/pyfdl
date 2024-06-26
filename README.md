@@ -1,3 +1,6 @@
+[![Tests](https://github.com/apetrynet/pyfdl/actions/workflows/test_pyfdl.yml/badge.svg)](https://github.com/apetrynet/pyfdl/actions/workflows/test_pyfdl.yml)
+[![Deploy Docs](https://github.com/apetrynet/pyfdl/actions/workflows/deploy_docs.yml/badge.svg)](https://github.com/apetrynet/pyfdl/actions/workflows/deploy_docs.yml)
+
 > **Warning!**  PyFDL is still under development and parts of the API may still change.
 > Please consider this before using it production. 
 
