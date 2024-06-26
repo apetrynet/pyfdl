@@ -10,6 +10,7 @@ FDL_SCHEMA_MINOR = 0
 FDL_SCHEMA_VERSION = {'major': FDL_SCHEMA_MAJOR, 'minor': FDL_SCHEMA_MINOR}
 
 DEFAULT_ROUNDING_STRATEGY = {'even': 'even', 'mode': 'round'}
+NO_ROUNDING = {}
 
 
 class Base(ABC):
@@ -164,10 +165,11 @@ class Base(ABC):
         return cls(**kwargs)
 
     @classmethod
-    def set_rounding_strategy(cls, rules: Union[dict, None] = None) -> None:
+    def set_rounding_strategy(cls, rules: Union[dict, None] = DEFAULT_ROUNDING_STRATEGY) -> None:
         """
-        Set the global rounding strategy for dimensions. The rules are the same as in
+        Set the global rounding strategy for dimensions. The rules are the same as for
         `CanvasTemplate.round` but are passed as a dictionary.
+        Passing `None` to the `rule` argument will disable all rounding for dimensions.
 
         Default rules are: `{'even': 'even', 'mode': 'round'}`
 
@@ -180,15 +182,15 @@ class Base(ABC):
         mode:
             "up" = always round up,
             "down" = always round down
-            "round" = standard rounding, >= +0.5 rounds up,< +0.5 rounds down
+            "round" = standard rounding: >= +0.5 rounds up and < +0.5 rounds down
 
         Args:
             rules: will default to `{'even': 'even', 'mode': 'round'}` if rules is `None`
         """
         if rules is None:
-            rules = DEFAULT_ROUNDING_STRATEGY
+            rules = NO_ROUNDING
 
-        cls.rounding_strategy = RoundStrategy(**rules)
+        Base.rounding_strategy = RoundStrategy(**rules)
 
     @staticmethod
     def generate_uuid():
@@ -317,7 +319,7 @@ class DimensionsFloat(Base):
         self.height = height
 
         if Base.rounding_strategy is None:
-            Base.set_rounding_strategy(DEFAULT_ROUNDING_STRATEGY)
+            Base.set_rounding_strategy()
 
     def scale_by(self, factor: float) -> None:
         """
@@ -363,7 +365,7 @@ class DimensionsInt(Base):
         self.height = height.__int__()
 
         if Base.rounding_strategy is None:
-            Base.set_rounding_strategy(DEFAULT_ROUNDING_STRATEGY)
+            Base.set_rounding_strategy()
 
     def scale_by(self, factor: float) -> None:
         """
@@ -384,6 +386,9 @@ class DimensionsInt(Base):
             copy: of these dimensions
         """
         return DimensionsInt(width=self.width, height=self.height)
+
+    def to_dict(self) -> dict:
+        return {'width': self.width.__int__(), 'height': self.height.__int__()}
 
     def __iter__(self):
         return iter((self.width, self.height))

@@ -7,8 +7,7 @@ from pyfdl import (
     DimensionsFloat,
     FramingDecision,
     TypedCollection,
-    FramingIntent,
-    DEFAULT_ROUNDING_STRATEGY
+    FramingIntent
 )
 
 
@@ -63,7 +62,7 @@ class Canvas(Base):
 
         # Make sure we have a rounding strategy
         if Base.rounding_strategy is None:
-            Base.set_rounding_strategy(DEFAULT_ROUNDING_STRATEGY)
+            Base.set_rounding_strategy()
 
     def place_framing_intent(self, framing_intent: FramingIntent) -> str:
         """Create a new [FramingDecision](framing_decision.md#Framing Decision) based on the provided
