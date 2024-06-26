@@ -7,7 +7,8 @@
 pip install pyfdl
 ```
 
-## Create an FDL from scratch
+## Examples
+### Create an FDL from scratch
 
 ```python
 import pyfdl
@@ -55,7 +56,7 @@ with StringIO() as f:
     pyfdl.dump(fdl, f, validate=True)
 ```
 
-## Create a Canvas from a Canvas Template
+### Create a Canvas from a Canvas Template
 ```python
 import pyfdl
 from io import StringIO
