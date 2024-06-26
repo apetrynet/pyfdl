@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Common Classes - PyFDL</title>
+    <title>Common - PyFDL</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,7 +13,7 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Common Classes";
+        var mkdocs_page_name = "Common";
         var mkdocs_page_input_path = "Classes/common.md";
         var mkdocs_page_url = null;
       </script>
@@ -58,8 +58,22 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../canvas_template/">Canvas Template</a>
                   </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Common Classes</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Common</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#global-variables">Global Variables</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.FDL_SCHEMA_MAJOR">FDL_SCHEMA_MAJOR</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.FDL_SCHEMA_MINOR">FDL_SCHEMA_MINOR</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.FDL_SCHEMA_VERSION">FDL_SCHEMA_VERSION</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.DEFAULT_ROUNDING_STRATEGY">DEFAULT_ROUNDING_STRATEGY</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.NO_ROUNDING">NO_ROUNDING</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#base-classes">Base Classes</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#pyfdl.Base">Base</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Base.apply_defaults">apply_defaults</a>
@@ -108,14 +122,6 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#global-variables">Global Variables</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.FDL_SCHEMA_MAJOR">FDL_SCHEMA_MAJOR</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.FDL_SCHEMA_MINOR">FDL_SCHEMA_MINOR</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.FDL_SCHEMA_VERSION">FDL_SCHEMA_VERSION</a>
-    </li>
     </ul>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../context/">Context</a>
@@ -146,7 +152,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
           <li class="breadcrumb-item">Classes</li>
-      <li class="breadcrumb-item active">Common Classes</li>
+      <li class="breadcrumb-item active">Common</li>
     <li class="wy-breadcrumbs-aside">
           <a href="https://github.com/apetrynet/pyfdl/edit/master/docs/Classes/common.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
@@ -156,7 +162,113 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="common-classes">Common Classes</h1>
+                <h1 id="common">Common</h1>
+<h2 id="global-variables">Global Variables</h2>
+<p>Version numbers are used as default values in <a href="../header/">Header</a> and to select a matching json schema file
+if no version is set.</p>
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h2 id="pyfdl.FDL_SCHEMA_MAJOR" class="doc doc-heading">
+            <code class="highlight language-python">pyfdl.FDL_SCHEMA_MAJOR = 1</code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents first">
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h2 id="pyfdl.FDL_SCHEMA_MINOR" class="doc doc-heading">
+            <code class="highlight language-python">pyfdl.FDL_SCHEMA_MINOR = 0</code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents first">
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h2 id="pyfdl.FDL_SCHEMA_VERSION" class="doc doc-heading">
+            <code class="highlight language-python">pyfdl.FDL_SCHEMA_VERSION = {'major': FDL_SCHEMA_MAJOR, 'minor': FDL_SCHEMA_MINOR}</code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents first">
+    </div>
+
+</div><hr />
+<p>Different workflows have different requirements for precision, so we are flexible in how to apply 
+rounding of values</p>
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h2 id="pyfdl.DEFAULT_ROUNDING_STRATEGY" class="doc doc-heading">
+            <code class="highlight language-python">pyfdl.DEFAULT_ROUNDING_STRATEGY = {'even': 'even', 'mode': 'round'}</code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents first">
+    </div>
+
+</div><p>This is the default behavior for rounding the values of dimensions. The rules are the same as for
+<code>CanvasTemplate.round</code>.</p>
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h2 id="pyfdl.NO_ROUNDING" class="doc doc-heading">
+            <code class="highlight language-python">pyfdl.NO_ROUNDING = {}</code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents first">
+    </div>
+
+</div><p>This will disable rounding of values in dimensions. Exception being <code>Canvas.dimensions</code> when
+created by a canvas templates</p>
+<h2 id="base-classes">Base Classes</h2>
 <p>Below is a collection of the common classes that are used by other classes.</p>
 
 
@@ -412,7 +524,7 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
 
 
 <h3 id="pyfdl.Base.set_rounding_strategy" class="doc doc-heading">
-            <code class="highlight language-python">set_rounding_strategy(rules=None)</code>
+            <code class="highlight language-python">set_rounding_strategy(rules=DEFAULT_ROUNDING_STRATEGY)</code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
@@ -423,8 +535,9 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
 
     <div class="doc doc-contents ">
 
-      <p>Set the global rounding strategy for dimensions. The rules are the same as in
-<code>CanvasTemplate.round</code> but are passed as a dictionary.</p>
+      <p>Set the global rounding strategy for dimensions. The rules are the same as for
+<code>CanvasTemplate.round</code> but are passed as a dictionary.
+Passing <code>None</code> to the <code>rule</code> argument will disable all rounding for dimensions.</p>
 <p>Default rules are: <code>{'even': 'even', 'mode': 'round'}</code></p>
 <p>Available options:</p>
 
@@ -439,7 +552,7 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
   <summary>mode</summary>
   <p>"up" = always round up,
 "down" = always round down
-"round" = standard rounding, &gt;= +0.5 rounds up,&lt; +0.5 rounds down</p>
+"round" = standard rounding: &gt;= +0.5 rounds up and &lt; +0.5 rounds down</p>
 </details>
 
 <table class="field-list">
@@ -455,7 +568,7 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
             <li>
               <b><code>rules</code></b>
                   (<code><span title="typing.Union">Union</span>[dict, None]</code>, default:
-                      <code>None</code>
+                      <code><a class="autorefs autorefs-internal" title="pyfdl.base.DEFAULT_ROUNDING_STRATEGY" href="#pyfdl.DEFAULT_ROUNDING_STRATEGY">DEFAULT_ROUNDING_STRATEGY</a></code>
 )
               –
               <div class="doc-md-description">
@@ -1307,66 +1420,6 @@ In addition, a strict control of unique id's is enforced.</p>
 
   </div>
 
-    </div>
-
-</div><h2 id="global-variables">Global Variables</h2>
-<p>Version numbers are used as default values in <a href="../header/">Header</a> and to select a matching json schema file
-if no version is set.</p>
-
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h2 id="pyfdl.FDL_SCHEMA_MAJOR" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.FDL_SCHEMA_MAJOR = 1</code>
-
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
-  </span>
-
-</h2>
-
-
-    <div class="doc doc-contents first">
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h2 id="pyfdl.FDL_SCHEMA_MINOR" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.FDL_SCHEMA_MINOR = 0</code>
-
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
-  </span>
-
-</h2>
-
-
-    <div class="doc doc-contents first">
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h2 id="pyfdl.FDL_SCHEMA_VERSION" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.FDL_SCHEMA_VERSION = {'major': FDL_SCHEMA_MAJOR, 'minor': FDL_SCHEMA_MINOR}</code>
-
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
-  </span>
-
-</h2>
-
-
-    <div class="doc doc-contents first">
     </div>
 
 </div>
