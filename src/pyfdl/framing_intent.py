@@ -18,6 +18,7 @@ class FramingIntent(Base):
             aspect_ratio: DimensionsInt = None,
             protection: float = None
     ):
+        super().__init__()
         self.id = id_
         self.label = label
         self.aspect_ratio = aspect_ratio

@@ -30,6 +30,7 @@ class FramingDecision(Base):
             protection_dimensions: DimensionsFloat = None,
             protection_anchor_point: Point = None
     ):
+        super().__init__()
         self.label = label
         self.id = id_
         self.framing_intent_id = framing_intent_id

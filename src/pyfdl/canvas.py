@@ -49,6 +49,7 @@ class Canvas(Base):
             anamorphic_squeeze: float = None,
             framing_decisions: TypedCollection = None
     ):
+        super().__init__()
         self.label = label
         self.id = id_
         self.source_canvas_id = source_canvas_id
