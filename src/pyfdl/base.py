@@ -13,7 +13,7 @@ DEFAULT_ROUNDING_STRATEGY = {'even': 'even', 'mode': 'round'}
 NO_ROUNDING = {}
 
 
-class Base(ABC):
+class Base:
     # Holds a list of known attributes
     attributes = []
     # Maps attribute names that clash with reserved builtin functions to safe alternatives (id -> id_)
@@ -30,8 +30,7 @@ class Base(ABC):
     # The rounding strategy is used when rounding dimensions
     rounding_strategy = None
 
-    @abstractmethod
-    def __init__(self, *args: Any, **kwargs: Any):
+    def __init__(self):
         """Base class not to be instanced directly.
 
             Args:
@@ -50,7 +49,7 @@ class Base(ABC):
                     subclasses of [Base](#Base)
 
             """
-        pass
+        ...
 
     def apply_defaults(self) -> None:
         """Applies default values defined in the `defaults` attribute to attributes that are `None`"""
@@ -196,9 +195,8 @@ class Base(ABC):
     def generate_uuid():
         return str(uuid.uuid4())
 
-    @abstractmethod
     def __repr__(self) -> str:
-        pass
+        return f'{self.__class__.__name__}'
 
     def __str__(self) -> str:
         return str(self.to_dict())
@@ -315,6 +313,7 @@ class DimensionsFloat(Base):
             width:
             height:
         """
+        super().__init__()
         self.width = width
         self.height = height
 
@@ -361,6 +360,7 @@ class DimensionsInt(Base):
             width:
             height:
         """
+        super().__init__()
         self.width = width.__int__()
         self.height = height.__int__()
 
@@ -411,6 +411,7 @@ class Point(Base):
             x:
             y:
         """
+        super().__init__()
         self.x = x
         self.y = y
 
@@ -446,6 +447,7 @@ class RoundStrategy(Base):
         Raises:
             FDLError: if you provide a value other than the ones listed above
         """
+        super().__init__()
         self.even = even
         self.mode = mode
 

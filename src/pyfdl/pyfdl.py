@@ -47,6 +47,7 @@ class FDL(Base):
             contexts: TypedCollection = None,
             canvas_templates: TypedCollection = None
     ):
+        super().__init__()
         self.uuid = _uuid
         self.version = version
         self.fdl_creator = fdl_creator

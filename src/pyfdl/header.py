@@ -16,6 +16,7 @@ class Header(Base):
             fdl_creator: str = None,
             default_framing_intent: str = None
     ):
+        super().__init__()
         self.uuid = _uuid
         self.version = version
         self.fdl_creator = fdl_creator

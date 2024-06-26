@@ -58,6 +58,7 @@ class CanvasTemplate(Base):
             pad_to_maximum: bool = None,
             round_: RoundStrategy = None
     ):
+        super().__init__()
         self.label = label
         self.id = id_
         self.target_dimensions = target_dimensions
