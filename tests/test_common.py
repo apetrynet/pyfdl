@@ -4,58 +4,57 @@ import pyfdl
 
 
 def test_dimensions_int_from_dict(sample_dimensions_int):
-    dim1 = pyfdl.DimensionsInt.from_dict(sample_dimensions_int)
-    assert isinstance(dim1, pyfdl.DimensionsInt)
+    dim1 = pyfdl.Dimensions.from_dict(sample_dimensions_int)
+    assert isinstance(dim1, pyfdl.Dimensions)
     assert dim1.check_required() == []
     assert dim1.to_dict() == sample_dimensions_int
 
 
 def test_dimensions_int_from_kwargs(sample_dimensions_int):
-    dim2 = pyfdl.DimensionsInt(**sample_dimensions_int)
-    assert isinstance(dim2, pyfdl.DimensionsInt)
+    dim2 = pyfdl.Dimensions(**sample_dimensions_int)
+    assert isinstance(dim2, pyfdl.Dimensions)
     assert dim2.check_required() == []
     assert dim2.to_dict() == sample_dimensions_int
 
     # Check that values are stores as ints
-    dim3 = pyfdl.DimensionsInt(width=16.0, height=9.0)
-    assert isinstance(dim3, pyfdl.DimensionsInt)
+    dim3 = pyfdl.Dimensions(width=16.0, height=9.0)
+    assert isinstance(dim3, pyfdl.Dimensions)
     assert dim3.check_required() == []
-    assert str(dim3.width) == str(16)
-    assert str(dim3.height) == str(9)
+    assert dim3.to_dict() == {'width': 16, 'height': 9}
 
     with pytest.raises(TypeError) as err:
-        pyfdl.DimensionsInt()
+        pyfdl.Dimensions()
 
     assert "missing 2 required positional arguments: 'width' and 'height'" in str(err.value)
 
 
 def test_dimensions_float_from_dict(sample_dimensions_float):
-    dim1 = pyfdl.DimensionsFloat.from_dict(sample_dimensions_float)
-    assert isinstance(dim1, pyfdl.DimensionsFloat)
+    dim1 = pyfdl.Dimensions.from_dict(sample_dimensions_float)
+    assert isinstance(dim1, pyfdl.Dimensions)
     assert dim1.check_required() == []
     assert dim1.to_dict() == sample_dimensions_float
 
 
 def test_dimensions_float_from_kwargs(sample_dimensions_float):
-    dim2 = pyfdl.DimensionsFloat(**sample_dimensions_float)
-    assert isinstance(dim2, pyfdl.DimensionsFloat)
+    dim2 = pyfdl.Dimensions(**sample_dimensions_float)
+    assert isinstance(dim2, pyfdl.Dimensions)
     assert dim2.check_required() == []
     assert dim2.to_dict() == sample_dimensions_float
 
-    dim3 = pyfdl.DimensionsFloat(width=16, height=9)
-    assert isinstance(dim3, pyfdl.DimensionsFloat)
+    dim3 = pyfdl.Dimensions(width=16, height=9)
+    assert isinstance(dim3, pyfdl.Dimensions)
     assert dim3.check_required() == []
     assert str(dim3.width) == str(16)
     assert str(dim3.height) == str(9)
 
-    dim4 = pyfdl.DimensionsFloat(width=16.0, height=9.0)
-    assert isinstance(dim4, pyfdl.DimensionsFloat)
+    dim4 = pyfdl.Dimensions(width=16.0, height=9.0)
+    assert isinstance(dim4, pyfdl.Dimensions)
     assert dim4.check_required() == []
     assert str(dim4.width) == str(16.0)
     assert str(dim4.height) == str(9.0)
 
     with pytest.raises(TypeError) as err:
-        pyfdl.DimensionsFloat()
+        pyfdl.Dimensions()
 
     assert "missing 2 required positional arguments: 'width' and 'height'" in str(err.value)
 

@@ -1,6 +1,6 @@
 from typing import Union, List
 
-from pyfdl import Base, DimensionsInt, DimensionsFloat, RoundStrategy
+from pyfdl import Base, Dimensions, RoundStrategy
 from pyfdl.errors import FDLError
 
 
@@ -22,8 +22,8 @@ class CanvasTemplate(Base):
 
     kwarg_map = {'id': 'id_', 'round': 'round_'}
     object_map = {
-        'target_dimensions': DimensionsInt,
-        'maximum_dimensions': DimensionsInt,
+        'target_dimensions': Dimensions,
+        'maximum_dimensions': Dimensions,
         'round': RoundStrategy
     }
     required = [
@@ -47,14 +47,14 @@ class CanvasTemplate(Base):
             self,
             label: str = None,
             id_: str = None,
-            target_dimensions: DimensionsInt = None,
+            target_dimensions: Dimensions = None,
             target_anamorphic_squeeze: float = None,
             fit_source: str = None,
             fit_method: str = None,
             alignment_method_vertical: str = None,
             alignment_method_horizontal: str = None,
             preserve_from_source_canvas: str = None,
-            maximum_dimensions: DimensionsInt = None,
+            maximum_dimensions: Dimensions = None,
             pad_to_maximum: bool = None,
             round_: RoundStrategy = None
     ):
@@ -71,6 +71,32 @@ class CanvasTemplate(Base):
         self.maximum_dimensions = maximum_dimensions
         self.pad_to_maximum = pad_to_maximum
         self.round = round_
+
+    @property
+    def dimensions(self) -> Union[Dimensions, None]:
+        return self._dimensions
+
+    @dimensions.setter
+    def dimensions(self, dim: Union[Dimensions, dict, None]):
+        if isinstance(dim, dict):
+            dim = Dimensions.from_dict(dim)
+
+        self._dimensions = dim
+        if dim is not None:
+            self._dimensions.dtype = int
+
+    @property
+    def maximum_dimensions(self) -> Union[Dimensions, None]:
+        return self._maximum_dimensions
+
+    @maximum_dimensions.setter
+    def maximum_dimensions(self, dim: Union[Dimensions, None]):
+        if isinstance(dim, dict):
+            dim = Dimensions.from_dict(dim)
+
+        self._maximum_dimensions = dim
+        if dim is not None:
+            self._maximum_dimensions.dtype = int
 
     @property
     def fit_source(self) -> str:
@@ -187,7 +213,7 @@ class CanvasTemplate(Base):
 
     def get_scale_factor(
             self,
-            source_dimensions: Union[DimensionsInt, DimensionsFloat],
+            source_dimensions: Dimensions,
             source_anamorphic_squeeze: float
     ) -> float:
         """
@@ -226,9 +252,9 @@ class CanvasTemplate(Base):
 
     def fit_source_to_target(
             self,
-            source_dimensions: Union[DimensionsInt, DimensionsFloat],
+            source_dimensions: Dimensions,
             source_anamorphic_squeeze: float
-    ) -> Union[DimensionsInt, DimensionsFloat]:
+    ) -> Dimensions:
         """
         Calculate the dimensions of `fit_source` inside `target_dimensions` based on `fit_mode`
 

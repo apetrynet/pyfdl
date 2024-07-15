@@ -1,13 +1,13 @@
 from typing import Union
 
-from pyfdl import Base, DimensionsInt, TypedCollection
+from pyfdl import Base, Dimensions, TypedCollection
 
 
 class FramingIntent(Base):
 
     attributes = ['id', 'label', 'aspect_ratio', 'protection']
     kwarg_map = {'id': 'id_'}
-    object_map = {'aspect_ratio': DimensionsInt}
+    object_map = {'aspect_ratio': Dimensions}
     required = ['id', 'aspect_ratio']
     defaults = {'protection': 0}
 
@@ -15,7 +15,7 @@ class FramingIntent(Base):
             self,
             label: str = None,
             id_: str = None,
-            aspect_ratio: DimensionsInt = None,
+            aspect_ratio: Dimensions = None,
             protection: float = None
     ):
         super().__init__()
@@ -23,6 +23,19 @@ class FramingIntent(Base):
         self.label = label
         self.aspect_ratio = aspect_ratio
         self.protection = protection
+
+    @property
+    def aspect_ratio(self) -> Union[Dimensions, None]:
+        return self._aspect_ratio
+
+    @aspect_ratio.setter
+    def aspect_ratio(self, dim: Union[Dimensions, dict, None]):
+        if isinstance(dim, dict):
+            dim = Dimensions.from_dict(dim)
+
+        self._aspect_ratio = dim
+        if dim is not None:
+            self._aspect_ratio.dtype = int
 
     def __repr__(self):
         return (f'{self.__class__.__name__}('

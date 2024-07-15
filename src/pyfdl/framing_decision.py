@@ -1,4 +1,6 @@
-from pyfdl import Base, DimensionsFloat, Point
+from typing import Union
+
+from pyfdl import Base, Dimensions, Point
 
 
 class FramingDecision(Base):
@@ -13,9 +15,9 @@ class FramingDecision(Base):
     ]
     kwarg_map = {'id': 'id_'}
     object_map = {
-        'dimensions': DimensionsFloat,
+        'dimensions': Dimensions,
         'anchor_point': Point,
-        'protection_dimensions': DimensionsFloat,
+        'protection_dimensions': Dimensions,
         'protection_anchor_point': Point
     }
     required = ['id', 'framing_intent_id', 'dimensions', 'anchor_point']
@@ -25,9 +27,9 @@ class FramingDecision(Base):
             label: str = None,
             id_: str = None,
             framing_intent_id: str = None,
-            dimensions: DimensionsFloat = None,
+            dimensions: Dimensions = None,
             anchor_point: Point = None,
-            protection_dimensions: DimensionsFloat = None,
+            protection_dimensions: Dimensions= None,
             protection_anchor_point: Point = None
     ):
         super().__init__()
@@ -42,6 +44,28 @@ class FramingDecision(Base):
         # Make sure we have a rounding strategy
         if Base.rounding_strategy is None:
             Base.set_rounding_strategy()
+
+    @property
+    def dimensions(self) -> Union[Dimensions, None]:
+        return self._dimensions
+
+    @dimensions.setter
+    def dimensions(self, dim: Union[Dimensions, dict, None]):
+        if isinstance(dim, dict):
+            dim = Dimensions.from_dict(dim)
+
+        self._dimensions = dim
+
+    @property
+    def protection_dimensions(self) -> Union[Dimensions, None]:
+        return self._protection_dimensions
+
+    @protection_dimensions.setter
+    def protection_dimensions(self, dim: Union[Dimensions, None]):
+        if isinstance(dim, dict):
+            dim = Dimensions.from_dict(dim)
+
+        self._protection_dimensions = dim
 
     @classmethod
     def from_framing_intent(cls, canvas: 'Canvas', framing_intent: 'FramingIntent') -> 'FramingDecision':
@@ -81,7 +105,7 @@ class FramingDecision(Base):
             height = active_dimensions.height
 
         if framing_intent.protection > 0:
-            protection_dimensions = DimensionsFloat(width=width, height=height)
+            protection_dimensions = Dimensions(width=width, height=height)
             framing_decision.protection_dimensions = cls.rounding_strategy.round_dimensions(
                 protection_dimensions
             )
@@ -92,7 +116,7 @@ class FramingDecision(Base):
             width = framing_decision.protection_dimensions.width
             height = framing_decision.protection_dimensions.height
 
-        dimensions = DimensionsFloat(
+        dimensions = Dimensions(
             width=width * (1 - framing_intent.protection),
             height=height * (1 - framing_intent.protection)
         )
