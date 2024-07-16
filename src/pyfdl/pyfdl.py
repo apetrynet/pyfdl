@@ -70,12 +70,12 @@ class FDL(Base):
             canvas: to be placed in context
         """
 
-        context = self.contexts.get_item(context_label)
+        context = self.contexts.get(context_label)
         if context is None:
             context = Context(label=context_label)
-            self.contexts.add_item(context)
+            self.contexts.add(context)
 
-        context.canvases.add_item(canvas)
+        context.canvases.add(canvas)
 
     @property
     def header(self) -> Header:
@@ -132,10 +132,10 @@ class FDL(Base):
 
         for canvas_collection in canvas_collections:
             for canvas in canvas_collection:
-                canvases.add_item(canvas)
+                canvases.add(canvas)
 
         for canvas in canvases:
-            if canvases.get_item(canvas.source_canvas_id) is None:
+            if canvases.get(canvas.source_canvas_id) is None:
                 errors.append(
                     f'{canvas.source_canvas_id} (canvas.source_canvas_id) not found in '
                     f'registered canvases'

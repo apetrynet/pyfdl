@@ -129,7 +129,7 @@ class Canvas(Base):
 
         """
         framing_decision = FramingDecision.from_framing_intent(self, framing_intent)
-        self.framing_decisions.add_item(framing_decision)
+        self.framing_decisions.add(framing_decision)
 
         return framing_decision.id
 
@@ -181,7 +181,7 @@ class Canvas(Base):
             id_=f'{canvas.id}-{source_framing_decision.framing_intent_id}',
             framing_intent_id=source_framing_decision.framing_intent_id
         )
-        canvas.framing_decisions.add_item(framing_decision)
+        canvas.framing_decisions.add(framing_decision)
 
         source_map = {
             'framing_decision': source_framing_decision,

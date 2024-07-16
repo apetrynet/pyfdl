@@ -84,7 +84,7 @@ def test_setting_default_framing_id(sample_framing_intent):
     fdl = pyfdl.FDL()
 
     fi = pyfdl.FramingIntent.from_dict(sample_framing_intent)
-    fdl.framing_intents.add_item(fi)
+    fdl.framing_intents.add(fi)
     fdl.default_framing_intent = fi.id
 
     assert fdl.default_framing_intent == fi.id
@@ -99,12 +99,12 @@ def test_place_canvas_in_context(sample_canvas, sample_context):
     fdl = pyfdl.FDL()
     canvas = pyfdl.Canvas.from_dict(sample_canvas)
     context = pyfdl.Context.from_dict(sample_context)
-    fdl.contexts.add_item(context)
+    fdl.contexts.add(context)
 
     fdl.place_canvas_in_context(context_label=context.label, canvas=canvas)
-    assert canvas in fdl.contexts.get_item(context.label).canvases
+    assert canvas in fdl.contexts.get(context.label).canvases
 
     fdl.place_canvas_in_context(context_label="nonexistent", canvas=canvas)
-    new_context = fdl.contexts.get_item("nonexistent")
+    new_context = fdl.contexts.get("nonexistent")
     assert isinstance(new_context, pyfdl.Context)
-    assert new_context.canvases.get_item(canvas.id) == canvas
+    assert new_context.canvases.get(canvas.id) == canvas
