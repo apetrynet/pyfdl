@@ -145,7 +145,7 @@ fdl.set_rounding_strategy({'even': 'whole', 'mode': 'up'})
 <h2 id="examples">Examples</h2>
 <h3 id="create-an-fdl-from-scratch">Create an FDL from scratch</h3>
 <pre><code class="language-python">import pyfdl
-from pyfdl import Canvas, FramingIntent, DimensionsInt, DimensionsFloat, Point
+from pyfdl import Canvas, FramingIntent, Dimensions, Point
 from io import StringIO
 
 fdl = pyfdl.FDL()
@@ -157,7 +157,7 @@ fdl.apply_defaults()
 framing_intent = FramingIntent(
     label=&quot;1.78-1 Framing&quot;,
     id_=&quot;FDLSMP03&quot;,
-    aspect_ratio=DimensionsInt(width=16, height=9),
+    aspect_ratio=Dimensions(width=16, height=9),
     protection=0.088
 )
 
@@ -169,11 +169,11 @@ canvas = Canvas(
     label=&quot;Open Gate RAW&quot;,
     id_=&quot;20220310&quot;,
     source_canvas_id=&quot;20220310&quot;,
-    dimensions=DimensionsInt(width=5184, height=4320),
-    effective_dimensions=DimensionsInt(width=5184, height=4320),
+    dimensions=Dimensions(width=5184, height=4320),
+    effective_dimensions=Dimensions(width=5184, height=4320),
     effective_anchor_point=Point(x=0, y=0),
-    photosite_dimensions=DimensionsInt(5184, height=4320),
-    physical_dimensions=DimensionsFloat(width=25.92, height=21.60),
+    photosite_dimensions=Dimensions(5184, height=4320),
+    physical_dimensions=Dimensions(width=25.92, height=21.60),
     anamorphic_squeeze=1.30
 )
 

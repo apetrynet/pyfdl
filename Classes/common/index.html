@@ -98,19 +98,11 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.DimensionsFloat">DimensionsFloat</a>
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.Dimensions">Dimensions</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.DimensionsFloat.copy">copy</a>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Dimensions.copy">copy</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.DimensionsFloat.scale_by">scale_by</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.DimensionsInt">DimensionsInt</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.DimensionsInt.copy">copy</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.DimensionsInt.scale_by">scale_by</a>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Dimensions.scale_by">scale_by</a>
     </li>
         </ul>
     </li>
@@ -277,7 +269,7 @@ created by a canvas templates</p>
 
 
 <h2 id="pyfdl.Base" class="doc doc-heading">
-              <code class="highlight language-python">pyfdl.Base()</code>
+              <code class="highlight language-python">pyfdl.Base(*args, **kwargs)</code>
 
 </h2>
 
@@ -883,8 +875,8 @@ In addition, a strict control of unique id's is enforced.</p>
 
 
 
-<h2 id="pyfdl.DimensionsFloat" class="doc doc-heading">
-              <code class="highlight language-python">pyfdl.DimensionsFloat(width, height)</code>
+<h2 id="pyfdl.Dimensions" class="doc doc-heading">
+              <code class="highlight language-python">pyfdl.Dimensions(width, height, dtype=float)</code>
 
 </h2>
 
@@ -894,7 +886,9 @@ In addition, a strict control of unique id's is enforced.</p>
               Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.base.Base" href="#pyfdl.Base">Base</a></code></p>
 
 
-      <p>Dimensions properly formatted and stored as floats</p>
+      <p>Dimensions may be either <code>ints</code> or <code>floats</code>. You may pass the desired data type at instantiation.
+However, the objects using the dimensions will set the required type for you when they are passed
+to them</p>
 
 
 <table class="field-list">
@@ -909,7 +903,7 @@ In addition, a strict control of unique id's is enforced.</p>
         <ul class="first simple">
             <li>
               <b><code>width</code></b>
-                  (<code>float</code>)
+                  (<code><span title="typing.Union">Union</span>[int, float]</code>)
               –
               <div class="doc-md-description">
                 
@@ -917,10 +911,20 @@ In addition, a strict control of unique id's is enforced.</p>
             </li>
             <li>
               <b><code>height</code></b>
-                  (<code>float</code>)
+                  (<code><span title="typing.Union">Union</span>[int, float]</code>)
               –
               <div class="doc-md-description">
                 
+              </div>
+            </li>
+            <li>
+              <b><code>dtype</code></b>
+                  (<code><span title="typing.Union">Union</span>[<span title="typing.Type">Type</span>[int], <span title="typing.Type">Type</span>[float]]</code>, default:
+                      <code>float</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>set data type of dimension values, mostly used behind the scenes.</p>
               </div>
             </li>
         </ul>
@@ -944,7 +948,7 @@ In addition, a strict control of unique id's is enforced.</p>
 <div class="doc doc-object doc-function">
 
 
-<h3 id="pyfdl.DimensionsFloat.copy" class="doc doc-heading">
+<h3 id="pyfdl.Dimensions.copy" class="doc doc-heading">
             <code class="highlight language-python">copy()</code>
 
 </h3>
@@ -966,7 +970,7 @@ In addition, a strict control of unique id's is enforced.</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-<b><code>copy</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.base.DimensionsFloat" href="#pyfdl.DimensionsFloat">DimensionsFloat</a></code>
+<b><code>copy</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.base.Dimensions" href="#pyfdl.Dimensions">Dimensions</a></code>
 )              –
               <div class="doc-md-description">
                 <p>of these dimensions</p>
@@ -984,158 +988,7 @@ In addition, a strict control of unique id's is enforced.</p>
 <div class="doc doc-object doc-function">
 
 
-<h3 id="pyfdl.DimensionsFloat.scale_by" class="doc doc-heading">
-            <code class="highlight language-python">scale_by(factor)</code>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-      <p>Scale the dimensions by the provider factor</p>
-
-
-<table class="field-list">
-  <colgroup>
-    <col class="field-name" />
-    <col class="field-body" />
-  </colgroup>
-  <tbody valign="top">
-    <tr class="field">
-      <th class="field-name">Parameters:</th>
-      <td class="field-body">
-        <ul class="first simple">
-            <li>
-              <b><code>factor</code></b>
-                  (<code>float</code>)
-              –
-              <div class="doc-md-description">
-                
-              </div>
-            </li>
-        </ul>
-      </td>
-    </tr>
-  </tbody>
-</table>
-    </div>
-
-</div>
-
-
-
-  </div>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-class">
-
-
-
-<h2 id="pyfdl.DimensionsInt" class="doc doc-heading">
-              <code class="highlight language-python">pyfdl.DimensionsInt(width, height)</code>
-
-</h2>
-
-
-    <div class="doc doc-contents first">
-            <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.base.Base" href="#pyfdl.Base">Base</a></code></p>
-
-
-      <p>Dimensions properly formatted and stored as ints</p>
-
-
-<table class="field-list">
-  <colgroup>
-    <col class="field-name" />
-    <col class="field-body" />
-  </colgroup>
-  <tbody valign="top">
-    <tr class="field">
-      <th class="field-name">Parameters:</th>
-      <td class="field-body">
-        <ul class="first simple">
-            <li>
-              <b><code>width</code></b>
-                  (<code>int</code>)
-              –
-              <div class="doc-md-description">
-                
-              </div>
-            </li>
-            <li>
-              <b><code>height</code></b>
-                  (<code>int</code>)
-              –
-              <div class="doc-md-description">
-                
-              </div>
-            </li>
-        </ul>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="pyfdl.DimensionsInt.copy" class="doc doc-heading">
-            <code class="highlight language-python">copy()</code>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-      <p>Create a copy of these dimensions</p>
-
-
-<table class="field-list">
-  <colgroup>
-    <col class="field-name" />
-    <col class="field-body" />
-  </colgroup>
-  <tbody valign="top">
-    <tr class="field">
-      <th class="field-name">Returns:</th>
-      <td class="field-body">
-        <ul class="first simple">
-            <li>
-<b><code>copy</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.base.DimensionsInt" href="#pyfdl.DimensionsInt">DimensionsInt</a></code>
-)              –
-              <div class="doc-md-description">
-                <p>of these dimensions</p>
-              </div>
-            </li>
-        </ul>
-      </td>
-    </tr>
-  </tbody>
-</table>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="pyfdl.DimensionsInt.scale_by" class="doc doc-heading">
+<h3 id="pyfdl.Dimensions.scale_by" class="doc doc-heading">
             <code class="highlight language-python">scale_by(factor)</code>
 
 </h3>
@@ -1370,7 +1223,7 @@ In addition, a strict control of unique id's is enforced.</p>
         <ul class="first simple">
             <li>
               <b><code>dimensions</code></b>
-                  (<code><span title="typing.Union">Union</span>[<a class="autorefs autorefs-internal" title="pyfdl.base.DimensionsInt" href="#pyfdl.DimensionsInt">DimensionsInt</a>, <a class="autorefs autorefs-internal" title="pyfdl.base.DimensionsFloat" href="#pyfdl.DimensionsFloat">DimensionsFloat</a>]</code>)
+                  (<code><a class="autorefs autorefs-internal" title="pyfdl.base.Dimensions" href="#pyfdl.Dimensions">Dimensions</a></code>)
               –
               <div class="doc-md-description">
                 
@@ -1393,7 +1246,7 @@ In addition, a strict control of unique id's is enforced.</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-<b><code>dimensions</code></b>(                  <code><span title="typing.Union">Union</span>[<a class="autorefs autorefs-internal" title="pyfdl.base.DimensionsInt" href="#pyfdl.DimensionsInt">DimensionsInt</a>, <a class="autorefs autorefs-internal" title="pyfdl.base.DimensionsFloat" href="#pyfdl.DimensionsFloat">DimensionsFloat</a>]</code>
+<b><code>dimensions</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.base.Dimensions" href="#pyfdl.Dimensions">Dimensions</a></code>
 )              –
               <div class="doc-md-description">
                 <p>rounded based on rules</p>
