@@ -313,7 +313,10 @@ class Dimensions(Base):
             height: Union[int, float],
             dtype: Union[Type[int], Type[float]] = float
     ):
-        """Dimensions properly formatted
+        """
+        Dimensions may be either `ints` or `floats`. You may pass the desired data type at instantiation.
+        However, the objects using the dimensions will set the required type for you when they are passed
+        to them
 
         Args:
             width:
