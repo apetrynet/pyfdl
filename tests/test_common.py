@@ -3,60 +3,78 @@ import pytest
 import pyfdl
 
 
-def test_dimensions_int_from_dict(sample_dimensions_int):
-    dim1 = pyfdl.Dimensions.from_dict(sample_dimensions_int)
-    assert isinstance(dim1, pyfdl.Dimensions)
-    assert dim1.check_required() == []
-    assert dim1.to_dict() == sample_dimensions_int
+def test_base_empty(base_subclass):
+    obj = base_subclass()
+    assert isinstance(obj, base_subclass)
 
 
-def test_dimensions_int_from_kwargs(sample_dimensions_int):
-    dim2 = pyfdl.Dimensions(**sample_dimensions_int)
-    assert isinstance(dim2, pyfdl.Dimensions)
-    assert dim2.check_required() == []
-    assert dim2.to_dict() == sample_dimensions_int
+def test_base_from_dict(base_subclass, base_class_dict):
+    obj1 = base_subclass.from_dict(base_class_dict)
 
-    # Check that values are stores as ints
-    dim3 = pyfdl.Dimensions(width=16.0, height=9.0, dtype=int)
-    assert isinstance(dim3, pyfdl.Dimensions)
-    assert dim3.check_required() == []
-    assert str(dim3.to_dict()) == str({'width': 16, 'height': 9})
-
-    with pytest.raises(TypeError) as err:
-        pyfdl.Dimensions()
-
-    assert "missing 2 required positional arguments: 'width' and 'height'" in str(err.value)
+    assert isinstance(obj1, base_subclass)
+    assert obj1.id == "my_id"
+    assert obj1.string == "hello"
+    assert isinstance(obj1.point, pyfdl.Point)
+    assert isinstance(obj1.dimensions, pyfdl.Dimensions)
+    assert isinstance(obj1.collection, pyfdl.TypedCollection)
+    assert obj1.collection._cls == pyfdl.FramingIntent
+    assert isinstance(obj1.collection[0], pyfdl.FramingIntent)
+    assert isinstance(obj1.round, pyfdl.RoundStrategy)
 
 
-def test_dimensions_float_from_dict(sample_dimensions_float):
-    dim1 = pyfdl.Dimensions.from_dict(sample_dimensions_float)
-    assert isinstance(dim1, pyfdl.Dimensions)
-    assert dim1.check_required() == []
-    assert dim1.to_dict() == sample_dimensions_float
+def test_base_from_kwargs(base_subclass, base_class_kwargs):
+    obj1 = base_subclass(**base_class_kwargs)
+    assert isinstance(obj1, base_subclass)
+    assert obj1.id == "my_id"
+    assert obj1.string == "hello"
+    assert isinstance(obj1.point, pyfdl.Point)
+    assert isinstance(obj1.dimensions, pyfdl.Dimensions)
+    assert isinstance(obj1.collection, pyfdl.TypedCollection)
+    assert obj1.collection._cls == pyfdl.FramingIntent
+    assert isinstance(obj1.collection[0], pyfdl.FramingIntent)
+    assert isinstance(obj1.round, pyfdl.RoundStrategy)
 
 
-def test_dimensions_float_from_kwargs(sample_dimensions_float):
-    dim2 = pyfdl.Dimensions(**sample_dimensions_float)
-    assert isinstance(dim2, pyfdl.Dimensions)
-    assert dim2.check_required() == []
-    assert dim2.to_dict() == sample_dimensions_float
+def test_base_apply_defaults(base_subclass):
+    obj = base_subclass()
+    assert obj.id is None
+    obj.apply_defaults()
+    assert obj.id == "my_id"
 
-    dim3 = pyfdl.Dimensions(width=16, height=9)
-    assert isinstance(dim3, pyfdl.Dimensions)
-    assert dim3.check_required() == []
-    assert str(dim3.width) == str(16)
-    assert str(dim3.height) == str(9)
 
-    dim4 = pyfdl.Dimensions(width=16.0, height=9.0)
-    assert isinstance(dim4, pyfdl.Dimensions)
-    assert dim4.check_required() == []
-    assert str(dim4.width) == str(16.0)
-    assert str(dim4.height) == str(9.0)
+def test_base_check_required(base_subclass):
+    obj = base_subclass()
+    assert obj.check_required() == ["id"]
 
-    with pytest.raises(TypeError) as err:
-        pyfdl.Dimensions()
+    # Check linked.requirements
+    obj.string = "part one"
+    assert obj.check_required() == ["id", "point"]
 
-    assert "missing 2 required positional arguments: 'width' and 'height'" in str(err.value)
+    obj.id = "my_id"
+    obj.point = pyfdl.Point(x=0, y=0)
+    assert obj.check_required() == []
+
+
+def test_base_to_dict(base_subclass, base_class_dict):
+    obj = base_subclass.from_dict(base_class_dict)
+    assert obj.to_dict() == base_class_dict
+
+    obj.id = None
+    with pytest.raises(pyfdl.FDLError):
+        obj.to_dict()
+
+
+def test_base_set_rounding_strategy(base_subclass, sample_rounding_strategy_obj):
+    obj = base_subclass()
+    assert obj.rounding_strategy.to_dict() == pyfdl.DEFAULT_ROUNDING_STRATEGY
+
+    override = {"even": "whole", "mode": "up"}
+    obj.set_rounding_strategy(rules=override)
+    assert obj.rounding_strategy.to_dict() == override
+
+
+def test_base_generate_uuid(base_subclass):
+    assert isinstance(base_subclass.generate_uuid(), str)
 
 
 def test_dimensions_point_from_dict(sample_point):
