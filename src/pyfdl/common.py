@@ -29,12 +29,8 @@ class Base:
     # The rounding strategy is used when rounding dimensions
     rounding_strategy = None
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         """Base class not to be instanced directly.
-
-            Args:
-                *args:
-                **kwargs:
 
             Attributes:
                 attributes: list of attributes described in FDL spec
