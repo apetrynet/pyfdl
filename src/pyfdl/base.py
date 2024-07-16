@@ -307,16 +307,22 @@ class Dimensions(Base):
     attributes = ['width', 'height']
     required = ['width', 'height']
 
-    def __init__(self, width: Union[int, float], height: Union[int, float]):
+    def __init__(
+            self,
+            width: Union[int, float],
+            height: Union[int, float],
+            dtype: Union[Type[int], Type[float]] = float
+    ):
         """Dimensions properly formatted
 
         Args:
             width:
             height:
+            dtype: set data type of dimension values, mostly used behind the scenes.
         """
 
         super().__init__()
-        self.dtype = float
+        self.dtype = dtype
 
         self.width = width
         self.height = height
@@ -345,10 +351,7 @@ class Dimensions(Base):
             copy: of these dimensions
         """
 
-        clone = Dimensions(width=self.width, height=self.height)
-        clone.dtype = self.dtype
-
-        return clone
+        return Dimensions(width=self.width, height=self.height, dtype=self.dtype)
 
     def to_dict(self) -> dict:
         return {'width': self.dtype(self.width), 'height': self.dtype(self.height)}
