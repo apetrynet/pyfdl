@@ -57,7 +57,7 @@ def test_place_framing_intent(sample_framing_intent, sample_canvas, sample_frami
     decision_id = canvas.place_framing_intent(intent)
     assert decision_id == f'{canvas.id}-{intent.id}'
 
-    decision = canvas.framing_decisions.get_item(decision_id)
+    decision = canvas.framing_decisions.get(decision_id)
     facit_decision = pyfdl.FramingDecision.from_dict(sample_framing_decision)
     assert decision == facit_decision
 

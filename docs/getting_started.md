@@ -58,7 +58,7 @@ framing_intent = FramingIntent(
 )
 
 # Add the newly created framing intent to our FDL
-fdl.framing_intents.add_item(framing_intent)
+fdl.framing_intents.add(framing_intent)
 
 # Now let's create a canvas
 canvas = Canvas(

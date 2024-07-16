@@ -155,7 +155,7 @@ class Base:
 
                     tc = TypedCollection(_cls)
                     for item in value:
-                        tc.add_item(_cls.from_dict(item))
+                        tc.add(_cls.from_dict(item))
                     value = tc
                 else:
                     value = cls.object_map[key].from_dict(value)
@@ -218,7 +218,7 @@ class TypedCollection:
     def ids(self):
         return list(self._data.keys())
 
-    def add_item(self, item: Any):
+    def add(self, item: Any):
         """Add an item to the collection.
          All items added to a collection get associated to the collection by passing itself
          as parent
@@ -248,7 +248,7 @@ class TypedCollection:
         else:
             raise FDLError(f"Item must have a valid identifier (\"{self._cls.id_attribute}\"), not None or empty string")
 
-    def get_item(self, item_id: str) -> Union[Any, None]:
+    def get(self, item_id: str) -> Union[Any, None]:
         """Get an item in the collection
 
         Args:
@@ -259,7 +259,7 @@ class TypedCollection:
         """
         return self._data.get(item_id)
 
-    def remove_item(self, item_id: str):
+    def remove(self, item_id: str):
         """Remove an item in the collection if found
 
         Args:
@@ -291,7 +291,7 @@ class TypedCollection:
             yield item
 
     def __getitem__(self, item):
-        return self.get_item(self.ids[item])
+        return self.get(self.ids[item])
 
     def __contains__(self, item: Any) -> bool:
         # We support both looking for an item by item.id and "string" for future use of collection
