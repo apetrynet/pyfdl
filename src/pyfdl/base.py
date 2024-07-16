@@ -1,7 +1,7 @@
 import math
 import uuid
 from abc import ABC, abstractmethod
-from typing import Any, Union
+from typing import Any, Union, Type
 
 from pyfdl.errors import FDLError
 
@@ -30,7 +30,7 @@ class Base:
     # The rounding strategy is used when rounding dimensions
     rounding_strategy = None
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """Base class not to be instanced directly.
 
             Args:
@@ -102,6 +102,7 @@ class Base:
         Returns:
             representation of object
         """
+
         data = {}
         for key in self.attributes:
             value = getattr(self, key)
@@ -302,18 +303,30 @@ class TypedCollection:
             return item in self._data
 
 
-class DimensionsFloat(Base):
+class Dimensions(Base):
     attributes = ['width', 'height']
     required = ['width', 'height']
 
-    def __init__(self, width: float, height: float):
-        """Dimensions properly formatted and stored as floats
+    def __init__(
+            self,
+            width: Union[int, float],
+            height: Union[int, float],
+            dtype: Union[Type[int], Type[float]] = float
+    ):
+        """
+        Dimensions may be either `ints` or `floats`. You may pass the desired data type at instantiation.
+        However, the objects using the dimensions will set the required type for you when they are passed
+        to them
 
         Args:
             width:
             height:
+            dtype: set data type of dimension values, mostly used behind the scenes.
         """
+
         super().__init__()
+        self.dtype = dtype
+
         self.width = width
         self.height = height
 
@@ -327,68 +340,24 @@ class DimensionsFloat(Base):
         Args:
             factor:
         """
-        self.width = self.width * factor
-        self.height = self.height * factor
-
-    def copy(self) -> 'DimensionsFloat':
-        """
-        Create a copy of these dimensions
-
-        Returns:
-            copy: of these dimensions
-        """
-        return DimensionsFloat(width=self.width, height=self.height)
-
-    def __iter__(self):
-        return iter((self.width, self.height))
-
-    def __eq__(self, other):
-        return self.width == other.width and self.height == other.height
-
-    def __repr__(self):
-        return f"{self.__class__.__name__}(width={self.width}, height={self.height})"
-
-
-class DimensionsInt(Base):
-    attributes = ['width', 'height']
-    required = ['width', 'height']
-
-    def __init__(self, width: int, height: int):
-        """Dimensions properly formatted and stored as ints
-
-        Args:
-            width:
-            height:
-        """
-        super().__init__()
-        self.width = width.__int__()
-        self.height = height.__int__()
-
-        if Base.rounding_strategy is None:
-            Base.set_rounding_strategy()
-
-    def scale_by(self, factor: float) -> None:
-        """
-        Scale the dimensions by the provider factor
-
-        Args:
-            factor:
-        """
         self.width *= factor
         self.height *= factor
-        self.width, self.height = self.rounding_strategy.round_dimensions(self)
 
-    def copy(self) -> 'DimensionsInt':
+        if self.dtype == int:
+            self.width, self.height = self.rounding_strategy.round_dimensions(self)
+
+    def copy(self) -> 'Dimensions':
         """
         Create a copy of these dimensions
 
         Returns:
             copy: of these dimensions
         """
-        return DimensionsInt(width=self.width, height=self.height)
+
+        return Dimensions(width=self.width, height=self.height, dtype=self.dtype)
 
     def to_dict(self) -> dict:
-        return {'width': self.width.__int__(), 'height': self.height.__int__()}
+        return {'width': self.dtype(self.width), 'height': self.dtype(self.height)}
 
     def __iter__(self):
         return iter((self.width, self.height))
@@ -396,8 +365,15 @@ class DimensionsInt(Base):
     def __eq__(self, other):
         return self.width == other.width and self.height == other.height
 
+    def __bool__(self):
+        return self.width is not None and self.height is not None
+
     def __repr__(self):
-        return f"{self.__class__.__name__}(width={self.width}, height={self.height})"
+        return (
+            f"{self.__class__.__name__}("
+            f"width={self.dtype(self.width)}, "
+            f"height={self.dtype(self.height)}"
+            f")")
 
 
 class Point(Base):
@@ -483,8 +459,8 @@ class RoundStrategy(Base):
 
     def round_dimensions(
             self,
-            dimensions: Union[DimensionsInt, DimensionsFloat]
-    ) -> Union[DimensionsInt, DimensionsFloat]:
+            dimensions: Dimensions
+    ) -> Dimensions:
         """
         Round the provided dimensions based on the rules defined in this object
 

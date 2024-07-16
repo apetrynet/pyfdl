@@ -32,11 +32,7 @@ Below is a collection of the common classes that are used by other classes.
     options:
         inherited_members: false
 
-::: pyfdl.DimensionsFloat
-    options:
-        inherited_members: false
-
-::: pyfdl.DimensionsInt
+::: pyfdl.Dimensions
     options:
         inherited_members: false
 

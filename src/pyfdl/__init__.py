@@ -4,8 +4,7 @@ from typing import IO, Union
 
 from .base import (
     Base,
-    DimensionsFloat,
-    DimensionsInt,
+    Dimensions,
     Point,
     RoundStrategy,
     DEFAULT_ROUNDING_STRATEGY,
@@ -30,8 +29,7 @@ __all__ = [
     'CanvasTemplate',
     'Context',
     'DEFAULT_ROUNDING_STRATEGY',
-    'DimensionsFloat',
-    'DimensionsInt',
+    'Dimensions',
     'FDL',
     'FDLError',
     'FDLValidationError',

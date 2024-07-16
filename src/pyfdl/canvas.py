@@ -2,9 +2,8 @@ from typing import Tuple, Union
 
 from pyfdl import (
     Base,
-    DimensionsInt,
+    Dimensions,
     Point,
-    DimensionsFloat,
     FramingDecision,
     TypedCollection,
     FramingIntent
@@ -26,11 +25,11 @@ class Canvas(Base):
     ]
     kwarg_map = {'id': 'id_'}
     object_map = {
-        'dimensions': DimensionsInt,
-        'effective_dimensions': DimensionsInt,
+        'dimensions': Dimensions,
+        'effective_dimensions': Dimensions,
         'effective_anchor_point': Point,
-        'photosite_dimensions': DimensionsInt,
-        'physical_dimensions': DimensionsFloat,
+        'photosite_dimensions': Dimensions,
+        'physical_dimensions': Dimensions,
         'framing_decisions': FramingDecision
     }
     required = ['id', 'source_canvas_id', 'dimensions', 'effective_dimensions.effective_anchor_point']
@@ -41,11 +40,11 @@ class Canvas(Base):
             label: str = None,
             id_: str = None,
             source_canvas_id: str = None,
-            dimensions: DimensionsInt = None,
-            effective_dimensions: DimensionsInt = None,
+            dimensions: Dimensions = None,
+            effective_dimensions: Dimensions = None,
             effective_anchor_point: Point = None,
-            photosite_dimensions: DimensionsInt = None,
-            physical_dimensions: DimensionsFloat = None,
+            photosite_dimensions: Dimensions = None,
+            physical_dimensions: Dimensions = None,
             anamorphic_squeeze: float = None,
             framing_decisions: TypedCollection = None
     ):
@@ -64,6 +63,54 @@ class Canvas(Base):
         # Make sure we have a rounding strategy
         if Base.rounding_strategy is None:
             Base.set_rounding_strategy()
+
+    @property
+    def dimensions(self) -> Union[Dimensions, None]:
+        return self._dimensions
+
+    @dimensions.setter
+    def dimensions(self, dim: Union[Dimensions, dict, None]):
+        if isinstance(dim, dict):
+            dim = Dimensions.from_dict(dim)
+
+        self._dimensions = dim
+        if dim is not None:
+            self._dimensions.dtype = int
+
+    @property
+    def effective_dimensions(self) -> Union[Dimensions, None]:
+        return self._effective_dimensions
+
+    @effective_dimensions.setter
+    def effective_dimensions(self, dim: Union[Dimensions, dict, None]):
+        if isinstance(dim, dict):
+            dim = Dimensions.from_dict(dim)
+
+        self._effective_dimensions = dim
+        if dim is not None:
+            self._effective_dimensions.dtype = int
+
+    @property
+    def photosite_dimensions(self) -> Union[Dimensions, None]:
+        return self._photosite_dimensions
+
+    @photosite_dimensions.setter
+    def photosite_dimensions(self, dim: Union[Dimensions, dict, None]):
+        if isinstance(dim, dict):
+            dim = Dimensions.from_dict(dim)
+
+        self._photosite_dimensions = dim
+
+    @property
+    def physical_dimensions(self) -> Union[Dimensions, None]:
+        return self._physical_dimensions
+
+    @physical_dimensions.setter
+    def physical_dimensions(self, dim: Union[Dimensions, dict, None]):
+        if isinstance(dim, dict):
+            dim = Dimensions.from_dict(dim)
+
+        self._physical_dimensions = dim
 
     def place_framing_intent(self, framing_intent: FramingIntent) -> str:
         """Create a new [FramingDecision](framing_decision.md#Framing Decision) based on the provided
@@ -86,7 +133,7 @@ class Canvas(Base):
 
         return framing_decision.id
 
-    def get_dimensions(self) -> Tuple[DimensionsInt, Point]:
+    def get_dimensions(self) -> Tuple[Dimensions, Point]:
         """ Get the most relevant dimensions and anchor point for the canvas.
         `effective_dimensions` and `effective_anchor_point` win over `dimensions`
 
@@ -161,7 +208,7 @@ class Canvas(Base):
         )
 
         # Dummy dimensions to test against if we received a proper value
-        dummy_dimensions = DimensionsFloat(width=0, height=0)
+        dummy_dimensions = Dimensions(width=0, height=0)
 
         # Copy and scale dimensions from source to target
         for transfer_key in canvas_template.get_transfer_keys():
