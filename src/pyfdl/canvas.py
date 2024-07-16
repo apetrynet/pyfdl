@@ -82,7 +82,7 @@ class Canvas(Base):
         return self._effective_dimensions
 
     @effective_dimensions.setter
-    def effective_dimensions(self, dim: Union[Dimensions, None]):
+    def effective_dimensions(self, dim: Union[Dimensions, dict, None]):
         if isinstance(dim, dict):
             dim = Dimensions.from_dict(dim)
 
@@ -95,7 +95,7 @@ class Canvas(Base):
         return self._photosite_dimensions
 
     @photosite_dimensions.setter
-    def photosite_dimensions(self, dim: Union[Dimensions, None]):
+    def photosite_dimensions(self, dim: Union[Dimensions, dict, None]):
         if isinstance(dim, dict):
             dim = Dimensions.from_dict(dim)
 
@@ -106,7 +106,7 @@ class Canvas(Base):
         return self._physical_dimensions
 
     @physical_dimensions.setter
-    def physical_dimensions(self, dim: Union[Dimensions, None]):
+    def physical_dimensions(self, dim: Union[Dimensions, dict, None]):
         if isinstance(dim, dict):
             dim = Dimensions.from_dict(dim)
 

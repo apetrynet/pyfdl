@@ -90,7 +90,7 @@ class CanvasTemplate(Base):
         return self._maximum_dimensions
 
     @maximum_dimensions.setter
-    def maximum_dimensions(self, dim: Union[Dimensions, None]):
+    def maximum_dimensions(self, dim: Union[Dimensions, dict, None]):
         if isinstance(dim, dict):
             dim = Dimensions.from_dict(dim)
 

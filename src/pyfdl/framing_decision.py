@@ -61,7 +61,7 @@ class FramingDecision(Base):
         return self._protection_dimensions
 
     @protection_dimensions.setter
-    def protection_dimensions(self, dim: Union[Dimensions, None]):
+    def protection_dimensions(self, dim: Union[Dimensions, dict, None]):
         if isinstance(dim, dict):
             dim = Dimensions.from_dict(dim)
 
