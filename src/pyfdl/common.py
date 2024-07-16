@@ -1,6 +1,5 @@
 import math
 import uuid
-from abc import ABC, abstractmethod
 from typing import Any, Union, Type
 
 from pyfdl.errors import FDLError
