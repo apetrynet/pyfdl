@@ -17,10 +17,10 @@ def test_dimensions_int_from_kwargs(sample_dimensions_int):
     assert dim2.to_dict() == sample_dimensions_int
 
     # Check that values are stores as ints
-    dim3 = pyfdl.Dimensions(width=16.0, height=9.0)
+    dim3 = pyfdl.Dimensions(width=16.0, height=9.0, dtype=int)
     assert isinstance(dim3, pyfdl.Dimensions)
     assert dim3.check_required() == []
-    assert dim3.to_dict() == {'width': 16, 'height': 9}
+    assert str(dim3.to_dict()) == str({'width': 16, 'height': 9})
 
     with pytest.raises(TypeError) as err:
         pyfdl.Dimensions()
