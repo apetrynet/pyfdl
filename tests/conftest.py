@@ -2,7 +2,7 @@ import pytest
 import pyfdl
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def base_subclass():
     class BaseSubclass(pyfdl.Base):
         # Holds a list of known attributes
@@ -39,8 +39,7 @@ def base_subclass():
             self.round = round_
 
             # Make sure we have a rounding strategy
-            if pyfdl.Base.rounding_strategy is None:
-                pyfdl.Base.set_rounding_strategy()
+            self.set_rounding_strategy(pyfdl.DEFAULT_ROUNDING_STRATEGY)
 
     return BaseSubclass
 
@@ -223,7 +222,7 @@ def sample_context() -> dict:
     return ctx
 
 
-@pytest.fixture()
+@pytest.fixture
 def sample_canvas_template() -> dict:
     canvas_template = {
         "label": "VFX Pull",
@@ -240,7 +239,7 @@ def sample_canvas_template() -> dict:
     return canvas_template
 
 
-@pytest.fixture()
+@pytest.fixture
 def sample_canvas_template_kwargs() -> dict:
     canvas_template = {
         "label": "VFX Pull",

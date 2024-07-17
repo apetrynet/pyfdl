@@ -72,34 +72,110 @@ def test_base_set_rounding_strategy(base_subclass, sample_rounding_strategy_obj)
     obj.set_rounding_strategy(rules=override)
     assert obj.rounding_strategy.to_dict() == override
 
+    # Reset to default to not mess up other tests
+    obj.set_rounding_strategy(pyfdl.DEFAULT_ROUNDING_STRATEGY)
+
 
 def test_base_generate_uuid(base_subclass):
     assert isinstance(base_subclass.generate_uuid(), str)
 
 
-def test_dimensions_point_from_dict(sample_point):
-    point1 = pyfdl.Point.from_dict(sample_point)
-    assert isinstance(point1, pyfdl.Point)
-    assert point1.check_required() == []
-    assert point1.to_dict() == sample_point
+def test_typed_collection_ids(sample_framing_intent_obj):
+    collection = pyfdl.TypedCollection(pyfdl.FramingIntent)
+    assert collection.ids == []
+
+    collection.add(sample_framing_intent_obj)
+    assert collection.ids == [sample_framing_intent_obj.id]
 
 
-def test_dimensions_point_from_kwargs(sample_point):
-    point2 = pyfdl.Point(**sample_point)
-    assert isinstance(point2, pyfdl.Point)
-    assert point2.check_required() == []
-    assert point2.to_dict() == sample_point
+def test_typed_collection_add(sample_framing_intent_obj):
+    collection = pyfdl.TypedCollection(pyfdl.FramingIntent)
+    framing_intent = sample_framing_intent_obj
+    collection.add(framing_intent)
+    assert len(collection) == 1
 
-    point3 = pyfdl.Point(x=16, y=9)
-    assert isinstance(point3, pyfdl.Point)
-    assert point3.check_required() == []
-    assert point3.x == 16
-    assert point3.y == 9
+    # Add something of wrong type
+    with pytest.raises(TypeError):
+        collection.add(pyfdl.Point(x=10, y=10))
 
-    with pytest.raises(TypeError) as err:
-        pyfdl.Point()
+    # Add duplicate "id"
+    with pytest.raises(pyfdl.FDLError) as err:
+        collection.add(framing_intent)
 
-    assert "missing 2 required positional arguments: 'x' and 'y'" in str(err.value)
+    assert "already exists." in str(err)
+
+    # Add something with "id_attribute" not set
+    framing_intent_1 = pyfdl.FramingIntent()
+    with pytest.raises(pyfdl.FDLError) as err:
+        collection.add(framing_intent_1)
+
+    assert "Item must have a valid identifier" in str(err)
+
+
+def test_typed_collection_get(sample_framing_intent_obj):
+    collection = pyfdl.TypedCollection(pyfdl.FramingIntent)
+    framing_intent = sample_framing_intent_obj
+    collection.add(framing_intent)
+    assert collection.get(framing_intent.id) == framing_intent
+    assert collection.get("not_present") is None
+
+
+def test_typed_collection_remove(sample_framing_intent_obj):
+    collection = pyfdl.TypedCollection(pyfdl.FramingIntent)
+    framing_intent = sample_framing_intent_obj
+    collection.add(framing_intent)
+    assert len(collection) == 1
+    collection.remove(framing_intent.id)
+    assert len(collection) == 0
+    assert bool(collection) is False
+
+
+def test_typed_collection_to_list(sample_framing_intent_obj):
+    collection = pyfdl.TypedCollection(pyfdl.FramingIntent)
+    framing_intent = sample_framing_intent_obj
+    collection.add(framing_intent)
+
+    assert collection.to_list() == [framing_intent.to_dict()]
+
+
+def test_typed_collection_contents(sample_framing_intent_obj):
+    collection = pyfdl.TypedCollection(pyfdl.FramingIntent)
+    framing_intent = sample_framing_intent_obj
+    collection.add(framing_intent)
+    assert framing_intent in collection
+    assert framing_intent.id in collection
+    assert [_fi for _fi in collection] == [framing_intent]
+
+
+def test_dimensions_to_dict():
+    dim_1 = pyfdl.Dimensions(width=1.1, height=2.2, dtype=int)
+    assert dim_1.to_dict() == {"width": 1, "height": 2}
+
+    dim_2 = pyfdl.Dimensions(width=1.1, height=2.2, dtype=float)
+    assert dim_2.to_dict() == {"width": 1.1, "height": 2.2}
+
+
+def test_dimensions_scale_by():
+    dim_1 = pyfdl.Dimensions(width=1.1, height=2.2, dtype=int)
+    dim_1.scale_by(2)
+    assert (dim_1.width, dim_1.height) == (2, 4)
+
+    dim_2 = pyfdl.Dimensions(width=1.1, height=2.2, dtype=float)
+    dim_2.scale_by(2)
+    assert (dim_2.width, dim_2.height) == (2.2, 4.4)
+
+    # Check if scaling follows rounding rules
+    dim_3 = pyfdl.Dimensions(width=1.1, height=2.2, dtype=int)
+    dim_3.rounding_strategy = pyfdl.RoundStrategy(**{"even": "whole", "mode": "up"})
+    dim_3.scale_by(2)
+    assert (dim_3.width, dim_3.height) == (3, 5)
+
+
+def test_dimensions_copy():
+    dim_1 = pyfdl.Dimensions(width=1.1, height=2.2, dtype=int)
+    dim_2 = dim_1.copy()
+    assert dim_1 == dim_2
+    assert dim_1.dtype == dim_2.dtype
 
 
 def test_rounding_strategy_validation():
@@ -115,68 +191,30 @@ def test_rounding_strategy_validation():
     assert '"wrong" is not a valid option for "mode".' in str(err.value)
 
 
-def test_rounding_strategy_default_values():
-    rs = pyfdl.RoundStrategy()
-    assert rs.check_required() == ['even', 'mode']
+@pytest.mark.parametrize(
+    'rules,dimensions,dtype,expected',
+    [
+        ({"even": "even", "mode": "up"}, {"width": 19, "height": 79}, int, (20, 80)),
+        ({"even": "even", "mode": "up"}, {"width": 19, "height": 79}, float, (20, 80)),
+        ({"even": "even", "mode": "down"}, {"width": 19, "height": 79}, int, (18, 78)),
+        ({"even": "even", "mode": "down"}, {"width": 19, "height": 79}, float, (18, 78)),
+        ({"even": "even", "mode": "round"}, {"width": 19, "height": 79}, int, (20, 80)),
+        ({"even": "even", "mode": "round"}, {"width": 19, "height": 79}, float, (20, 80)),
+        ({"even": "even", "mode": "round"}, {"width": 19.456, "height": 79.456}, int, (20, 80)),
+        ({"even": "even", "mode": "round"}, {"width": 19.456, "height": 79.456}, float, (20, 80)),
+        ({"even": "whole", "mode": "up"}, {"width": 19.5, "height": 79.5}, int, (20, 80)),
+        ({"even": "whole", "mode": "up"}, {"width": 19.5, "height": 79.5}, float, (20, 80)),
+        ({"even": "whole", "mode": "down"}, {"width": 19.5, "height": 79.5}, int, (19, 79)),
+        ({"even": "whole", "mode": "down"}, {"width": 19.5, "height": 79.5}, float, (19, 79)),
+        ({"even": "whole", "mode": "round"}, {"width": 19.5, "height": 79.5}, int, (20, 80)),
+        ({"even": "whole", "mode": "round"}, {"width": 19.5, "height": 79.5}, float, (20, 80)),
+        ({"even": "whole", "mode": "round"}, {"width": 19.456, "height": 79.456}, int, (19, 79)),
+        ({"even": "whole", "mode": "round"}, {"width": 19.456, "height": 79.456}, float, (19, 79))
+    ]
+)
+def test_rounding_strategy_rounding(rules, dimensions, dtype, expected):
+    rnd = pyfdl.RoundStrategy.from_dict(rules)
+    dim = pyfdl.Dimensions(**dimensions, dtype=dtype)
+    result = rnd.round_dimensions(dim)
 
-    rs.apply_defaults()
-    assert rs.even == 'even'
-    assert rs.mode == 'up'
-    assert rs.check_required() == []
-
-
-def test_rounding_strategy_from_dict(sample_rounding_strategy):
-    rs = pyfdl.RoundStrategy.from_dict(sample_rounding_strategy)
-    assert isinstance(rs, pyfdl.RoundStrategy)
-    assert rs.even == "even"
-    assert rs.mode == "up"
-
-
-def test_typed_collection(sample_framing_intent, sample_framing_intent_kwargs):
-    td = pyfdl.TypedCollection(pyfdl.FramingIntent)
-    fi = pyfdl.FramingIntent.from_dict(sample_framing_intent)
-    td.add(fi)
-
-    assert td.to_list() == [fi.to_dict()]
-    assert td.ids == [f"{fi.id}"]
-
-    assert fi in td
-    assert fi.id in td
-    assert td.get(fi.id) == fi
-    assert [_fi for _fi in td] == [fi]
-
-    td.remove(fi.id)
-    assert len(td) == 0
-    assert bool(td) is False
-
-    with pytest.raises(TypeError) as err:
-        td.add(pyfdl.Point(x=10, y=10))
-
-    assert "This container does not accept items of type:" in str(err.value)
-
-    # Test missing id
-    fi1 = pyfdl.FramingIntent()
-    with pytest.raises(pyfdl.FDLError) as err:
-        td.add(fi1)
-
-    assert f"Item must have a valid identifier (\"id\")" in str(err.value)
-
-    # Test duplicate id's
-    td.add(fi)
-    kwargs = sample_framing_intent_kwargs.copy()
-    kwargs['label'] = 'somethingelse'
-    fi2 = pyfdl.FramingIntent(**kwargs)
-    with pytest.raises(pyfdl.FDLError) as err:
-        td.add(fi2)
-
-    assert f"FramingIntent.id (\"{fi.id}\") already exists." in str(err.value)
-
-    # Test object with alternative id_attribute
-    td1 = pyfdl.TypedCollection(pyfdl.Context)
-    ctx1 = pyfdl.Context(label='context1')
-    td1.add(ctx1)
-
-    with pytest.raises(pyfdl.FDLError) as err:
-        td1.add(ctx1)
-
-    assert f"Context.label (\"{ctx1.label}\") already exists." in str(err)
+    assert (result.width, result.height) == expected
