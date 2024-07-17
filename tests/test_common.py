@@ -40,6 +40,9 @@ def test_base_apply_defaults(base_subclass):
     assert obj.id is None
     obj.apply_defaults()
     assert obj.id == "my_id"
+    assert isinstance(obj.instance, pyfdl.RoundStrategy)
+    assert isinstance(obj.callable, str)
+    assert obj.self_reference == obj.id
 
 
 def test_base_check_required(base_subclass):

@@ -19,7 +19,12 @@ def base_subclass():
         # List of required attributes
         required = ["id", "string.point"]
         # Default values for attributes
-        defaults = {"id": "my_id"}
+        defaults = {
+            "id": "my_id",
+            "callable": pyfdl.Base.generate_uuid,
+            "instance": pyfdl.RoundStrategy,
+            "self_reference": "self.id"
+        }
 
         def __init__(
                 self,
@@ -28,7 +33,10 @@ def base_subclass():
                 point=None,
                 dimensions=None,
                 collection=None,
-                round_=None
+                round_=None,
+                callable_=None,
+                instance=None,
+                self_reference=None
         ):
             super().__init__()
             self.id = id_
@@ -37,6 +45,9 @@ def base_subclass():
             self.dimensions = dimensions
             self.collection = collection or pyfdl.TypedCollection(pyfdl.FramingIntent)
             self.round = round_
+            self.callable = callable_
+            self.instance = instance
+            self.self_reference = self_reference
 
             # Make sure we have a rounding strategy
             self.set_rounding_strategy(pyfdl.DEFAULT_ROUNDING_STRATEGY)
