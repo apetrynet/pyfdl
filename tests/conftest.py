@@ -98,12 +98,6 @@ def sample_dimensions_int():
 
 
 @pytest.fixture
-def sample_point() -> dict:
-    point = {"x": 196, "y": 288}
-    return point
-
-
-@pytest.fixture
 def sample_header() -> dict:
     header = {
         "uuid": "0E6D12BB-5D9A-461C-803E-5696E9CC8989",
@@ -157,6 +151,20 @@ def sample_framing_intent_kwargs() -> dict:
         "protection": 0.088
     }
     return framing_intent
+
+
+@pytest.fixture
+def sample_framing_decision_obj():
+    fd = pyfdl.FramingDecision(
+        label="1.78-1 Framing",
+        id_="20220310-FDLSMP03",
+        framing_intent_id="FDLSMP03",
+        dimensions=pyfdl.Dimensions(width=4728, height=3456),
+        anchor_point=pyfdl.Point(x=228, y=432),
+        protection_dimensions=pyfdl.Dimensions(width=5184, height=3790),
+        protection_anchor_point=pyfdl.Point(x=0, y=265)
+    )
+    return fd
 
 
 @pytest.fixture

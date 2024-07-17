@@ -29,10 +29,7 @@ class FramingIntent(Base):
         return self._aspect_ratio
 
     @aspect_ratio.setter
-    def aspect_ratio(self, dim: Union[Dimensions, dict, None]):
-        if isinstance(dim, dict):
-            dim = Dimensions.from_dict(dim)
-
+    def aspect_ratio(self, dim: Union[Dimensions, None]):
         self._aspect_ratio = dim
         if dim is not None:
             self._aspect_ratio.dtype = int

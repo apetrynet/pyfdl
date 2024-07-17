@@ -69,10 +69,7 @@ class Canvas(Base):
         return self._dimensions
 
     @dimensions.setter
-    def dimensions(self, dim: Union[Dimensions, dict, None]):
-        if isinstance(dim, dict):
-            dim = Dimensions.from_dict(dim)
-
+    def dimensions(self, dim: Union[Dimensions, None]):
         self._dimensions = dim
         if dim is not None:
             self._dimensions.dtype = int
@@ -82,10 +79,7 @@ class Canvas(Base):
         return self._effective_dimensions
 
     @effective_dimensions.setter
-    def effective_dimensions(self, dim: Union[Dimensions, dict, None]):
-        if isinstance(dim, dict):
-            dim = Dimensions.from_dict(dim)
-
+    def effective_dimensions(self, dim: Union[Dimensions, None]):
         self._effective_dimensions = dim
         if dim is not None:
             self._effective_dimensions.dtype = int
@@ -95,21 +89,17 @@ class Canvas(Base):
         return self._photosite_dimensions
 
     @photosite_dimensions.setter
-    def photosite_dimensions(self, dim: Union[Dimensions, dict, None]):
-        if isinstance(dim, dict):
-            dim = Dimensions.from_dict(dim)
-
+    def photosite_dimensions(self, dim: Union[Dimensions, None]):
         self._photosite_dimensions = dim
+        if dim is not None:
+            self._photosite_dimensions.dtype = int
 
     @property
     def physical_dimensions(self) -> Union[Dimensions, None]:
         return self._physical_dimensions
 
     @physical_dimensions.setter
-    def physical_dimensions(self, dim: Union[Dimensions, dict, None]):
-        if isinstance(dim, dict):
-            dim = Dimensions.from_dict(dim)
-
+    def physical_dimensions(self, dim: Union[Dimensions, None]):
         self._physical_dimensions = dim
 
     def place_framing_intent(self, framing_intent: FramingIntent) -> str:

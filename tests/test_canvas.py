@@ -3,65 +3,58 @@ import pytest
 import pyfdl
 
 
-def test_canvas_instance_from_dict(sample_canvas):
-    canvas = pyfdl.Canvas.from_dict(sample_canvas)
-    assert isinstance(canvas, pyfdl.Canvas)
-    assert canvas.to_dict() == sample_canvas
+def test_dimensions_int():
+    dim = pyfdl.Dimensions(width=1920, height=1080)
+    assert dim.dtype == float
+    canvas = pyfdl.Canvas()
+
+    # property method makes sure dimensions have dtype int
+    canvas.dimensions = dim
+    assert dim.dtype == int
 
 
-def test_canvas_instance_from_kwargs(sample_canvas, sample_canvas_kwargs):
-    canvas = pyfdl.Canvas(**sample_canvas_kwargs)
-    assert isinstance(canvas, pyfdl.Canvas)
-    assert canvas.to_dict() == sample_canvas
-    assert canvas.check_required() == []
-
-
-def test_canvas_linked_requirements(sample_canvas_kwargs):
-    # check linked requirements "effective_dimensions.effective_anchor_point"
-    kwargs = sample_canvas_kwargs.copy()
-    kwargs.pop('effective_anchor_point')
-    canvas = pyfdl.Canvas(**kwargs)
-    assert canvas.check_required() == ['effective_anchor_point']
-    del canvas
-
-    kwargs.pop('effective_dimensions')
-    canvas = pyfdl.Canvas(**kwargs)
-    assert canvas.check_required() == []
-
-
-def test_source_canvas_id(sample_canvas_kwargs, sample_canvas):
+def test_source_canvas_id(sample_canvas_obj):
     fdl = pyfdl.FDL()
     fdl.apply_defaults()
 
-    canvas1 = pyfdl.Canvas.from_dict(sample_canvas)
-
-    fdl.place_canvas_in_context(context_label="context1", canvas=canvas1)
+    fdl.place_canvas_in_context(context_label="context1", canvas=sample_canvas_obj)
     assert fdl.validate() is None
+    fdl.contexts[0].canvases.remove(sample_canvas_obj.id)
 
-    canvas2 = pyfdl.Canvas.from_dict(sample_canvas)
-    canvas2.id = "456"
-    canvas2.source_canvas_id = "123"
-
-    fdl.place_canvas_in_context(context_label="context2", canvas=canvas2)
+    sample_canvas_obj.id = "456"
+    sample_canvas_obj.source_canvas_id = "123"
+    fdl.place_canvas_in_context(context_label="context2", canvas=sample_canvas_obj)
 
     with pytest.raises(pyfdl.FDLValidationError) as err:
         fdl.validate()
 
-    assert f'{canvas2.source_canvas_id} (canvas.source_canvas_id) not found in ' in str(err)
+    assert f'{sample_canvas_obj.source_canvas_id} (canvas.source_canvas_id) not found in ' in str(err)
 
 
-def test_place_framing_intent(sample_framing_intent, sample_canvas, sample_framing_decision):
-    intent = pyfdl.FramingIntent.from_dict(sample_framing_intent)
-    canvas = pyfdl.Canvas.from_dict(sample_canvas)
+def test_place_framing_intent(sample_framing_intent_obj, sample_canvas_obj, sample_framing_decision_obj):
+    intent = sample_framing_intent_obj
+    canvas = sample_canvas_obj
 
     decision_id = canvas.place_framing_intent(intent)
     assert decision_id == f'{canvas.id}-{intent.id}'
 
     decision = canvas.framing_decisions.get(decision_id)
-    facit_decision = pyfdl.FramingDecision.from_dict(sample_framing_decision)
-    assert decision == facit_decision
+    assert decision == sample_framing_decision_obj
 
 
+def test_get_dimensions(sample_canvas_obj):
+    assert sample_canvas_obj.get_dimensions() == (
+        sample_canvas_obj.effective_dimensions,
+        sample_canvas_obj.effective_anchor_point
+    )
+    sample_canvas_obj.effective_dimensions = None
+    assert sample_canvas_obj.get_dimensions() == (
+        sample_canvas_obj.dimensions,
+        pyfdl.Point(x=0, y=0)
+    )
+
+
+# TODO: continue here
 def test_from_canvas_template(sample_canvas, sample_framing_decision, sample_canvas_template):
     canvas = pyfdl.Canvas.from_dict(sample_canvas)
     canvas_template = pyfdl.CanvasTemplate.from_dict(sample_canvas_template)

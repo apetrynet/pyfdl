@@ -29,7 +29,7 @@ class FramingDecision(Base):
             framing_intent_id: str = None,
             dimensions: Dimensions = None,
             anchor_point: Point = None,
-            protection_dimensions: Dimensions= None,
+            protection_dimensions: Dimensions = None,
             protection_anchor_point: Point = None
     ):
         super().__init__()
@@ -50,10 +50,7 @@ class FramingDecision(Base):
         return self._dimensions
 
     @dimensions.setter
-    def dimensions(self, dim: Union[Dimensions, dict, None]):
-        if isinstance(dim, dict):
-            dim = Dimensions.from_dict(dim)
-
+    def dimensions(self, dim: Union[Dimensions, None]):
         self._dimensions = dim
 
     @property
@@ -61,10 +58,7 @@ class FramingDecision(Base):
         return self._protection_dimensions
 
     @protection_dimensions.setter
-    def protection_dimensions(self, dim: Union[Dimensions, dict, None]):
-        if isinstance(dim, dict):
-            dim = Dimensions.from_dict(dim)
-
+    def protection_dimensions(self, dim: Union[Dimensions, None]):
         self._protection_dimensions = dim
 
     @classmethod
