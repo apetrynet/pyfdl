@@ -107,12 +107,15 @@ def test_place_canvas_in_context(sample_canvas_obj, sample_context_obj):
     assert new_context.canvases.get(sample_canvas_obj.id) == sample_canvas_obj
 
 
-def test_validate(sample_framing_intent_obj, sample_canvas_obj):
+def test_validate_missing_requirements(sample_framing_intent_obj, sample_canvas_obj):
     fdl = pyfdl.FDL()
     # This raises FDLError as  header is missing required attributes
     with pytest.raises(pyfdl.FDLError):
         fdl.validate()
 
+
+def test_validate_schema_rule(sample_framing_intent_obj, sample_canvas_obj):
+    fdl = pyfdl.FDL()
     fdl.apply_defaults()
 
     # This is id is too long and will fail schema validation
@@ -122,12 +125,22 @@ def test_validate(sample_framing_intent_obj, sample_canvas_obj):
     with pytest.raises(pyfdl.FDLValidationError):
         fdl.validate()
 
+
+def test_validate_missing_source_framing_intent(sample_framing_intent_obj, sample_canvas_obj):
+    fdl = pyfdl.FDL()
+    fdl.apply_defaults()
+
     # Source framing intent of framing decision is not in framing intents and will fail validation
     fdl.place_canvas_in_context(context_label="test", canvas=sample_canvas_obj)
-    sample_canvas_obj.place_framing_intent(framing_intent)
-    fdl.framing_intents.remove(framing_intent.id)
+    sample_canvas_obj.place_framing_intent(sample_framing_intent_obj)
     with pytest.raises(pyfdl.FDLValidationError):
         fdl.validate()
+
+
+def test_validate_missing_source_canvas_id(sample_framing_intent_obj, sample_canvas_obj):
+    fdl = pyfdl.FDL()
+    fdl.apply_defaults()
+    fdl.place_canvas_in_context(context_label="test", canvas=sample_canvas_obj)
 
     # Change source canvas id to provoke validation error
     sample_canvas_obj.source_canvas_id = "shouldnotbethere"
