@@ -35,7 +35,7 @@ class Base:
             Attributes:
                 attributes: list of attributes described in FDL spec
                 kwarg_map: map attribute names that clash with reserved builtin python functions to safe alternatives
-                    like: (id -> id_) and (uuid -> _uuid)
+                    like: (id -> id_) and (uuid -> uuid_)
                 object_map: map attributes to custom classes
                 required: list of required attributes.
                     Supports linked attributes like: "effective_dimensions.effective_anchor_point" where

@@ -28,7 +28,7 @@ class FDL(Base):
         'contexts',
         'canvas_templates'
     ]
-    kwarg_map = {'uuid': '_uuid'}
+    kwarg_map = {'uuid': 'uuid_'}
     required = ['uuid', 'version']
     defaults = {'uuid': Base.generate_uuid, 'fdl_creator': 'PyFDL', 'version': FDL_SCHEMA_VERSION}
     object_map = {
@@ -39,7 +39,7 @@ class FDL(Base):
 
     def __init__(
             self,
-            _uuid: str = None,
+            uuid_: str = None,
             version: dict = None,
             fdl_creator: str = None,
             default_framing_intent: str = None,
@@ -48,7 +48,7 @@ class FDL(Base):
             canvas_templates: TypedCollection = None
     ):
         super().__init__()
-        self.uuid = _uuid
+        self.uuid = uuid_
         self.version = version
         self.fdl_creator = fdl_creator
         self.framing_intents = framing_intents or TypedCollection(FramingIntent)
@@ -84,7 +84,8 @@ class FDL(Base):
         Returns:
             Header: based on attributes
         """
-        header = Header.from_dict(self.to_dict())
+        header = Header(uuid_=self.uuid, version=self.version, fdl_creator=self.fdl_creator,
+                        default_framing_intent=self.default_framing_intent)
 
         return header
 

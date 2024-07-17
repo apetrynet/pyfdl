@@ -106,7 +106,7 @@ def sample_header() -> dict:
 @pytest.fixture
 def sample_header_kwargs() -> dict:
     header = {
-        "_uuid": "0E6D12BB-5D9A-461C-803E-5696E9CC8989",
+        "uuid_": "0E6D12BB-5D9A-461C-803E-5696E9CC8989",
         "version": {"major": 0, "minor": 1},
         "fdl_creator": "ASC FDL Committee",
         "default_framing_intent": "FDLSMP03"
@@ -177,6 +177,24 @@ def sample_framing_decision_kwargs() -> dict:
 
 
 @pytest.fixture
+def sample_canvas_obj():
+    canvas = pyfdl.Canvas(
+        label="Open Gate RAW",
+        id_="20220310",
+        source_canvas_id="20220310",
+        dimensions=pyfdl.Dimensions(width=5184, height=4320),
+        effective_dimensions=pyfdl.Dimensions(width=5184, height=4320),
+        effective_anchor_point=pyfdl.Point(x=0, y=0),
+        photosite_dimensions=pyfdl.Dimensions(width=5184, height=4320),
+        physical_dimensions=pyfdl.Dimensions(width=25.92, height=21.60),
+        anamorphic_squeeze=1.30,
+        framing_decisions=pyfdl.TypedCollection(pyfdl.FramingDecision)
+    )
+
+    return canvas
+
+
+@pytest.fixture
 def sample_canvas() -> dict:
     canvas = {
         "label": "Open Gate RAW",
@@ -210,6 +228,17 @@ def sample_canvas_kwargs() -> dict:
     }
 
     return canvas
+
+
+@pytest.fixture
+def sample_context_obj():
+    ctx = pyfdl.Context(
+        label="PanavisionDXL2",
+        context_creator="ASC FDL Committee",
+        canvases=pyfdl.TypedCollection(pyfdl.Canvas)
+    )
+
+    return ctx
 
 
 @pytest.fixture
