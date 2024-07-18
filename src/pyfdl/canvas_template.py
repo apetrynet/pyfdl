@@ -73,14 +73,14 @@ class CanvasTemplate(Base):
         self.round = round_
 
     @property
-    def dimensions(self) -> Union[Dimensions, None]:
-        return self._dimensions
+    def target_dimensions(self) -> Union[Dimensions, None]:
+        return self._target_dimensions
 
-    @dimensions.setter
-    def dimensions(self, dim: Union[Dimensions, None]):
-        self._dimensions = dim
+    @target_dimensions.setter
+    def target_dimensions(self, dim: Union[Dimensions, None]):
+        self._target_dimensions = dim
         if dim is not None:
-            self._dimensions.dtype = int
+            self._target_dimensions.dtype = int
 
     @property
     def maximum_dimensions(self) -> Union[Dimensions, None]:
