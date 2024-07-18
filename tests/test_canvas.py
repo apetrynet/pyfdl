@@ -54,11 +54,10 @@ def test_get_dimensions(sample_canvas_obj):
     )
 
 
-# TODO: continue here
-def test_from_canvas_template(sample_canvas, sample_framing_decision, sample_canvas_template):
-    canvas = pyfdl.Canvas.from_dict(sample_canvas)
-    canvas_template = pyfdl.CanvasTemplate.from_dict(sample_canvas_template)
-    framing_decision = pyfdl.FramingDecision.from_dict(sample_framing_decision)
+def test_from_canvas_template(sample_canvas_obj, sample_framing_decision_obj, sample_canvas_template_obj):
+    canvas = sample_canvas_obj
+    canvas_template = sample_canvas_template_obj
+    framing_decision = sample_framing_decision_obj
     new_canvas = pyfdl.Canvas.from_canvas_template(
         canvas_template,
         canvas,
@@ -67,3 +66,11 @@ def test_from_canvas_template(sample_canvas, sample_framing_decision, sample_can
 
     assert isinstance(new_canvas, pyfdl.Canvas)
     assert new_canvas.dimensions != canvas.dimensions
+
+
+def test_from_adjust_anchor_point(sample_canvas_obj):
+    canvas = sample_canvas_obj
+    canvas.effective_anchor_point = pyfdl.Point(x=10, y=10)
+    canvas.adjust_effective_anchor_point()
+
+    assert canvas.effective_anchor_point == pyfdl.Point(x=0, y=0)

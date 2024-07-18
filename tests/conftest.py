@@ -56,7 +56,7 @@ def base_subclass():
 
 
 @pytest.fixture
-def base_class_kwargs(sample_framing_intent, sample_framing_intent_obj, sample_rounding_strategy_obj):
+def base_class_kwargs(sample_framing_intent_obj, sample_rounding_strategy_obj):
     collection = pyfdl.TypedCollection(pyfdl.FramingIntent)
     collection.add(sample_framing_intent_obj)
     kwargs = {
@@ -132,28 +132,6 @@ def sample_framing_intent_obj():
 
 
 @pytest.fixture
-def sample_framing_intent() -> dict:
-    framing_intent = {
-        "label": "1.78-1 Framing",
-        "id": "FDLSMP03",
-        "aspect_ratio": {"width": 16, "height": 9},
-        "protection": 0.088
-    }
-    return framing_intent
-
-
-@pytest.fixture
-def sample_framing_intent_kwargs() -> dict:
-    framing_intent = {
-        "label": "1.78-1 Framing",
-        "id_": "FDLSMP03",
-        "aspect_ratio": {"width": 16, "height": 9},
-        "protection": 0.088
-    }
-    return framing_intent
-
-
-@pytest.fixture
 def sample_framing_decision_obj():
     fd = pyfdl.FramingDecision(
         label="1.78-1 Framing",
@@ -214,42 +192,6 @@ def sample_canvas_obj():
 
 
 @pytest.fixture
-def sample_canvas() -> dict:
-    canvas = {
-        "label": "Open Gate RAW",
-        "id": "20220310",
-        "source_canvas_id": "20220310",
-        "dimensions": {"width": 5184, "height": 4320},
-        "effective_dimensions": {"width": 5184, "height": 4320},
-        "effective_anchor_point": {"x": 0, "y": 0},
-        "photosite_dimensions": {"width": 5184, "height": 4320},
-        "physical_dimensions": {"width": 25.92, "height": 21.60},
-        "anamorphic_squeeze": 1.30,
-        "framing_decisions": []
-    }
-
-    return canvas
-
-
-@pytest.fixture
-def sample_canvas_kwargs() -> dict:
-    canvas = {
-        "label": "Open Gate RAW",
-        "id_": "20220310",
-        "source_canvas_id": "20220310",
-        "dimensions": {"width": 5184, "height": 4320},
-        "effective_dimensions": {"width": 5184, "height": 4320},
-        "effective_anchor_point": {"x": 0, "y": 0},
-        "photosite_dimensions": {"width": 5184, "height": 4320},
-        "physical_dimensions": {"width": 25.92, "height": 21.60},
-        "anamorphic_squeeze": 1.30,
-        "framing_decisions": []
-    }
-
-    return canvas
-
-
-@pytest.fixture
 def sample_context_obj():
     ctx = pyfdl.Context(
         label="PanavisionDXL2",
@@ -268,6 +210,23 @@ def sample_context() -> dict:
         "canvases": []
     }
     return ctx
+
+
+@pytest.fixture
+def sample_canvas_template_obj():
+    canvas_template = pyfdl.CanvasTemplate(
+        label="VFX Pull",
+        id_="VX220310",
+        target_dimensions=pyfdl.Dimensions(width=4096, height=2304),
+        target_anamorphic_squeeze=1.00,
+        fit_source="framing_decision.dimensions",
+        fit_method="width",
+        alignment_method_vertical="center",
+        alignment_method_horizontal="center",
+        preserve_from_source_canvas="canvas.dimensions",
+        round_=pyfdl.RoundStrategy(even="even", mode="up")
+    )
+    return canvas_template
 
 
 @pytest.fixture
@@ -307,8 +266,3 @@ def sample_canvas_template_kwargs() -> dict:
 @pytest.fixture
 def sample_rounding_strategy_obj():
     return pyfdl.RoundStrategy(even="even", mode="up")
-
-
-@pytest.fixture
-def sample_rounding_strategy() -> dict:
-    return {"even": "even", "mode": "up"}
