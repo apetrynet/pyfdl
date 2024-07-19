@@ -295,9 +295,9 @@ class CanvasTemplate(Base):
                 height *= adjustment_scale
                 width *= adjustment_scale
 
-        size = type(self.target_dimensions)(width=width, height=height)
+        size = Dimensions(width=width, height=height, dtype=self.target_dimensions.dtype)
         # TODO consider returning crop True/False
-        #  or at least coordinates outside of frame like data window vs display window
+        #  or at least coordinates outside of frame like data window vs display window in EXR
 
         return size
 
