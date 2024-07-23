@@ -178,3 +178,46 @@ def test_fit_source_to_target(sample_canvas_template_obj, fit_method, target_dim
     template.fit_method = fit_method
 
     assert template.fit_source_to_target(pyfdl.Dimensions(*source_dim), source_sqz) == pyfdl.Dimensions(*expected)
+
+
+@pytest.mark.parametrize(
+    'fit_source,preserve,expected',
+    [
+        (
+            "framing_decision.dimensions",
+            "canvas.dimensions",
+            [
+                "framing_decision.dimensions",
+                "framing_decision.protection_dimensions",
+                "canvas.effective_dimensions",
+                "canvas.dimensions"
+            ]
+        ),
+        (
+                "framing_decision.dimensions",
+                "framing_decision.dimensions",
+                [
+                    "framing_decision.dimensions"
+                ]
+        ),
+        (
+                "framing_decision.dimensions",
+                "none",
+                [
+                    "framing_decision.dimensions"
+                ]
+        ),
+        (
+                "framing_decision.dimensions",
+                None,
+                [
+                    "framing_decision.dimensions"
+                ]
+        )
+    ]
+)
+def test_get_transfer_keys(sample_canvas_template_obj, fit_source, preserve, expected):
+    template = sample_canvas_template_obj
+    template.fit_source = fit_source
+    template.preserve_from_source_canvas = preserve
+    assert template.get_transfer_keys() == expected

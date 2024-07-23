@@ -259,7 +259,6 @@ class CanvasTemplate(Base):
         Returns:
             size:
         """
-        # TODO: Add tests to see if this method actually does the right thing
 
         scale_factor = self.get_scale_factor(source_dimensions, source_anamorphic_squeeze)
         source_width = self.get_desqueezed_width(source_dimensions.width, source_anamorphic_squeeze)
