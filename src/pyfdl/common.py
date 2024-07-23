@@ -364,7 +364,7 @@ class Dimensions(Base):
         return iter((self.width, self.height))
 
     def __lt__(self, other):
-        return self.width > other.width or self.height > other.height
+        return self.width < other.width or self.height < other.height
 
     def __eq__(self, other):
         return self.width == other.width and self.height == other.height
