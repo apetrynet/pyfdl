@@ -181,6 +181,48 @@ def test_dimensions_copy():
     assert dim_1.dtype == dim_2.dtype
 
 
+@pytest.mark.parametrize(
+    'source_dim,compare_dim,expected',
+    [
+        ((1920, 1080), (1921, 1080), True),
+        ((1920, 1080), (1920, 1081), True),
+        ((1920, 1080), (1921, 1081), True),
+        ((1920, 1080), (1919, 1080), False),
+        ((1920, 1080), (1920, 1079), False),
+        ((1920, 1080), (1920, 1080), False)
+    ]
+)
+def test_dimensions_lt(source_dim, compare_dim, expected):
+    assert bool(pyfdl.Dimensions(*source_dim) < pyfdl.Dimensions(*compare_dim)) is expected
+
+
+@pytest.mark.parametrize(
+    'source_dim,compare_dim,expected',
+    [
+        ((1920, 1080), (1921, 1080), False),
+        ((1920, 1080), (1920, 1081), False),
+        ((1920, 1080), (1920, 1080), True)
+    ]
+)
+def test_dimensions_eq(source_dim, compare_dim, expected):
+    assert bool(pyfdl.Dimensions(*source_dim) == pyfdl.Dimensions(*compare_dim)) is expected
+
+
+@pytest.mark.parametrize(
+    'source_dim,compare_dim,expected',
+    [
+        ((1920, 1080), (1921, 1080), False),
+        ((1920, 1080), (1920, 1081), False),
+        ((1920, 1080), (1921, 1081), False),
+        ((1920, 1080), (1919, 1080), True),
+        ((1920, 1080), (1920, 1079), True),
+        ((1920, 1080), (1920, 1080), False)
+    ]
+)
+def test_dimensions_gt(source_dim, compare_dim, expected):
+    assert bool(pyfdl.Dimensions(*source_dim) > pyfdl.Dimensions(*compare_dim)) is expected
+
+
 def test_rounding_strategy_validation():
     rs = pyfdl.RoundStrategy()
     with pytest.raises(pyfdl.FDLError) as err:
