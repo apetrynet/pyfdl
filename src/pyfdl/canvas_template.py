@@ -288,18 +288,17 @@ class CanvasTemplate(Base):
             )
 
         elif self.fit_method == 'fit_all':
-            height = source_dimensions.height * scale_factor
             width = source_width * scale_factor
+            height = source_dimensions.height * scale_factor
             if source_dimensions > self.target_dimensions:
                 if width > self.target_dimensions.width:
                     adjustment_scale = self.target_dimensions.width / width
-                    height *= adjustment_scale
-                    width *= adjustment_scale
 
                 else:
                     adjustment_scale = self.target_dimensions.height / height
-                    height *= adjustment_scale
-                    width *= adjustment_scale
+
+                width *= adjustment_scale
+                height *= adjustment_scale
 
         size = Dimensions(width=width, height=height)
         # TODO consider returning crop True/False
