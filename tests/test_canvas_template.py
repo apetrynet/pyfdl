@@ -146,3 +146,35 @@ def test_get_scale_factor(sample_canvas_template_obj, fit_method, target_dim, so
     template.target_dimensions.width, template.target_dimensions.height = target_dim
     template.fit_method = fit_method
     assert template.get_scale_factor(pyfdl.Dimensions(*source_dim), source_sqz) == expected
+
+
+@pytest.mark.parametrize(
+    'fit_method,target_dim,source_dim,source_sqz,expected',
+    [   # Same aspect
+        ('width', (1920, 1080), (960, 540), 1, (1920, 1080)),
+        ('height', (1920, 1080), (960, 540), 1, (1920, 1080)),
+        ('fit_all', (1920, 1080), (960, 540), 1, (1920, 1080)),
+        ('fill', (1920, 1080), (960, 540), 1, (1920, 1080)),
+        # Same aspect, but difference squeeze
+        ('width', (1920, 1080), (480, 540), 2, (1920, 1080)),
+        ('height', (1920, 1080), (480, 540), 2, (1920, 1080)),
+        ('fit_all', (1920, 1080), (480, 540), 2, (1920, 1080)),
+        ('fill', (1920, 1080), (480, 540), 2, (1920, 1080)),
+        # Taller than target
+        ('width', (1920, 1080), (540, 960), 1, (1920, 1080)),
+        ('height', (1920, 1080), (540, 960), 1, (607.5, 1080)),
+        ('fit_all', (1920, 1080), (540, 960), 1, (607.5, 1080)),
+        ('fill', (1920, 1080), (540, 960), 1, (1920, 1080)),
+        # Wider than target
+        ('width', (1920, 1080), (960, 500), 1, (1920, 1000)),
+        ('height', (1920, 1080), (960, 500), 1, (1920, 1080)),
+        ('fit_all', (1920, 1080), (960, 500), 1, (1920, 1000)),
+        ('fill', (1920, 1080), (960, 500), 1, (1920, 1080)),
+    ]
+)
+def test_fit_source_to_target(sample_canvas_template_obj, fit_method, target_dim, source_dim, source_sqz, expected):
+    template = sample_canvas_template_obj
+    template.target_dimensions.width, template.target_dimensions.height = target_dim
+    template.fit_method = fit_method
+
+    assert template.fit_source_to_target(pyfdl.Dimensions(*source_dim), source_sqz) == pyfdl.Dimensions(*expected)
