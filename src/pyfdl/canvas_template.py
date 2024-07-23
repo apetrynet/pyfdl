@@ -288,14 +288,20 @@ class CanvasTemplate(Base):
             )
 
         elif self.fit_method == 'fit_all':
-            height = self.target_dimensions.height
+            height = source_dimensions.height * scale_factor
             width = source_width * scale_factor
-            if width > self.target_dimensions.width:
-                adjustment_scale = self.target_dimensions.width / width
-                height *= adjustment_scale
-                width *= adjustment_scale
+            if source_dimensions > self.target_dimensions:
+                if width > self.target_dimensions.width:
+                    adjustment_scale = self.target_dimensions.width / width
+                    height *= adjustment_scale
+                    width *= adjustment_scale
 
-        size = Dimensions(width=width, height=height, dtype=self.target_dimensions.dtype)
+                else:
+                    adjustment_scale = self.target_dimensions.height / height
+                    height *= adjustment_scale
+                    width *= adjustment_scale
+
+        size = Dimensions(width=width, height=height)
         # TODO consider returning crop True/False
         #  or at least coordinates outside of frame like data window vs display window in EXR
 
