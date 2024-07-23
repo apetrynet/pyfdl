@@ -363,8 +363,14 @@ class Dimensions(Base):
     def __iter__(self):
         return iter((self.width, self.height))
 
+    def __lt__(self, other):
+        return self.width > other.width or self.height > other.height
+
     def __eq__(self, other):
         return self.width == other.width and self.height == other.height
+
+    def __gt__(self, other):
+        return self.width > other.width or self.height > other.height
 
     def __bool__(self):
         return self.width is not None and self.height is not None
