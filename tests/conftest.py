@@ -103,28 +103,6 @@ def sample_dimensions_int():
 
 
 @pytest.fixture
-def sample_header() -> dict:
-    header = {
-        "uuid": "0E6D12BB-5D9A-461C-803E-5696E9CC8989",
-        "version": {"major": 0, "minor": 1},
-        "fdl_creator": "ASC FDL Committee",
-        "default_framing_intent": "FDLSMP03"
-    }
-    return header
-
-
-@pytest.fixture
-def sample_header_kwargs() -> dict:
-    header = {
-        "uuid_": "0E6D12BB-5D9A-461C-803E-5696E9CC8989",
-        "version": {"major": 0, "minor": 1},
-        "fdl_creator": "ASC FDL Committee",
-        "default_framing_intent": "FDLSMP03"
-    }
-    return header
-
-
-@pytest.fixture
 def sample_framing_intent_obj():
     framing_intent = pyfdl.FramingIntent(
         label="1.78-1 Framing",
@@ -147,34 +125,6 @@ def sample_framing_decision_obj():
         protection_dimensions=pyfdl.Dimensions(width=5184, height=3790),
         protection_anchor_point=pyfdl.Point(x=0, y=265)
     )
-    return fd
-
-
-@pytest.fixture
-def sample_framing_decision() -> dict:
-    fd = {
-        "label": "1.78-1 Framing",
-        "id": "20220310-FDLSMP03",
-        "framing_intent_id": "FDLSMP03",
-        "dimensions": {"width": 4728, "height": 3456},
-        "anchor_point": {"x": 228, "y": 432},
-        "protection_dimensions": {"width": 5184, "height": 3790},
-        "protection_anchor_point": {"x": 0, "y": 265}
-    }
-    return fd
-
-
-@pytest.fixture
-def sample_framing_decision_kwargs() -> dict:
-    fd = {
-        "label": "1.78-1 Framing",
-        "id_": "20220310-FDLSMP03",
-        "framing_intent_id": "FDLSMP03",
-        "dimensions": {"width": 4728, "height": 3456},
-        "anchor_point": {"x": 228, "y": 432},
-        "protection_dimensions": {"width": 5184, "height": 3790},
-        "protection_anchor_point": {"x": 0, "y": 265}
-    }
     return fd
 
 
@@ -208,16 +158,6 @@ def sample_context_obj():
 
 
 @pytest.fixture
-def sample_context() -> dict:
-    ctx = {
-        "label": "PanavisionDXL2",
-        "context_creator": "ASC FDL Committee",
-        "canvases": []
-    }
-    return ctx
-
-
-@pytest.fixture
 def sample_canvas_template_obj():
     canvas_template = pyfdl.CanvasTemplate(
         label="VFX Pull",
@@ -231,40 +171,6 @@ def sample_canvas_template_obj():
         preserve_from_source_canvas="canvas.dimensions",
         round_=pyfdl.RoundStrategy(even="even", mode="up")
     )
-    return canvas_template
-
-
-@pytest.fixture
-def sample_canvas_template() -> dict:
-    canvas_template = {
-        "label": "VFX Pull",
-        "id": "VX220310",
-        "target_dimensions": {"width": 4096, "height": 2304},
-        "target_anamorphic_squeeze": 1.00,
-        "fit_source": "framing_decision.dimensions",
-        "fit_method": "width",
-        "alignment_method_vertical": "center",
-        "alignment_method_horizontal": "center",
-        "preserve_from_source_canvas": "canvas.dimensions",
-        "round": {"even": "even", "mode": "up"}
-    }
-    return canvas_template
-
-
-@pytest.fixture
-def sample_canvas_template_kwargs() -> dict:
-    canvas_template = {
-        "label": "VFX Pull",
-        "id_": "VX220310",
-        "target_dimensions": {"width": 4096, "height": 2304},
-        "target_anamorphic_squeeze": 1.00,
-        "fit_source": "framing_decision.dimensions",
-        "fit_method": "width",
-        "alignment_method_vertical": "center",
-        "alignment_method_horizontal": "center",
-        "preserve_from_source_canvas": "canvas.dimensions",
-        "round_": {"even": "even", "mode": "up"}
-    }
     return canvas_template
 
 
