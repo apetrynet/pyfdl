@@ -2,6 +2,11 @@ import pytest
 import pyfdl
 
 
+@pytest.fixture(autouse=True)
+def consistent_rounding():
+    pyfdl.Base.set_rounding_strategy(pyfdl.DEFAULT_ROUNDING_STRATEGY)
+
+
 @pytest.fixture(scope="function")
 def base_subclass():
     class BaseSubclass(pyfdl.Base):

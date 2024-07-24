@@ -137,10 +137,10 @@ class FramingDecision(Base):
         """
 
         # TODO check if anchor point is shifted before centering
-        _, active_anchor_point = canvas.get_dimensions()
+        active_dimensions, active_anchor_point = canvas.get_dimensions()
 
         offset_point = self.protection_anchor_point or active_anchor_point
-        offset_dimensions = self.protection_dimensions or self.dimensions
+        offset_dimensions = self.protection_dimensions or active_dimensions
 
         x = offset_point.x
         y = offset_point.y
