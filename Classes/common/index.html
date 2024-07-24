@@ -269,7 +269,7 @@ created by a canvas templates</p>
 
 
 <h2 id="pyfdl.Base" class="doc doc-heading">
-              <code class="highlight language-python">pyfdl.Base(*args, **kwargs)</code>
+              <code class="highlight language-python">pyfdl.Base()</code>
 
 </h2>
 
@@ -279,36 +279,6 @@ created by a canvas templates</p>
 
       <p>Base class not to be instanced directly.</p>
 
-
-<table class="field-list">
-  <colgroup>
-    <col class="field-name" />
-    <col class="field-body" />
-  </colgroup>
-  <tbody valign="top">
-    <tr class="field">
-      <th class="field-name">Parameters:</th>
-      <td class="field-body">
-        <ul class="first simple">
-            <li>
-              <b><code>*args</code></b>
-              –
-              <div class="doc-md-description">
-                
-              </div>
-            </li>
-            <li>
-              <b><code>**kwargs</code></b>
-              –
-              <div class="doc-md-description">
-                
-              </div>
-            </li>
-        </ul>
-      </td>
-    </tr>
-  </tbody>
-</table>
 
 <table class="field-list">
   <colgroup>
@@ -332,7 +302,7 @@ created by a canvas templates</p>
               –
               <div class="doc-md-description">
                 <p>map attribute names that clash with reserved builtin python functions to safe alternatives
-like: (id -&gt; id_) and (uuid -&gt; _uuid)</p>
+like: (id -&gt; id_) and (uuid -&gt; uuid_)</p>
               </div>
             </li>
             <li>
@@ -552,7 +522,7 @@ Passing <code>None</code> to the <code>rule</code> argument will disable all rou
             <li>
               <b><code>rules</code></b>
                   (<code><span title="typing.Union">Union</span>[dict, None]</code>, default:
-                      <code><a class="autorefs autorefs-internal" title="pyfdl.base.DEFAULT_ROUNDING_STRATEGY" href="#pyfdl.DEFAULT_ROUNDING_STRATEGY">DEFAULT_ROUNDING_STRATEGY</a></code>
+                      <code><a class="autorefs autorefs-internal" title="pyfdl.common.DEFAULT_ROUNDING_STRATEGY" href="#pyfdl.DEFAULT_ROUNDING_STRATEGY">DEFAULT_ROUNDING_STRATEGY</a></code>
 )
               –
               <div class="doc-md-description">
@@ -883,7 +853,7 @@ In addition, a strict control of unique id's is enforced.</p>
 
     <div class="doc doc-contents first">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.base.Base" href="#pyfdl.Base">Base</a></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.common.Base" href="#pyfdl.Base">Base</a></code></p>
 
 
       <p>Dimensions may be either <code>ints</code> or <code>floats</code>. You may pass the desired data type at instantiation.
@@ -970,7 +940,7 @@ to them</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-<b><code>copy</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.base.Dimensions" href="#pyfdl.Dimensions">Dimensions</a></code>
+<b><code>copy</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.common.Dimensions" href="#pyfdl.Dimensions">Dimensions</a></code>
 )              –
               <div class="doc-md-description">
                 <p>of these dimensions</p>
@@ -1046,7 +1016,7 @@ to them</p>
 
     <div class="doc doc-contents first">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.base.Base" href="#pyfdl.Base">Base</a></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.common.Base" href="#pyfdl.Base">Base</a></code></p>
 
 
       <p>Point properly formatted</p>
@@ -1116,7 +1086,7 @@ to them</p>
 
     <div class="doc doc-contents first">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.base.Base" href="#pyfdl.Base">Base</a></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.common.Base" href="#pyfdl.Base">Base</a></code></p>
 
 
       <p>Describes how to handle rounding canvas dimensions when applying a
@@ -1223,7 +1193,7 @@ to them</p>
         <ul class="first simple">
             <li>
               <b><code>dimensions</code></b>
-                  (<code><a class="autorefs autorefs-internal" title="pyfdl.base.Dimensions" href="#pyfdl.Dimensions">Dimensions</a></code>)
+                  (<code><a class="autorefs autorefs-internal" title="pyfdl.common.Dimensions" href="#pyfdl.Dimensions">Dimensions</a></code>)
               –
               <div class="doc-md-description">
                 
@@ -1246,7 +1216,7 @@ to them</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-<b><code>dimensions</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.base.Dimensions" href="#pyfdl.Dimensions">Dimensions</a></code>
+<b><code>dimensions</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.common.Dimensions" href="#pyfdl.Dimensions">Dimensions</a></code>
 )              –
               <div class="doc-md-description">
                 <p>rounded based on rules</p>
