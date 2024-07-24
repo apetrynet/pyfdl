@@ -5,19 +5,19 @@ from pyfdl import FDL_SCHEMA_VERSION, Base
 
 class Header(Base):
     attributes = ['uuid', 'version', 'fdl_creator', 'default_framing_intent']
-    kwarg_map = {'uuid': '_uuid'}
+    kwarg_map = {'uuid': 'uuid_'}
     required = ['uuid', 'version']
     defaults = {'uuid': Base.generate_uuid, 'fdl_creator': 'PyFDL', 'version': FDL_SCHEMA_VERSION}
 
     def __init__(
             self,
-            _uuid: str = None,
+            uuid_: str = None,
             version: dict = None,
             fdl_creator: str = None,
             default_framing_intent: str = None
     ):
         super().__init__()
-        self.uuid = _uuid
+        self.uuid = uuid_
         self.version = version
         self.fdl_creator = fdl_creator
         self.default_framing_intent = default_framing_intent

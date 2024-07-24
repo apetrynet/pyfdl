@@ -73,27 +73,21 @@ class CanvasTemplate(Base):
         self.round = round_
 
     @property
-    def dimensions(self) -> Union[Dimensions, None]:
-        return self._dimensions
+    def target_dimensions(self) -> Union[Dimensions, None]:
+        return self._target_dimensions
 
-    @dimensions.setter
-    def dimensions(self, dim: Union[Dimensions, dict, None]):
-        if isinstance(dim, dict):
-            dim = Dimensions.from_dict(dim)
-
-        self._dimensions = dim
+    @target_dimensions.setter
+    def target_dimensions(self, dim: Union[Dimensions, None]):
+        self._target_dimensions = dim
         if dim is not None:
-            self._dimensions.dtype = int
+            self._target_dimensions.dtype = int
 
     @property
     def maximum_dimensions(self) -> Union[Dimensions, None]:
         return self._maximum_dimensions
 
     @maximum_dimensions.setter
-    def maximum_dimensions(self, dim: Union[Dimensions, dict, None]):
-        if isinstance(dim, dict):
-            dim = Dimensions.from_dict(dim)
-
+    def maximum_dimensions(self, dim: Union[Dimensions, None]):
         self._maximum_dimensions = dim
         if dim is not None:
             self._maximum_dimensions.dtype = int
@@ -265,7 +259,6 @@ class CanvasTemplate(Base):
         Returns:
             size:
         """
-        # TODO: Add tests to see if this method actually does the right thing
 
         scale_factor = self.get_scale_factor(source_dimensions, source_anamorphic_squeeze)
         source_width = self.get_desqueezed_width(source_dimensions.width, source_anamorphic_squeeze)
@@ -294,16 +287,21 @@ class CanvasTemplate(Base):
             )
 
         elif self.fit_method == 'fit_all':
-            height = self.target_dimensions.height
             width = source_width * scale_factor
-            if width > self.target_dimensions.width:
-                adjustment_scale = self.target_dimensions.width / width
-                height *= adjustment_scale
-                width *= adjustment_scale
+            height = source_dimensions.height * scale_factor
+            if source_dimensions > self.target_dimensions:
+                if width > self.target_dimensions.width:
+                    adjustment_scale = self.target_dimensions.width / width
 
-        size = type(self.target_dimensions)(width=width, height=height)
+                else:
+                    adjustment_scale = self.target_dimensions.height / height
+
+                width *= adjustment_scale
+                height *= adjustment_scale
+
+        size = Dimensions(width=width, height=height)
         # TODO consider returning crop True/False
-        #  or at least coordinates outside of frame like data window vs display window
+        #  or at least coordinates outside of frame like data window vs display window in EXR
 
         return size
 

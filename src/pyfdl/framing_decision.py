@@ -29,7 +29,7 @@ class FramingDecision(Base):
             framing_intent_id: str = None,
             dimensions: Dimensions = None,
             anchor_point: Point = None,
-            protection_dimensions: Dimensions= None,
+            protection_dimensions: Dimensions = None,
             protection_anchor_point: Point = None
     ):
         super().__init__()
@@ -50,10 +50,7 @@ class FramingDecision(Base):
         return self._dimensions
 
     @dimensions.setter
-    def dimensions(self, dim: Union[Dimensions, dict, None]):
-        if isinstance(dim, dict):
-            dim = Dimensions.from_dict(dim)
-
+    def dimensions(self, dim: Union[Dimensions, None]):
         self._dimensions = dim
 
     @property
@@ -61,10 +58,7 @@ class FramingDecision(Base):
         return self._protection_dimensions
 
     @protection_dimensions.setter
-    def protection_dimensions(self, dim: Union[Dimensions, dict, None]):
-        if isinstance(dim, dict):
-            dim = Dimensions.from_dict(dim)
-
+    def protection_dimensions(self, dim: Union[Dimensions, None]):
         self._protection_dimensions = dim
 
     @classmethod
@@ -143,10 +137,10 @@ class FramingDecision(Base):
         """
 
         # TODO check if anchor point is shifted before centering
-        _, active_anchor_point = canvas.get_dimensions()
+        active_dimensions, active_anchor_point = canvas.get_dimensions()
 
         offset_point = self.protection_anchor_point or active_anchor_point
-        offset_dimensions = self.protection_dimensions or self.dimensions
+        offset_dimensions = self.protection_dimensions or active_dimensions
 
         x = offset_point.x
         y = offset_point.y

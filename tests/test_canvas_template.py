@@ -3,80 +3,221 @@ import pytest
 import pyfdl
 
 
-def test_canvas_template_from_dict(sample_canvas_template):
-    canvas_template = pyfdl.CanvasTemplate.from_dict(sample_canvas_template)
-    assert isinstance(canvas_template, pyfdl.CanvasTemplate)
-    assert canvas_template.to_dict() == sample_canvas_template
-
-
-def test_canvas_template_from_kwargs(sample_canvas_template, sample_canvas_template_kwargs):
-    canvas_template = pyfdl.CanvasTemplate(**sample_canvas_template_kwargs)
-    assert isinstance(canvas_template, pyfdl.CanvasTemplate)
-    assert canvas_template.to_dict() == sample_canvas_template
-
-
-def test_fit_source_enum_validation(sample_canvas_template):
-    faulty_value = 'thisisnotvalid'
+@pytest.mark.parametrize(
+    'fit_source,fail',
+    [
+        ('framing_decision.dimensions', 'IWillFail'),
+        ('framing_decision.protection_dimensions', 'IWillFail'),
+        ('canvas.dimensions', 'IWillFail'),
+        ('canvas.effective_dimensions', 'IWillFail')
+    ]
+)
+def test_fit_source_enum_validation(fit_source, fail):
     canvas_template = pyfdl.CanvasTemplate()
 
-    canvas_template.fit_source = sample_canvas_template['fit_source']
-    assert canvas_template.fit_source == sample_canvas_template['fit_source']
+    canvas_template.fit_source = fit_source
+    assert canvas_template.fit_source == fit_source
 
-    with pytest.raises(pyfdl.FDLError) as err:
-        canvas_template.fit_source = faulty_value
-
-    assert f'"{faulty_value}" is not a valid option for "fit_source"' in str(err.value)
+    with pytest.raises(pyfdl.FDLError):
+        canvas_template.fit_source = fail
 
 
-def test_fit_method_enum_validation(sample_canvas_template):
-    faulty_value = 'thisisnotvalid'
+@pytest.mark.parametrize(
+    'fit_method,fail',
+    [
+        ('width', 'IWillFail'),
+        ('height', 'IWillFail'),
+        ('fit_all', 'IWillFail'),
+        ('fill', 'IWillFail')
+    ]
+)
+def test_fit_method_enum_validation(fit_method, fail):
     canvas_template = pyfdl.CanvasTemplate()
 
-    canvas_template.fit_method = sample_canvas_template['fit_method']
-    assert canvas_template.fit_method == sample_canvas_template['fit_method']
+    canvas_template.fit_method = fit_method
+    assert canvas_template.fit_method == fit_method
 
-    with pytest.raises(pyfdl.FDLError) as err:
-        canvas_template.fit_method = faulty_value
-
-    assert f'"{faulty_value}" is not a valid option for "fit_method"' in str(err.value)
+    with pytest.raises(pyfdl.FDLError):
+        canvas_template.fit_method = fail
 
 
-def test_alignment_method_vertical_enum_validation(sample_canvas_template):
-    faulty_value = 'thisisnotvalid'
+@pytest.mark.parametrize(
+    'alignment,fail',
+    [
+        ('center', 'IWillFail'),
+        ('top', 'IWillFail'),
+        ('bottom', 'IWillFail'),
+    ]
+)
+def test_alignment_method_vertical_enum_validation(alignment, fail):
     canvas_template = pyfdl.CanvasTemplate()
 
-    canvas_template.alignment_method_vertical = sample_canvas_template['alignment_method_vertical']
-    assert canvas_template.alignment_method_vertical == sample_canvas_template['alignment_method_vertical']
+    canvas_template.alignment_method_vertical = alignment
+    assert canvas_template.alignment_method_vertical == alignment
 
-    with pytest.raises(pyfdl.FDLError) as err:
-        canvas_template.alignment_method_vertical = faulty_value
-
-    assert f'"{faulty_value}" is not a valid option for "alignment_method_vertical"' in str(err.value)
+    with pytest.raises(pyfdl.FDLError):
+        canvas_template.alignment_method_vertical = fail
 
 
-def test_alignment_method_horizontal_enum_validation(sample_canvas_template):
-    faulty_value = 'thisisnotvalid'
+@pytest.mark.parametrize(
+    'alignment,fail',
+    [
+        ('left', 'IWillFail'),
+        ('center', 'IWillFail'),
+        ('right', 'IWillFail'),
+    ]
+)
+def test_alignment_method_horizontal_enum_validation(alignment, fail):
     canvas_template = pyfdl.CanvasTemplate()
 
-    canvas_template.alignment_method_horizontal = sample_canvas_template['alignment_method_horizontal']
-    assert canvas_template.alignment_method_horizontal == sample_canvas_template['alignment_method_horizontal']
+    canvas_template.alignment_method_horizontal = alignment
+    assert canvas_template.alignment_method_horizontal == alignment
 
-    with pytest.raises(pyfdl.FDLError) as err:
-        canvas_template.alignment_method_horizontal = faulty_value
-
-    assert f'"{faulty_value}" is not a valid option for "alignment_method_horizontal"' in str(err.value)
+    with pytest.raises(pyfdl.FDLError):
+        canvas_template.alignment_method_horizontal = fail
 
 
-def test_preserve_from_source_canvas_enum_validation(sample_canvas_template):
-    faulty_value = 'thisisnotvalid'
+@pytest.mark.parametrize(
+    'preserve,fail',
+    [
+        ('none', 'IWillFail'),
+        ('framing_decision.dimensions', 'IWillFail'),
+        ('framing_decision.protection_dimensions', 'IWillFail'),
+        ('canvas.dimensions', 'IWillFail'),
+        ('canvas.effective_dimensions', 'IWillFail')
+    ]
+)
+def test_preserve_from_source_canvas_enum_validation(preserve, fail):
     canvas_template = pyfdl.CanvasTemplate()
 
-    canvas_template.preserve_from_source_canvas = sample_canvas_template['preserve_from_source_canvas']
-    assert canvas_template.preserve_from_source_canvas == sample_canvas_template['preserve_from_source_canvas']
+    canvas_template.preserve_from_source_canvas = preserve
+    assert canvas_template.preserve_from_source_canvas == preserve
 
-    with pytest.raises(pyfdl.FDLError) as err:
-        canvas_template.preserve_from_source_canvas = faulty_value
+    with pytest.raises(pyfdl.FDLError):
+        canvas_template.preserve_from_source_canvas = fail
 
-    assert f'"{faulty_value}" is not a valid option for "preserve_from_source_canvas"' in str(err.value)
 
-# TODO: Add more tests for all the variations of fit_methods etc.
+@pytest.mark.parametrize(
+    'source_width,squeeze_factor,target_squeeze,expected',
+    [
+        (100, 2, 1, 200),
+        (100, 2, 2, 100),
+        (100, 2, 1.5, 200 / 1.5),
+        (100, 2, 0, 100)    # target anamorphic squeeze of 0 is same as source
+    ]
+)
+def test_get_desqueezed_width(sample_canvas_template_obj, source_width, squeeze_factor, target_squeeze, expected):
+    template = sample_canvas_template_obj
+    template.target_anamorphic_squeeze = target_squeeze
+    assert template.get_desqueezed_width(source_width, squeeze_factor) == expected
+
+
+@pytest.mark.parametrize(
+    'fit_method,target_dim,source_dim,source_sqz,expected',
+    [
+        ('width', (1920, 1080), (960, 540), 1, 2),
+        ('height', (1920, 1080), (960, 540), 1, 2),
+        ('fit_all', (1920, 1080), (960, 540), 1, 2),
+        ('fill', (1920, 1080), (960, 540), 1, 2),
+
+        ('width', (1920, 1080), (960, 1080), 2, 1),
+        ('height', (1920, 1080), (960, 1080), 2, 1),
+        ('fit_all', (1920, 1080), (960, 1080), 2, 1),
+        ('fill', (1920, 1080), (960, 1080), 2, 1),
+
+        ('width', (1000, 500), (250, 500), 1, 4),
+        ('height', (1000, 500), (250, 500), 1, 1),
+        ('fit_all', (1000, 500), (250, 500), 1, 1),
+        ('fill', (1000, 500), (250, 500), 1, 4),
+
+        ('width', (960, 540), (1920, 1080), 1, .5),
+        ('height', (960, 540), (1920, 1080), 1, .5),
+        ('fit_all', (960, 540), (1920, 1080), 1, .5),
+        ('fill', (960, 540), (1920, 1080), 1, .5),
+
+        ('width', (250, 500), (1000, 500), 1, .25),
+        ('height', (250, 500), (1000, 500), 1, 1),
+        ('fit_all', (250, 500), (1000, 500), 1, .25),
+        ('fill', (250, 500), (1000, 500), 1, 1)
+    ]
+)
+def test_get_scale_factor(sample_canvas_template_obj, fit_method, target_dim, source_dim, source_sqz, expected):
+    template = sample_canvas_template_obj
+    template.target_dimensions.width, template.target_dimensions.height = target_dim
+    template.fit_method = fit_method
+    assert template.get_scale_factor(pyfdl.Dimensions(*source_dim), source_sqz) == expected
+
+
+@pytest.mark.parametrize(
+    'fit_method,target_dim,source_dim,source_sqz,expected',
+    [   # Same aspect
+        ('width', (1920, 1080), (960, 540), 1, (1920, 1080)),
+        ('height', (1920, 1080), (960, 540), 1, (1920, 1080)),
+        ('fit_all', (1920, 1080), (960, 540), 1, (1920, 1080)),
+        ('fill', (1920, 1080), (960, 540), 1, (1920, 1080)),
+        # Same aspect, but difference squeeze
+        ('width', (1920, 1080), (480, 540), 2, (1920, 1080)),
+        ('height', (1920, 1080), (480, 540), 2, (1920, 1080)),
+        ('fit_all', (1920, 1080), (480, 540), 2, (1920, 1080)),
+        ('fill', (1920, 1080), (480, 540), 2, (1920, 1080)),
+        # Taller than target
+        ('width', (1920, 1080), (540, 960), 1, (1920, 1080)),
+        ('height', (1920, 1080), (540, 960), 1, (607.5, 1080)),
+        ('fit_all', (1920, 1080), (540, 960), 1, (607.5, 1080)),
+        ('fill', (1920, 1080), (540, 960), 1, (1920, 1080)),
+        # Wider than target
+        ('width', (1920, 1080), (960, 500), 1, (1920, 1000)),
+        ('height', (1920, 1080), (960, 500), 1, (1920, 1080)),
+        ('fit_all', (1920, 1080), (960, 500), 1, (1920, 1000)),
+        ('fill', (1920, 1080), (960, 500), 1, (1920, 1080)),
+    ]
+)
+def test_fit_source_to_target(sample_canvas_template_obj, fit_method, target_dim, source_dim, source_sqz, expected):
+    template = sample_canvas_template_obj
+    template.target_dimensions.width, template.target_dimensions.height = target_dim
+    template.fit_method = fit_method
+
+    assert template.fit_source_to_target(pyfdl.Dimensions(*source_dim), source_sqz) == pyfdl.Dimensions(*expected)
+
+
+@pytest.mark.parametrize(
+    'fit_source,preserve,expected',
+    [
+        (
+            "framing_decision.dimensions",
+            "canvas.dimensions",
+            [
+                "framing_decision.dimensions",
+                "framing_decision.protection_dimensions",
+                "canvas.effective_dimensions",
+                "canvas.dimensions"
+            ]
+        ),
+        (
+                "framing_decision.dimensions",
+                "framing_decision.dimensions",
+                [
+                    "framing_decision.dimensions"
+                ]
+        ),
+        (
+                "framing_decision.dimensions",
+                "none",
+                [
+                    "framing_decision.dimensions"
+                ]
+        ),
+        (
+                "framing_decision.dimensions",
+                None,
+                [
+                    "framing_decision.dimensions"
+                ]
+        )
+    ]
+)
+def test_get_transfer_keys(sample_canvas_template_obj, fit_source, preserve, expected):
+    template = sample_canvas_template_obj
+    template.fit_source = fit_source
+    template.preserve_from_source_canvas = preserve
+    assert template.get_transfer_keys() == expected

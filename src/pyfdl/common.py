@@ -1,6 +1,5 @@
 import math
 import uuid
-from abc import ABC, abstractmethod
 from typing import Any, Union, Type
 
 from pyfdl.errors import FDLError
@@ -30,17 +29,13 @@ class Base:
     # The rounding strategy is used when rounding dimensions
     rounding_strategy = None
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         """Base class not to be instanced directly.
-
-            Args:
-                *args:
-                **kwargs:
 
             Attributes:
                 attributes: list of attributes described in FDL spec
                 kwarg_map: map attribute names that clash with reserved builtin python functions to safe alternatives
-                    like: (id -> id_) and (uuid -> _uuid)
+                    like: (id -> id_) and (uuid -> uuid_)
                 object_map: map attributes to custom classes
                 required: list of required attributes.
                     Supports linked attributes like: "effective_dimensions.effective_anchor_point" where
@@ -246,7 +241,9 @@ class TypedCollection:
             self._data[item_id] = item
 
         else:
-            raise FDLError(f"Item must have a valid identifier (\"{self._cls.id_attribute}\"), not None or empty string")
+            raise FDLError(
+                f"Item must have a valid identifier (\"{self._cls.id_attribute}\"), not None or empty string"
+            )
 
     def get(self, item_id: str) -> Union[Any, None]:
         """Get an item in the collection
@@ -282,6 +279,9 @@ class TypedCollection:
             id:
         """
         return getattr(item, self._cls.id_attribute)
+
+    def __bool__(self):
+        return bool(self._data)
 
     def __len__(self):
         return len(self._data)
@@ -357,13 +357,20 @@ class Dimensions(Base):
         return Dimensions(width=self.width, height=self.height, dtype=self.dtype)
 
     def to_dict(self) -> dict:
+        # TODO: do we round before casting to int?
         return {'width': self.dtype(self.width), 'height': self.dtype(self.height)}
 
     def __iter__(self):
         return iter((self.width, self.height))
 
+    def __lt__(self, other):
+        return self.width < other.width or self.height < other.height
+
     def __eq__(self, other):
         return self.width == other.width and self.height == other.height
+
+    def __gt__(self, other):
+        return self.width > other.width or self.height > other.height
 
     def __bool__(self):
         return self.width is not None and self.height is not None
@@ -426,6 +433,7 @@ class RoundStrategy(Base):
         super().__init__()
         self.even = even
         self.mode = mode
+        self.rounding_strategy = None
 
     @property
     def even(self):
@@ -489,7 +497,13 @@ class RoundStrategy(Base):
             width = mode_map[self.mode](width / adjust) * adjust
             height = mode_map[self.mode](height / adjust) * adjust
 
-        return type(dimensions)(width=width, height=height)
+        return Dimensions(width=width, height=height, dtype=dimensions.dtype)
+
+    def __eq__(self, other):
+        if isinstance(other, dict):
+            return self.even == other.get('even') and self.mode == other.get('mode')
+
+        return self.even == other.even and self.mode == other.mode
 
     def __repr__(self):
         return f'{self.__class__.__name__}(even="{self.even}", mode="{self.mode}")'

@@ -2,7 +2,7 @@ import json
 
 from typing import IO, Union
 
-from .base import (
+from .common import (
     Base,
     Dimensions,
     Point,
