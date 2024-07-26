@@ -26,10 +26,26 @@ described in the FDL.
 N/A Not applicable  
 
 # Documentation
-You'll find the latest published documentation [here](https://apetrynet.github.io/pyfdl/)
+You'll find the latest published documentation on PyFDL [here](https://apetrynet.github.io/pyfdl/)
 
-If You'd like a local copy of the documentation you may build it by installing mkdocs and running `mkdocs build` in the
-root directory. A "site" folder should appear with an `index.html` file in it.
+# Package Management
+PyFDL uses [Hatch](https://hatch.pypa.io) for package management. 
+Please refer to their documentation for more info on usage.
+
+There is an environment setup for unit testing.
+
+``` commandline
+hatch run test:test
+```
+
+To build and serve the documentation locally, you may use one of the following commands.
+``` commandline
+# Only build the docs. You'll find them in the "site" folder
+hatch run docs:build
+
+# Serve the docs on localhost:8000
+hatch run docs:serve
+```
 
 # Schema Files
 PyFDL ships with JSON schema definition files kindly provided by [ASC MITC](https://github.com/ascmitc/fdl).  

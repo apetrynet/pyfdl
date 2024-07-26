@@ -4,15 +4,17 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pyfdl"
-version = "0.1.0"
 authors = [
   { name="Daniel Flehner Heen", email="flehnerheener@gmail.com" },
 ]
 description = "Toolkit for parsing and producing ASC FDL files"
+dynamic = ["version"]
 license = {file="LICENSE"}
 readme = "README.md"
 requires-python = ">=3.9"
-dependencies = ["jsonschema"]
+dependencies = [
+    "jsonschema"
+]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Development Status :: 4 - Beta",
@@ -28,8 +30,33 @@ classifiers = [
 keywords = ["film", "tv", "editing", "editorial", "fdl", "asc", "conform", "reformat", "vfx"]
 
 [project.urls]
-"Homepage" = "https://github.com/apetrynet/pyfdl"
-"Bug Tracker" = "https://github.com/apetrynet/pyfdl/issues"
+"Source" = "https://github.com/apetrynet/pyfdl"
+"Issues" = "https://github.com/apetrynet/pyfdl/issues"
+"Documentation" = "https://apetrynet.github.io/pyfdl"
+
+[tool.hatch.version]
+path = "src/pyfdl/__init__.py"
+
+[tool.hatch.envs.test]
+dependencies = [
+    "pytest",
+    "mktestdocs"
+]
+
+[tool.hatch.envs.test.scripts]
+test = "pytest -v ."
+
+[tool.hatch.envs.docs]
+dependencies = [
+    "mkdocs",
+    "mkdocstrings",
+    "mkdocstrings-python",
+    "mkdocs-autorefs"
+]
+
+[tool.hatch.envs.docs.scripts]
+build = "mkdocs build --clean --strict"
+serve = "mkdocs serve --dev-addr localhost:8000"
 
 [tool.hatch.build.targets.sdist]
 # Ensure the sdist includes a setup.py for older pip versions
