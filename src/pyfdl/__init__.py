@@ -47,7 +47,7 @@ __all__ = [
     'TypedCollection'
 ]
 
-__version__ = "0.1.0"
+__version__ = "0.1.0.dev0"
 
 
 def load(fp: IO, validate: bool = True) -> FDL:
