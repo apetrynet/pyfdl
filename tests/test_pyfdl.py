@@ -4,6 +4,7 @@ from pathlib import Path
 import pytest
 
 import pyfdl
+import pyfdl.io.builtin
 
 SAMPLE_FDL_DIR = Path(__file__).parent.joinpath("sample_data")
 SAMPLE_FDL_FILE = Path(
@@ -14,7 +15,7 @@ SAMPLE_FDL_FILE = Path(
 
 def test_load_unvalidated():
     with SAMPLE_FDL_FILE.open('r') as fdl_file:
-        fdl = pyfdl.load(fdl_file, validate=False)
+        fdl = pyfdl.io.builtin.load(fdl_file, validate=False)
 
     assert isinstance(fdl, pyfdl.FDL)
     assert isinstance(fdl.header, pyfdl.Header)
@@ -24,7 +25,7 @@ def test_load_unvalidated():
 
 def test_load_validated():
     with SAMPLE_FDL_FILE.open('r') as fdl_file:
-        fdl = pyfdl.load(fdl_file, validate=True)
+        fdl = pyfdl.io.builtin.load(fdl_file, validate=True)
 
     assert isinstance(fdl, pyfdl.FDL)
 
@@ -38,20 +39,20 @@ def test_loads():
     with SAMPLE_FDL_FILE.open('r') as fdl_file:
         raw = fdl_file.read()
 
-    fdl = pyfdl.loads(raw)
+    fdl = pyfdl.io.builtin.loads(raw)
     assert fdl.to_dict() == json.loads(raw)
 
 
 def test_dump(tmp_path):
     my_path = Path(tmp_path, 'myfdl.fdl')
     with SAMPLE_FDL_FILE.open('r') as fdl_file:
-        fdl1 = pyfdl.load(fdl_file)
+        fdl1 = pyfdl.io.builtin.load(fdl_file)
 
     with my_path.open('w') as fp:
-        pyfdl.dump(fdl1, fp)
+        pyfdl.io.builtin.dump(fdl1, fp)
 
     with my_path.open('r') as fp:
-        fdl2 = pyfdl.load(fp)
+        fdl2 = pyfdl.io.builtin.load(fp)
 
     assert fdl1.to_dict() == fdl2.to_dict()
 
@@ -60,9 +61,9 @@ def test_dumps():
     with SAMPLE_FDL_FILE.open('r') as fdl_file:
         raw = fdl_file.read()
 
-    fdl = pyfdl.loads(raw)
+    fdl = pyfdl.io.builtin.loads(raw)
 
-    assert json.loads(pyfdl.dumps(fdl)) == json.loads(raw)
+    assert json.loads(pyfdl.io.builtin.dumps(fdl)) == json.loads(raw)
 
 
 def test_init_empty_fdl():
