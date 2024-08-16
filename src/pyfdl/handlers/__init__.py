@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Optional, Any, Union
 
 from pyfdl.errors import UnsupportedHandlerError
-from pyfdl.plugins import manifest
+from pyfdl.plugins import registry
 
 
 def get_handler(direction: str, func_name: str, path: Path = None, handler_name: str = None) -> Any:
@@ -19,7 +19,7 @@ def get_handler(direction: str, func_name: str, path: Path = None, handler_name:
 
     """
 
-    _manifest = manifest.get_manifest()
+    _manifest = registry.get_registry()
     handler = None
     if handler_name is not None:
         handler = _manifest.get_handler_by_name(handler_name, direction=direction, func_name=func_name)

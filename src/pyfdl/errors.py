@@ -4,3 +4,7 @@ class FDLError(Exception):
 
 class FDLValidationError(FDLError):
     pass
+
+
+class UnsupportedHandlerError(FDLError):
+    pass
