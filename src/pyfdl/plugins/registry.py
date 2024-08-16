@@ -28,17 +28,23 @@ class PluginRegistry:
                 continue
             module_name = module.stem
             mod = import_module(f'{anchor}.{module_name}')
-            mod.register_plugin(self)
+            if hasattr(mod, 'register_plugin'):
+                mod.register_plugin(self)
 
     def load_plugins(self):
         """
         Load plugins from the "pyfdl.plugins" namespace.
         """
-        # TODO: Add loading of plugins from ENV
         plugin_packages = entry_points(group='pyfdl.plugins')
         for plugin in plugin_packages:
-            register_func = plugin.load()
-            register_func(self)
+            if plugin.attr is not None:
+                mod = plugin.load()
+                register_func = getattr(mod, 'register_plugin', None)
+            else:
+                register_func = plugin.load()
+
+            if register_func is not None:
+                register_func(self)
 
     def add_handler(self, handler: Any):
         """
