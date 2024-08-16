@@ -16,9 +16,9 @@ from .framing_decision import FramingDecision
 from .canvas import Canvas
 from .context import Context
 from .canvas_template import CanvasTemplate
-from .pyfdl import FDL
+from .fdl import FDL
 from .errors import FDLError, FDLValidationError
-from .io.builtin import load, loads, dump, dumps
+from .handlers import read_from_file, read_from_string, write_to_string, write_to_file
 
 __all__ = [
     'Base',
@@ -27,8 +27,6 @@ __all__ = [
     'Context',
     'DEFAULT_ROUNDING_STRATEGY',
     'Dimensions',
-    'dump',
-    'dumps',
     'FDL',
     'FDLError',
     'FDLValidationError',
@@ -38,12 +36,14 @@ __all__ = [
     'FramingDecision',
     'FramingIntent',
     'Header',
-    'load',
-    'loads',
     'NO_ROUNDING',
     'Point',
+    'read_from_file',
+    'read_from_string',
     'RoundStrategy',
-    'TypedCollection'
+    'TypedCollection',
+    'write_to_file',
+    'write_to_string'
 ]
 
 __version__ = "0.1.0.dev0"
