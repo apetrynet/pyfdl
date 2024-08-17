@@ -35,7 +35,12 @@ class PluginRegistry:
         """
         Load plugins from the "pyfdl.plugins" namespace.
         """
-        plugin_packages = entry_points(group='pyfdl.plugins')
+        try:
+            plugin_packages = entry_points(group='pyfdl.plugins')
+        except TypeError:
+            # Python < 3.10
+            plugin_packages = entry_points()['pyfdl.plugins']
+
         for plugin in plugin_packages:
             if plugin.attr is not None:
                 mod = plugin.load()
