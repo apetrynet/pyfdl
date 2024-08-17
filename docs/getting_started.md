@@ -43,6 +43,7 @@ fdl.set_rounding_strategy({'even': 'whole', 'mode': 'up'})
 import pyfdl
 from pyfdl import Canvas, FramingIntent, Dimensions, Point
 from tempfile import NamedTemporaryFile
+
 fdl = pyfdl.FDL()
 
 # Applying defaults will provide you with a valid staring point 
@@ -80,7 +81,7 @@ fdl.place_canvas_in_context(context_label="PanavisionDXL2", canvas=canvas)
 canvas.place_framing_intent(framing_intent=framing_intent)
 
 # Validate our FDL and save it
-with NamedTemporaryFile(suffix='fdl') as f:
+with NamedTemporaryFile(suffix='.fdl', delete=False) as f:
     pyfdl.write_to_file(fdl, f.name, validate=True)
 ```
 
@@ -112,6 +113,6 @@ new_canvas = pyfdl.Canvas.from_canvas_template(
 fdl.place_canvas_in_context(context_label=context.label, canvas=new_canvas)
 
 # Validate and write to file.
-with NamedTemporaryFile(suffix='fdl') as f:
+with NamedTemporaryFile(suffix='.fdl', delete=False) as f:
     pyfdl.write_to_file(fdl, f.name, validate=True)
 ```
