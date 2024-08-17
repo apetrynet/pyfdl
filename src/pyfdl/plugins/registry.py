@@ -39,7 +39,7 @@ class PluginRegistry:
             plugin_packages = entry_points(group='pyfdl.plugins')
         except TypeError:
             # Python < 3.10
-            plugin_packages = entry_points()['pyfdl.plugins']
+            plugin_packages = entry_points().get('pyfdl.plugins', [])
 
         for plugin in plugin_packages:
             if plugin.attr is not None:
