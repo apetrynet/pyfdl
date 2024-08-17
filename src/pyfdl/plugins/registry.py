@@ -2,6 +2,8 @@ from importlib import import_module, resources
 from importlib.metadata import entry_points
 from typing import Union, Any
 
+from pyfdl.errors import UnknownHandlerError
+
 _REGISTRY = None
 
 
@@ -11,10 +13,7 @@ class PluginRegistry:
         The `PluginRegistry` loads and registers all plugins and built in handlers.
         """
 
-        self.handlers = {
-            "input": {},
-            "output": {}
-        }
+        self.handlers = {}
         self.load_builtin()
         self.load_plugins()
 
@@ -43,10 +42,10 @@ class PluginRegistry:
 
         for plugin in plugin_packages:
             if plugin.attr is not None:
+                register_func = plugin.load()
+            else:
                 mod = plugin.load()
                 register_func = getattr(mod, 'register_plugin', None)
-            else:
-                register_func = plugin.load()
 
             if register_func is not None:
                 register_func(self)
@@ -57,46 +56,58 @@ class PluginRegistry:
         Args:
             handler: plugin or built-in handler to add
         """
-        for direction in handler.directions:
-            self.handlers[direction].setdefault(handler.name, handler)
+        self.handlers.setdefault(handler.name, handler)
 
-    def get_handler_by_name(self, handler_name: str, direction: str, func_name: str) -> Union['Handler', None]:
+    def get_handler_by_name(self, handler_name: str, func_name: str) -> Union['Handler', None]:
         """
-        Get a registered handler by `handler_name`, `direction` and
+        Get a registered handler by `handler_name`, and
         make sure it has a function (`func_name`) to call
 
         Args:
             handler_name: name handler to look for
-            direction: to send data ("input" or "output")
             func_name: name of function in handler to call
 
         Returns:
             handler:
+
+        Raises:
+            error: if no handler by name and function is registered
         """
-        handler = self.handlers.get(direction, {}).get(handler_name)
+        handler = self.handlers.get(handler_name)
         if hasattr(handler, func_name):
             return handler
 
-    def get_handler_by_suffix(self, suffix: str, direction: str, func_name: str) -> Union['Handler', None]:
+        raise UnknownHandlerError(
+            f'No handler by name: "{handler_name}" with function: "{func_name}" seems to be registered. '
+            f'Please check that a plugin containing this handler is properly installed'
+            f'or use one of the following registered handlers: {sorted(self.handlers.keys())}'
+        )
+
+    def get_handler_by_suffix(self, suffix: str, func_name: str) -> Union['Handler', None]:
         """
-        Get a registered handler by `suffix`, `direction` and
+        Get a registered handler by `suffix`, and
         make sure it has a function (`func_name`) to call
 
 
         Args:
             suffix: including the dot (".fdl")
-            direction: to send data ("input" or "output")
             func_name: name of function in handler to call
 
         Returns:
             handler:
         """
-        for handler in self.handlers.get(direction, {}).values():
+        for handler in self.handlers.values():
             if suffix in handler.suffixes and hasattr(handler, func_name):
                 return handler
 
+        raise UnknownHandlerError(
+            f'No handler supporting suffix: "{suffix}" and function: "{func_name}" seems to be registered. '
+            f'Please check that a plugin supporting this suffix is properly installed'
+            f'or use one of the following registered handlers: {sorted(self.handlers.keys())}'
+        )
 
-def get_registry() -> PluginRegistry:
+
+def get_registry(reload: bool = False) -> PluginRegistry:
     """
     Get the active registry containing plugins and built-in handlers
 
@@ -104,7 +115,7 @@ def get_registry() -> PluginRegistry:
         registry:
     """
     global _REGISTRY
-    if _REGISTRY is None:
+    if _REGISTRY is None or reload:
         _REGISTRY = PluginRegistry()
 
     return _REGISTRY
