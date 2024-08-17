@@ -11,7 +11,6 @@ class FDLHandler:
         The default built-in FDL handler. Takes care of reading and writing FDL files
         """
         self.name = 'fdl'
-        self.directions = ['input', 'output']
         self.suffixes = ['.fdl']
 
     def read_from_file(self, path: Path, validate: bool = True) -> FDL:
