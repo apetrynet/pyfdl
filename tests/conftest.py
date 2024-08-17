@@ -1,3 +1,5 @@
+from pathlib import Path
+import tempfile
 import pytest
 import pyfdl
 
@@ -5,6 +7,15 @@ import pyfdl
 @pytest.fixture(autouse=True)
 def consistent_rounding():
     pyfdl.Base.set_rounding_strategy(pyfdl.DEFAULT_ROUNDING_STRATEGY)
+
+
+@pytest.fixture(autouse=True)
+def cleanup_temp_files():
+    yield
+
+    # Remove temp files
+    for file in Path(tempfile.gettempdir()).glob('*.fdl'):
+        file.unlink(missing_ok=True)
 
 
 @pytest.fixture(scope="function")
