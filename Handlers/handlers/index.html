@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Errors - PyFDL</title>
+    <title>Handlers - PyFDL</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,8 +13,8 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Errors";
-        var mkdocs_page_input_path = "Classes/errors.md";
+        var mkdocs_page_name = "Handlers";
+        var mkdocs_page_input_path = "Handlers/handlers.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -52,29 +52,41 @@
                 <li class="toctree-l1"><a class="reference internal" href="../../top_level_functions/">Top Level Functions</a>
                 </li>
               </ul>
-              <p class="caption"><span class="caption-text">Classes</span></p>
+              <p class="caption"><span class="caption-text">FDL Classes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../FDL%20Classes/canvas/">Canvas</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../FDL%20Classes/canvas_template/">Canvas Template</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../FDL%20Classes/common/">Common</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../FDL%20Classes/context/">Context</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../FDL%20Classes/errors/">Errors</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../FDL%20Classes/fdl/">FDL</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../FDL%20Classes/framing_decision/">Framing Decision</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../FDL%20Classes/framing_intent/">Framing Intent</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../FDL%20Classes/header/">Header</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Handlers</span></p>
               <ul class="current">
-                  <li class="toctree-l1"><a class="reference internal" href="../canvas/">Canvas</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../canvas_template/">Canvas Template</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../common/">Common</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../context/">Context</a>
-                  </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Errors</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Handlers</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.FDLError">FDLError</a>
+    <li class="toctree-l2"><a class="reference internal" href="#fdlhandler">FDLHandler</a>
     </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../fdl/">FDL</a>
+              </ul>
+              <p class="caption"><span class="caption-text">Plugins</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Plugins/plugins/">About Plugins</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../framing_decision/">Framing Decision</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../framing_intent/">Framing Intent</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../header/">Header</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Plugins/registry/">Plugin Registry</a>
                   </li>
               </ul>
       </div>
@@ -91,10 +103,10 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
-          <li class="breadcrumb-item">Classes</li>
-      <li class="breadcrumb-item active">Errors</li>
+          <li class="breadcrumb-item">Handlers</li>
+      <li class="breadcrumb-item active">Handlers</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/apetrynet/pyfdl/edit/master/docs/Classes/errors.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/apetrynet/pyfdl/edit/master/docs/Handlers/handlers.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -102,35 +114,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="errors">Errors</h1>
-
-
-<div class="doc doc-object doc-class">
-
-
-
-<h2 id="pyfdl.FDLError" class="doc doc-heading">
-            <code>pyfdl.FDLError</code>
-
-
-</h2>
-
-
-    <div class="doc doc-contents first">
-            <p class="doc doc-class-bases">
-              Bases: <code>Exception</code></p>
-
-
-
-    </div>
-
-</div>
+                <h1 id="handlers">Handlers</h1>
+<h2 id="fdlhandler">FDLHandler</h2>
+<p>This is the built-in handler for reading and writing fdl files</p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../context/" class="btn btn-neutral float-left" title="Context"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../fdl/" class="btn btn-neutral float-right" title="FDL">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../../FDL%20Classes/header/" class="btn btn-neutral float-left" title="Header"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../Plugins/plugins/" class="btn btn-neutral float-right" title="About Plugins">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -157,10 +149,10 @@
         </span>
     
     
-      <span><a href="../context/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../../FDL%20Classes/header/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../fdl/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../../Plugins/plugins/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

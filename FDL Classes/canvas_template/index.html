@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Framing Decision - PyFDL</title>
+    <title>Canvas Template - PyFDL</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,8 +13,8 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Framing Decision";
-        var mkdocs_page_input_path = "Classes/framing_decision.md";
+        var mkdocs_page_name = "Canvas Template";
+        var mkdocs_page_input_path = "FDL Classes/canvas_template.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -52,11 +52,25 @@
                 <li class="toctree-l1"><a class="reference internal" href="../../top_level_functions/">Top Level Functions</a>
                 </li>
               </ul>
-              <p class="caption"><span class="caption-text">Classes</span></p>
+              <p class="caption"><span class="caption-text">FDL Classes</span></p>
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" href="../canvas/">Canvas</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../canvas_template/">Canvas Template</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Canvas Template</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.CanvasTemplate">CanvasTemplate</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.CanvasTemplate.fit_source_to_target">fit_source_to_target</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.CanvasTemplate.get_desqueezed_width">get_desqueezed_width</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.CanvasTemplate.get_scale_factor">get_scale_factor</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.CanvasTemplate.get_transfer_keys">get_transfer_keys</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../common/">Common</a>
                   </li>
@@ -66,23 +80,23 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../fdl/">FDL</a>
                   </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Framing Decision</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.FramingDecision">FramingDecision</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.FramingDecision.adjust_anchor_point">adjust_anchor_point</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.FramingDecision.adjust_protection_anchor_point">adjust_protection_anchor_point</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.FramingDecision.from_framing_intent">from_framing_intent</a>
-    </li>
-        </ul>
-    </li>
-    </ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../framing_decision/">Framing Decision</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../framing_intent/">Framing Intent</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../header/">Header</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Handlers</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Handlers/handlers/">Handlers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Plugins</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Plugins/plugins/">About Plugins</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Plugins/registry/">Plugin Registry</a>
                   </li>
               </ul>
       </div>
@@ -99,10 +113,10 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
-          <li class="breadcrumb-item">Classes</li>
-      <li class="breadcrumb-item active">Framing Decision</li>
+          <li class="breadcrumb-item">FDL Classes</li>
+      <li class="breadcrumb-item active">Canvas Template</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/apetrynet/pyfdl/edit/master/docs/Classes/framing_decision.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/apetrynet/pyfdl/edit/master/docs/FDL Classes/canvas_template.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -110,15 +124,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="framing-decision">Framing Decision</h1>
+                <h1 id="canvas-template">Canvas Template</h1>
 
 
 <div class="doc doc-object doc-class">
 
 
 
-<h2 id="pyfdl.FramingDecision" class="doc doc-heading">
-              <code class="highlight language-python">pyfdl.FramingDecision(label=None, id_=None, framing_intent_id=None, dimensions=None, anchor_point=None, protection_dimensions=None, protection_anchor_point=None)</code>
+<h2 id="pyfdl.CanvasTemplate" class="doc doc-heading">
+              <code class="highlight language-python">pyfdl.CanvasTemplate(label=None, id_=None, target_dimensions=None, target_anamorphic_squeeze=None, fit_source=None, fit_method=None, alignment_method_vertical=None, alignment_method_horizontal=None, preserve_from_source_canvas=None, maximum_dimensions=None, pad_to_maximum=None, round_=None)</code>
 
 </h2>
 
@@ -144,18 +158,15 @@
 <div class="doc doc-object doc-function">
 
 
-<h3 id="pyfdl.FramingDecision.adjust_anchor_point" class="doc doc-heading">
-            <code class="highlight language-python">adjust_anchor_point(canvas, h_method='center', v_method='center')</code>
+<h3 id="pyfdl.CanvasTemplate.fit_source_to_target" class="doc doc-heading">
+            <code class="highlight language-python">fit_source_to_target(source_dimensions, source_anamorphic_squeeze)</code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-      <p>Adjust this object's <code>anchor_point</code> either relative to <code>protection_anchor_point</code>
-or <code>canvas.effective_anchor_point</code>
-Please note that the <code>h_method</code> and <code>v_method</code> arguments only apply if no
-<code>protection_anchor_point</code> is present.</p>
+      <p>Calculate the dimensions of <code>fit_source</code> inside <code>target_dimensions</code> based on <code>fit_mode</code></p>
 
 
 <table class="field-list">
@@ -169,151 +180,19 @@ Please note that the <code>h_method</code> and <code>v_method</code> arguments o
       <td class="field-body">
         <ul class="first simple">
             <li>
-              <b><code>canvas</code></b>
-                  (<code><a class="autorefs autorefs-internal" title="pyfdl.canvas.Canvas" href="../canvas/#pyfdl.Canvas">Canvas</a></code>)
+              <b><code>source_dimensions</code></b>
+                  (<code><a class="autorefs autorefs-internal" title="pyfdl.Dimensions" href="../common/#pyfdl.Dimensions">Dimensions</a></code>)
               –
               <div class="doc-md-description">
-                <p>to fetch anchor point from in case protection_anchor_point is not set</p>
+                
               </div>
             </li>
             <li>
-              <b><code>h_method</code></b>
-                  (<code>str</code>, default:
-                      <code>&#39;center&#39;</code>
-)
+              <b><code>source_anamorphic_squeeze</code></b>
+                  (<code>float</code>)
               –
               <div class="doc-md-description">
-                <p>horizontal alignment ('left', 'center', 'right')</p>
-              </div>
-            </li>
-            <li>
-              <b><code>v_method</code></b>
-                  (<code>str</code>, default:
-                      <code>&#39;center&#39;</code>
-)
-              –
-              <div class="doc-md-description">
-                <p>vertical alignment ('top', 'center', 'bottom')</p>
-              </div>
-            </li>
-        </ul>
-      </td>
-    </tr>
-  </tbody>
-</table>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="pyfdl.FramingDecision.adjust_protection_anchor_point" class="doc doc-heading">
-            <code class="highlight language-python">adjust_protection_anchor_point(canvas, h_method='center', v_method='center')</code>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-      <p>Adjust this object's <code>protection_anchor_point</code> if <code>protection_dimensions</code> are set.
-Please note that the <code>h_method</code> and <code>v_method</code> are primarily used when creating a canvas based on
-a <a href="../canvas/#from_canvas_template">canvas template</a></p>
-
-
-<table class="field-list">
-  <colgroup>
-    <col class="field-name" />
-    <col class="field-body" />
-  </colgroup>
-  <tbody valign="top">
-    <tr class="field">
-      <th class="field-name">Parameters:</th>
-      <td class="field-body">
-        <ul class="first simple">
-            <li>
-              <b><code>canvas</code></b>
-                  (<code><a class="autorefs autorefs-internal" title="pyfdl.canvas.Canvas" href="../canvas/#pyfdl.Canvas">Canvas</a></code>)
-              –
-              <div class="doc-md-description">
-                <p>to fetch anchor point from in case protection_anchor_point is not set</p>
-              </div>
-            </li>
-            <li>
-              <b><code>h_method</code></b>
-                  (<code>str</code>, default:
-                      <code>&#39;center&#39;</code>
-)
-              –
-              <div class="doc-md-description">
-                <p>horizontal alignment ('left', 'center', 'right')</p>
-              </div>
-            </li>
-            <li>
-              <b><code>v_method</code></b>
-                  (<code>str</code>, default:
-                      <code>&#39;center&#39;</code>
-)
-              –
-              <div class="doc-md-description">
-                <p>vertical alignment ('top', 'center', 'bottom')</p>
-              </div>
-            </li>
-        </ul>
-      </td>
-    </tr>
-  </tbody>
-</table>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="pyfdl.FramingDecision.from_framing_intent" class="doc doc-heading">
-            <code class="highlight language-python">from_framing_intent(canvas, framing_intent)</code>
-
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
-  </span>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-      <p>Create a new <a href="./#Framing Decision">FramingDecision</a> based on the provided
-<a href="../canvas/#Canvas">Canvas</a> and <a href="../framing_intent/#Framing Intent">FramingIntent</a></p>
-<p>The framing decision's properties are calculated for you.
-If the canvas has effective dimensions set, these will be used for the calculations.
-Otherwise, we use the dimensions</p>
-
-
-<table class="field-list">
-  <colgroup>
-    <col class="field-name" />
-    <col class="field-body" />
-  </colgroup>
-  <tbody valign="top">
-    <tr class="field">
-      <th class="field-name">Parameters:</th>
-      <td class="field-body">
-        <ul class="first simple">
-            <li>
-              <b><code>canvas</code></b>
-                  (<code><a class="autorefs autorefs-internal" title="pyfdl.canvas.Canvas" href="../canvas/#pyfdl.Canvas">Canvas</a></code>)
-              –
-              <div class="doc-md-description">
-                <p>canvas to base framing decision on</p>
-              </div>
-            </li>
-            <li>
-              <b><code>framing_intent</code></b>
-                  (<code><a class="autorefs autorefs-internal" title="pyfdl.framing_intent.FramingIntent" href="../framing_intent/#pyfdl.FramingIntent">FramingIntent</a></code>)
-              –
-              <div class="doc-md-description">
-                <p>framing intent to place in canvas</p>
+                
               </div>
             </li>
         </ul>
@@ -333,7 +212,195 @@ Otherwise, we use the dimensions</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-<b><code>framing_decision</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.framing_decision.FramingDecision" href="#pyfdl.FramingDecision">FramingDecision</a></code>
+<b><code>size</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.Dimensions" href="../common/#pyfdl.Dimensions">Dimensions</a></code>
+)              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pyfdl.CanvasTemplate.get_desqueezed_width" class="doc doc-heading">
+            <code class="highlight language-python">get_desqueezed_width(source_width, squeeze_factor)</code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Get the de-squeezed width also considering the <code>target_anamorphic_squeeze</code>.
+Used to calculate scaling of canvases and framing decisions.
+If <code>target_anamorphic_squeeze</code> is 0, it's considered "same as source" and no de-squeeze
+is applied.</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>source_width</code></b>
+                  (<code><span title="typing.Union">Union</span>[float, int]</code>)
+              –
+              <div class="doc-md-description">
+                <p>from source <code>Canvas</code> or <code>FramingDecision</code></p>
+              </div>
+            </li>
+            <li>
+              <b><code>squeeze_factor</code></b>
+                  (<code>float</code>)
+              –
+              <div class="doc-md-description">
+                <p>source <code>Canvas.anamorphic_squeeze</code></p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>width</code></b>(                  <code><span title="typing.Union">Union</span>[float, int]</code>
+)              –
+              <div class="doc-md-description">
+                <p>scaled to size</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pyfdl.CanvasTemplate.get_scale_factor" class="doc doc-heading">
+            <code class="highlight language-python">get_scale_factor(source_dimensions, source_anamorphic_squeeze)</code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Calculate the scale factor used when creating a new <code>Canvas</code> and <code>FramingDecision</code></p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>source_dimensions</code></b>
+                  (<code><a class="autorefs autorefs-internal" title="pyfdl.Dimensions" href="../common/#pyfdl.Dimensions">Dimensions</a></code>)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+            <li>
+              <b><code>source_anamorphic_squeeze</code></b>
+                  (<code>float</code>)
+              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>scale_factor</code></b>(                  <code>float</code>
+)              –
+              <div class="doc-md-description">
+                
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pyfdl.CanvasTemplate.get_transfer_keys" class="doc doc-heading">
+            <code class="highlight language-python">get_transfer_keys()</code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Get a list of attributes to transfer from source to destination in the order that
+preserves all attributes between <code>fit_source</code> and <code>preserve_from_canvas</code></p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>keys</code></b>(                  <code><span title="typing.List">List</span>[str]</code>
 )              –
               <div class="doc-md-description">
                 
@@ -359,8 +426,8 @@ Otherwise, we use the dimensions</p>
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../fdl/" class="btn btn-neutral float-left" title="FDL"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../framing_intent/" class="btn btn-neutral float-right" title="Framing Intent">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../canvas/" class="btn btn-neutral float-left" title="Canvas"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../common/" class="btn btn-neutral float-right" title="Common">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -387,10 +454,10 @@ Otherwise, we use the dimensions</p>
         </span>
     
     
-      <span><a href="../fdl/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../canvas/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../framing_intent/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../common/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

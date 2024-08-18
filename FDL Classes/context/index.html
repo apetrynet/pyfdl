@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Framing Intent - PyFDL</title>
+    <title>Context - PyFDL</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,8 +13,8 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Framing Intent";
-        var mkdocs_page_input_path = "Classes/framing_intent.md";
+        var mkdocs_page_name = "Context";
+        var mkdocs_page_input_path = "FDL Classes/context.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -52,7 +52,7 @@
                 <li class="toctree-l1"><a class="reference internal" href="../../top_level_functions/">Top Level Functions</a>
                 </li>
               </ul>
-              <p class="caption"><span class="caption-text">Classes</span></p>
+              <p class="caption"><span class="caption-text">FDL Classes</span></p>
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" href="../canvas/">Canvas</a>
                   </li>
@@ -60,7 +60,11 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../common/">Common</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../context/">Context</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Context</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.Context">Context</a>
+    </li>
+    </ul>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../errors/">Errors</a>
                   </li>
@@ -68,13 +72,21 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../framing_decision/">Framing Decision</a>
                   </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Framing Intent</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.FramingIntent">FramingIntent</a>
-    </li>
-    </ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../framing_intent/">Framing Intent</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../header/">Header</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Handlers</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Handlers/handlers/">Handlers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Plugins</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Plugins/plugins/">About Plugins</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Plugins/registry/">Plugin Registry</a>
                   </li>
               </ul>
       </div>
@@ -91,10 +103,10 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
-          <li class="breadcrumb-item">Classes</li>
-      <li class="breadcrumb-item active">Framing Intent</li>
+          <li class="breadcrumb-item">FDL Classes</li>
+      <li class="breadcrumb-item active">Context</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/apetrynet/pyfdl/edit/master/docs/Classes/framing_intent.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/apetrynet/pyfdl/edit/master/docs/FDL Classes/context.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -102,15 +114,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="framing-intent">Framing Intent</h1>
+                <h1 id="context">Context</h1>
 
 
 <div class="doc doc-object doc-class">
 
 
 
-<h2 id="pyfdl.FramingIntent" class="doc doc-heading">
-              <code class="highlight language-python">pyfdl.FramingIntent(label=None, id_=None, aspect_ratio=None, protection=None)</code>
+<h2 id="pyfdl.Context" class="doc doc-heading">
+              <code class="highlight language-python">pyfdl.Context(label=None, context_creator=None, canvases=None)</code>
 
 </h2>
 
@@ -144,8 +156,8 @@
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../framing_decision/" class="btn btn-neutral float-left" title="Framing Decision"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../header/" class="btn btn-neutral float-right" title="Header">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../common/" class="btn btn-neutral float-left" title="Common"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../errors/" class="btn btn-neutral float-right" title="Errors">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -172,10 +184,10 @@
         </span>
     
     
-      <span><a href="../framing_decision/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../common/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../header/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../errors/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>About Plugins - PyFDL</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "About Plugins";
+        var mkdocs_page_input_path = "Plugins/plugins.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> PyFDL
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Welcome to PyFDL</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../top_level_functions/">Top Level Functions</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">FDL Classes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../FDL%20Classes/canvas/">Canvas</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../FDL%20Classes/canvas_template/">Canvas Template</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../FDL%20Classes/common/">Common</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../FDL%20Classes/context/">Context</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../FDL%20Classes/errors/">Errors</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../FDL%20Classes/fdl/">FDL</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../FDL%20Classes/framing_decision/">Framing Decision</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../FDL%20Classes/framing_intent/">Framing Intent</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../FDL%20Classes/header/">Header</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Handlers</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Handlers/handlers/">Handlers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Plugins</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">About Plugins</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#plugin-types">Plugin types</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#handlers">Handlers</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#writing-a-handler-plugin">Writing a handler plugin</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#installing-a-plugin">Installing a plugin</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#install-via-pip">Install via pip</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#install-at-runtime">Install at runtime</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#using-your-handler">Using your handler</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry/">Plugin Registry</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">PyFDL</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Plugins</li>
+      <li class="breadcrumb-item active">About Plugins</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/apetrynet/pyfdl/edit/master/docs/Plugins/plugins.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="about-plugins">About Plugins</h1>
+<p>PyFDL supports plugins for expanding the toolkit.<br />
+This may be useful to add support for converting frame line definitions in another formats to FDL or 
+reading metadata from files to mention a few examples.</p>
+<h2 id="plugin-types">Plugin types</h2>
+<h3 id="handlers">Handlers</h3>
+<p>Plugins that take care of reading/writing files to and/or from FDL are called <code>handlers</code>. 
+PyFDL comes with a built-in <a href="../../Handlers/handlers/#fdlhandler"><code>FDLHandler</code></a> which takes care of reading and writing 
+FDL files.</p>
+<h2 id="writing-a-handler-plugin">Writing a handler plugin</h2>
+<p>There are only a couple of requirements for a handler.<br />
+1. The handler needs to be a class with a <code>name</code> variable. If your handler deals with files you should 
+ provide a <code>suffixes</code> variable containing a list of suffixes to support. Suffixes include the dot like. ".yml" 
+2. The module needs to provide a function, example: <code>register_plugin(registry)</code> which accepts one argument for 
+ the registry. This function will call <code>registry.add_handler(&lt;HANDLER_INSTANCE&gt;)</code> with an instance of your 
+ handler.</p>
+<p>Example of a YAML Handler:</p>
+<pre><code class="language-python">import yaml
+from pathlib import Path
+from typing import Optional, Any
+from pyfdl import FDL
+
+class YAMLHandler:
+    def __init__(self):
+        # Name is required
+        self.name = 'yaml'
+        # Suffixes may be used to automagically select this handler based on path
+        self.suffixes = [&quot;.yml&quot;, &quot;.yaml&quot;]
+
+    def write_to_string(self, fdl: FDL, validate: bool = True, **yaml_args: Optional[Any]) -&gt; str:
+        if validate:
+            fdl.validate()
+
+        return yaml.dump(fdl.to_dict(), **yaml_args)
+
+    def write_to_file(self, fdl: FDL, path: Path, validate: bool = True, **yaml_args: Optional[Any]) -&gt; str:
+        if validate:
+            fdl.validate()
+        print('yoho')
+        with path.open('w') as f:
+            f.write(yaml.dump(fdl.to_dict(), **yaml_args))
+
+    def custom_method(self, fdl: FDL, brand: str) -&gt; FDL:
+        fdl.fdl_creator = brand
+        return fdl
+
+
+def register_plugin(registry: 'PluginRegistry'):
+    registry.add_handler(YAMLHandler())
+</code></pre>
+<h2 id="installing-a-plugin">Installing a plugin</h2>
+<h3 id="install-via-pip">Install via pip</h3>
+<p>Ideally you package your plugin according to best practices and share it via PyPi for other to use.
+However, the only requirement from PyFDL's perspective is that you install the plugin to PyFDL's 
+plugin namespace: <code>pyfdl.plugins</code>.</p>
+<p>In your pyproject.toml or setup.py make sure to add your package/module like so:</p>
+<pre><code class="language-toml">
+[project.entry-points.&quot;pyfdl.plugins&quot;]
+# If you choose to call your register function something else, make sure to adjust the entry below.
+yaml_handler = &quot;yaml_handler:register_plugin&quot;
+</code></pre>
+<p>You are free to name your register function whatever you like, but make sure you add it after the module name
+If you don't provide a function name PyFDL will assume the function is named <code>register_plugin</code> and will
+ignore your plugin if that is not the case.</p>
+<h3 id="install-at-runtime">Install at runtime</h3>
+<p>You may also add your handler directly in your code.
+To do this, simply get a hold of the registry and add your handler.</p>
+<pre><code class="language-python">from pyfdl.plugins import get_registry
+
+registry = get_registry()
+registry.add_handler(YAMLHandler())
+</code></pre>
+<h2 id="using-your-handler">Using your handler</h2>
+<p>If your handler provides one or more of the following methods: <code>read_from_file</code> <code>read_from_string</code>, 
+<code>write_to_file</code> or <code>write_to_string</code>, PyFDL will choose your handler based on either path (suffix) or 
+directly asking for this specific handler.</p>
+<pre><code class="language-python">import pyfdl
+from pathlib import Path
+from tempfile import NamedTemporaryFile
+
+fdl = pyfdl.FDL()
+fdl.apply_defaults()
+pyfdl.write_to_string(fdl, handler_name='yaml', indent=4)
+pyfdl.write_to_file(fdl, path=NamedTemporaryFile(suffix='.yml', delete=False).name)
+</code></pre>
+<p>If your handler doesn't provide one of the methods above or you have others exposed you can use them like so:</p>
+<pre><code class="language-python">from pyfdl.handlers import get_handler
+
+my_handler = get_handler(func_name='custom_method', handler_name='yaml')
+fdl = FDL()
+fdl.apply_defaults()
+assert fdl.fdl_creator == 'PyFDL'
+my_handler.custom_method(fdl, &quot;my brand&quot;)
+assert fdl.fdl_creator == 'my brand'
+
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../Handlers/handlers/" class="btn btn-neutral float-left" title="Handlers"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../registry/" class="btn btn-neutral float-right" title="Plugin Registry">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/apetrynet/pyfdl" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../../Handlers/handlers/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../registry/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
