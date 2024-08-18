@@ -1,3 +1,5 @@
+from pathlib import Path
+import tempfile
 import pytest
 import pyfdl
 
@@ -5,6 +7,17 @@ import pyfdl
 @pytest.fixture(autouse=True)
 def consistent_rounding():
     pyfdl.Base.set_rounding_strategy(pyfdl.DEFAULT_ROUNDING_STRATEGY)
+
+
+@pytest.fixture(autouse=True)
+def cleanup_temp_files():
+    yield
+
+    files = list(Path(tempfile.gettempdir()).glob('*.fdl'))
+    files += Path(tempfile.gettempdir()).glob('*.yml')
+    # Remove temp files
+    for file in files:
+        file.unlink(missing_ok=True)
 
 
 @pytest.fixture(scope="function")
@@ -177,3 +190,16 @@ def sample_canvas_template_obj():
 @pytest.fixture
 def sample_rounding_strategy_obj():
     return pyfdl.RoundStrategy(even="even", mode="up")
+
+
+@pytest.fixture
+def simple_handler():
+    class SimpleHandler:
+        def __init__(self):
+            self.name = 'simple'
+            self.suffixes = ['.ext']
+
+        def read_from_string(self, s: str) -> str:
+            return s
+
+    return SimpleHandler

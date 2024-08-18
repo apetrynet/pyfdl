@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "faulty-handler-plugin"
+dynamic = ["version"]
+description = ''
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Alan Smithee", email = "alan@whomadeit.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "pyfdl"
+]
+
+[tool.hatch.version]
+path = "src/faulty_handler_plugin/__about__.py"
+
+[project.entry-points."pyfdl.plugins"]
+# Notice intentional typo (plugi) below. Provokes a ModuleNotFoundError
+faulty_handler_plugin1 = "faulty_handler_plugi:register_plugin_func"
+# This plugin has no "register_plugin" function and will not import properly
+faulty_handler_plugin2 = "faulty_handler_plugin"
+# This will install, but fail on call as the plugin is missing a suffixes variable
+faulty_handler_plugin3 = "faulty_handler_plugin:my_reg_func"

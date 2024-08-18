@@ -4,3 +4,11 @@ class FDLError(Exception):
 
 class FDLValidationError(FDLError):
     pass
+
+
+class HandlerError(FDLError):
+    pass
+
+
+class UnknownHandlerError(HandlerError):
+    pass

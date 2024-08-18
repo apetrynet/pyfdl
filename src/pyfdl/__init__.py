@@ -1,7 +1,3 @@
-import json
-
-from typing import IO, Union
-
 from .common import (
     Base,
     Dimensions,
@@ -20,8 +16,9 @@ from .framing_decision import FramingDecision
 from .canvas import Canvas
 from .context import Context
 from .canvas_template import CanvasTemplate
-from .pyfdl import FDL
+from .fdl import FDL
 from .errors import FDLError, FDLValidationError
+from .handlers import read_from_file, read_from_string, write_to_string, write_to_file
 
 __all__ = [
     'Base',
@@ -39,78 +36,14 @@ __all__ = [
     'FramingDecision',
     'FramingIntent',
     'Header',
-    'load',
-    'loads',
     'NO_ROUNDING',
     'Point',
+    'read_from_file',
+    'read_from_string',
     'RoundStrategy',
-    'TypedCollection'
+    'TypedCollection',
+    'write_to_file',
+    'write_to_string'
 ]
 
 __version__ = "0.1.0.dev0"
-
-
-def load(fp: IO, validate: bool = True) -> FDL:
-    """
-    Load an FDL from a file.
-
-    Args:
-        fp: file pointer
-        validate: validate incoming json with jsonschema
-
-    Raises:
-        jsonschema.exceptions.ValidationError: if the contents doesn't follow the spec
-
-    Returns:
-        FDL:
-    """
-    raw = fp.read()
-    return loads(raw, validate=validate)
-
-
-def loads(s: str, validate: bool = True) -> FDL:
-    """Load an FDL from string.
-
-    Args:
-        s: string representation of an FDL
-        validate: validate incoming json with jsonschema
-
-    Returns:
-        FDL:
-
-    """
-    fdl = FDL.from_dict(json.loads(s))
-
-    if validate:
-        fdl.validate()
-
-    return fdl
-
-
-def dump(obj: FDL, fp: IO, validate: bool = True, indent: Union[int, None] = 2):
-    """Dump an FDL to a file.
-
-    Args:
-        obj: object to serialize
-        fp: file pointer
-        validate: validate outgoing json with jsonschema
-        indent: amount of spaces
-    """
-    fp.write(dumps(obj, validate=validate, indent=indent))
-
-
-def dumps(obj: FDL, validate: bool = True, indent: Union[int, None] = 2) -> str:
-    """Dump an FDL to string
-
-    Args:
-        obj: object to serialize
-        validate: validate outgoing json with jsonschema
-        indent: amount of spaces
-
-    Returns:
-        string: representation of the resulting json
-    """
-    if validate:
-        obj.validate()
-
-    return json.dumps(obj.to_dict(), indent=indent, sort_keys=False)

@@ -13,12 +13,12 @@ round values of dimensions accordingly.
 A canvas+framing decision for a "raw" camera canvas should in theory keep more precision than a 
 canvas+framing decision for a conformed VFX plate. 
 
-The rules for rounding strategy are the same as for [CanvasTemplate.round](Classes/common.md#pyfdl.RoundStrategy)
+The rules for rounding strategy are the same as for [CanvasTemplate.round](FDL Classes/common.md#pyfdl.RoundStrategy)
 
 
-The [default](Classes/common.md#pyfdl.DEFAULT_ROUNDING_STRATEGY) strategy is to round dimensions to 
+The [default](FDL Classes/common.md#pyfdl.DEFAULT_ROUNDING_STRATEGY) strategy is to round dimensions to 
 even numbers, but this may be overridden by setting the rounding strategy to 
-[`NO_ROUNDING`](Classes/common.md#pyfdl.NO_ROUNDING)
+[`NO_ROUNDING`](FDL Classes/common.md#pyfdl.NO_ROUNDING)
 
 Here are a couple examples of setting the rounding strategy:
 ```python
@@ -42,7 +42,7 @@ fdl.set_rounding_strategy({'even': 'whole', 'mode': 'up'})
 ```python
 import pyfdl
 from pyfdl import Canvas, FramingIntent, Dimensions, Point
-from io import StringIO
+from tempfile import NamedTemporaryFile
 
 fdl = pyfdl.FDL()
 
@@ -80,20 +80,19 @@ fdl.place_canvas_in_context(context_label="PanavisionDXL2", canvas=canvas)
 # Finally, let's create a framing decision
 canvas.place_framing_intent(framing_intent=framing_intent)
 
-# Validate our FDL and save it (using StringIO as example)
-with StringIO() as f:
-    pyfdl.dump(fdl, f, validate=True)
+# Validate our FDL and save it
+with NamedTemporaryFile(suffix='.fdl', delete=False) as f:
+    pyfdl.write_to_file(fdl, f.name, validate=True)
 ```
 
 ### Create a Canvas from a Canvas Template
 ```python
 import pyfdl
-from io import StringIO
 from pathlib import Path
+from tempfile import NamedTemporaryFile
 
 fdl_file = Path('tests/sample_data/Scenario-9__OriginalFDL_UsedToMakePlate.fdl')
-with fdl_file.open('r') as f:
-    fdl = pyfdl.load(f)
+fdl = pyfdl.read_from_file(fdl_file)
 
 # Select the first canvas in the first context
 context = fdl.contexts[0]
@@ -113,7 +112,7 @@ new_canvas = pyfdl.Canvas.from_canvas_template(
 # Place the new canvas along side the source 
 fdl.place_canvas_in_context(context_label=context.label, canvas=new_canvas)
 
-# Validate and "save"
-with StringIO() as f:
-    pyfdl.dump(fdl, f, validate=True)
+# Validate and write to file.
+with NamedTemporaryFile(suffix='.fdl', delete=False) as f:
+    pyfdl.write_to_file(fdl, f.name, validate=True)
 ```

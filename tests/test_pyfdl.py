@@ -12,57 +12,40 @@ SAMPLE_FDL_FILE = Path(
 )
 
 
-def test_load_unvalidated():
-    with SAMPLE_FDL_FILE.open('r') as fdl_file:
-        fdl = pyfdl.load(fdl_file, validate=False)
-
-    assert isinstance(fdl, pyfdl.FDL)
-    assert isinstance(fdl.header, pyfdl.Header)
-    assert fdl.header.uuid == fdl.uuid
-    assert fdl.uuid != ""
-
-
-def test_load_validated():
-    with SAMPLE_FDL_FILE.open('r') as fdl_file:
-        fdl = pyfdl.load(fdl_file, validate=True)
+def test_read_from_file_unvalidated():
+    fdl = pyfdl.read_from_file(SAMPLE_FDL_FILE, validate=False)
 
     assert isinstance(fdl, pyfdl.FDL)
 
-    with SAMPLE_FDL_FILE.open('r') as f:
-        raw = json.load(f)
 
-    assert raw == fdl.to_dict()
+def test_read_from_file_validated():
+    fdl = pyfdl.read_from_file(SAMPLE_FDL_FILE, validate=True)
+
+    assert isinstance(fdl, pyfdl.FDL)
 
 
-def test_loads():
-    with SAMPLE_FDL_FILE.open('r') as fdl_file:
-        raw = fdl_file.read()
-
-    fdl = pyfdl.loads(raw)
+def test_read_from_string():
+    raw = SAMPLE_FDL_FILE.read_text()
+    fdl = pyfdl.read_from_string(raw)
+    assert isinstance(fdl, pyfdl.FDL)
     assert fdl.to_dict() == json.loads(raw)
 
 
-def test_dump(tmp_path):
+def test_write_to_file(tmp_path):
     my_path = Path(tmp_path, 'myfdl.fdl')
-    with SAMPLE_FDL_FILE.open('r') as fdl_file:
-        fdl1 = pyfdl.load(fdl_file)
+    fdl1 = pyfdl.read_from_file(SAMPLE_FDL_FILE)
 
-    with my_path.open('w') as fp:
-        pyfdl.dump(fdl1, fp)
-
-    with my_path.open('r') as fp:
-        fdl2 = pyfdl.load(fp)
+    pyfdl.write_to_file(fdl1, my_path)
+    fdl2 = pyfdl.read_from_file(my_path)
 
     assert fdl1.to_dict() == fdl2.to_dict()
 
 
-def test_dumps():
-    with SAMPLE_FDL_FILE.open('r') as fdl_file:
-        raw = fdl_file.read()
+def test_write_to_string():
+    raw = SAMPLE_FDL_FILE.read_text()
+    fdl = pyfdl.read_from_string(raw)
 
-    fdl = pyfdl.loads(raw)
-
-    assert json.loads(pyfdl.dumps(fdl)) == json.loads(raw)
+    assert json.loads(pyfdl.write_to_string(fdl)) == json.loads(raw)
 
 
 def test_init_empty_fdl():
