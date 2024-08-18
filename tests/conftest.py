@@ -13,8 +13,10 @@ def consistent_rounding():
 def cleanup_temp_files():
     yield
 
+    files = list(Path(tempfile.gettempdir()).glob('*.fdl'))
+    files += Path(tempfile.gettempdir()).glob('*.yml')
     # Remove temp files
-    for file in Path(tempfile.gettempdir()).glob('*.fdl'):
+    for file in files:
         file.unlink(missing_ok=True)
 
 
