@@ -27,7 +27,7 @@ class MyHandler2:
         )
 
 
-# This fun is named in pyproject.toml
+# This func is named in pyproject.toml
 def register_plugin_func(registrar: 'PluginRegistrar'):
     registrar.add_handler(MyHandler1())
 

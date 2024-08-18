@@ -1,8 +1,9 @@
+import sys
 from importlib import import_module, resources
 from importlib.metadata import entry_points
 from typing import Union, Any
 
-from pyfdl.errors import UnknownHandlerError
+from pyfdl.errors import UnknownHandlerError, HandlerError
 
 _REGISTRY = None
 
@@ -41,14 +42,27 @@ class PluginRegistry:
             plugin_packages = entry_points().get('pyfdl.plugins', [])
 
         for plugin in plugin_packages:
-            if plugin.attr is not None:
-                register_func = plugin.load()
-            else:
-                mod = plugin.load()
-                register_func = getattr(mod, 'register_plugin', None)
+            try:
+                if plugin.attr is not None:
+                    register_func = plugin.load()
+                else:
+                    mod = plugin.load()
+                    register_func = getattr(mod, 'register_plugin', None)
 
-            if register_func is not None:
+                if register_func is None:
+                    print(
+                        f'Unable to find a registration function in plugin: "{plugin.name}". '
+                        f'Please consult documentation on plugins to solve this.',
+                        file=sys.stderr
+                    )
+
                 register_func(self)
+
+            except (ModuleNotFoundError, TypeError) as err:
+                print(
+                    f'Unable to load plugin: "{plugin.name}" due to: "{err}"',
+                    file=sys.stderr
+                )
 
     def add_handler(self, handler: Any):
         """
@@ -95,8 +109,14 @@ class PluginRegistry:
 
         Returns:
             handler:
+
+        Raises:
+            error:
         """
         for handler in self.handlers.values():
+            if not hasattr(handler, 'suffixes'):
+                continue
+
             if suffix in handler.suffixes and hasattr(handler, func_name):
                 return handler
 

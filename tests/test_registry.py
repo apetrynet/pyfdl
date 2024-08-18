@@ -8,14 +8,14 @@ from pyfdl.errors import UnknownHandlerError
 
 
 @pytest.fixture
-def install_plugin():
-    # pip.main(['install', '--upgrade', 'pip'])
+def install_plugins():
     pip.main(
-        ['install', 'tests/sample_data/dummy-plugin']
+        ['install', 'tests/sample_data/handler-plugin', 'tests/sample_data/faulty-handler-plugin']
     )
     yield
+
     pip.main(
-        ['uninstall', '-y', 'dummy-plugin']
+        ['uninstall', '-y', 'handler-plugin', 'faulty-handler-plugin']
     )
 
 
@@ -47,10 +47,21 @@ def test_load_builtin():
     assert isinstance(_registry.handlers['fdl'], FDLHandler)
 
 
-def test_load_plugin(install_plugin):
+def test_load_plugin(capsys, install_plugins):
     _registry = get_registry(reload=True)
     assert _registry.handlers.get('myhandler1') is not None
     assert _registry.handlers.get('myhandler2') is not None
+
+    # faulty-handler-plugin intentionally fails importing
+    expected_err1 = \
+        """Unable to load plugin: "faulty_handler_plugin1" due to: "No module named 'faulty_handler_plugi'"""
+
+    expected_err2 = \
+        """Unable to find a registration function in plugin: "faulty_handler_plugin2"."""
+
+    captured_messages = capsys.readouterr().err
+    assert expected_err1 in captured_messages
+    assert expected_err2 in captured_messages
 
 
 def test_add_handler(simple_handler):

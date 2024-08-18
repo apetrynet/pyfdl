@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "dummy-plugin"
+name = "handler-plugin"
 dynamic = ["version"]
 description = ''
 readme = "README.md"
@@ -29,8 +29,8 @@ dependencies = [
 ]
 
 [tool.hatch.version]
-path = "src/dummy_plugin/__about__.py"
+path = "src/handler_plugin/__about__.py"
 
 [project.entry-points."pyfdl.plugins"]
-dummy_plugin1 = "dummy_plugin:register_plugin_func"
-dummy_plugin2 = "dummy_plugin"
+handler_plugin1 = "handler_plugin:register_plugin_func"
+handler_plugin2 = "handler_plugin"

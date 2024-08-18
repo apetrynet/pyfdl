@@ -6,5 +6,9 @@ class FDLValidationError(FDLError):
     pass
 
 
-class UnknownHandlerError(FDLError):
+class HandlerError(FDLError):
+    pass
+
+
+class UnknownHandlerError(HandlerError):
     pass
