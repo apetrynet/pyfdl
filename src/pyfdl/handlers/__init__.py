@@ -4,7 +4,7 @@ from typing import Optional, Any, Union
 from pyfdl.plugins import get_registry
 
 
-def get_handler(func_name: str, path: Path = None, handler_name: str = None) -> Any:
+def get_handler(func_name: str, path: Union[Path, str] = None, handler_name: str = None) -> Any:
     """
     Convenience function to get a handler matching the provided arguments.
 
@@ -25,6 +25,7 @@ def get_handler(func_name: str, path: Path = None, handler_name: str = None) -> 
         handler = _registry.get_handler_by_name(handler_name, func_name=func_name)
 
     else:
+        path = Path(path)
         handler = _registry.get_handler_by_suffix(path.suffix, func_name=func_name)
 
     return handler

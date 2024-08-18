@@ -19,19 +19,6 @@ def install_plugins():
     )
 
 
-@pytest.fixture
-def simple_handler():
-    class SimpleHandler:
-        def __init__(self):
-            self.name = 'simple'
-            self.suffixes = ['.ext']
-
-        def read_from_string(self, s: str) -> str:
-            return s
-
-    return SimpleHandler
-
-
 def test_loading_registry():
     pyfdl.plugins.registry._REGISTRY = None
     assert isinstance(get_registry(), pyfdl.plugins.registry.PluginRegistry)

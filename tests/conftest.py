@@ -190,3 +190,16 @@ def sample_canvas_template_obj():
 @pytest.fixture
 def sample_rounding_strategy_obj():
     return pyfdl.RoundStrategy(even="even", mode="up")
+
+
+@pytest.fixture
+def simple_handler():
+    class SimpleHandler:
+        def __init__(self):
+            self.name = 'simple'
+            self.suffixes = ['.ext']
+
+        def read_from_string(self, s: str) -> str:
+            return s
+
+    return SimpleHandler
