@@ -1,12 +1,12 @@
 from pathlib import Path
 from typing import Optional, Any, Union
 
-from pyfdl import plugins
+from pyfdl.plugins import get_registry
 
 
 def get_handler(func_name: str, path: Path = None, handler_name: str = None) -> Any:
     """
-    Convenience function to get a matching handler matching the provided arguments.
+    Convenience function to get a handler matching the provided arguments.
 
     Args:
         func_name: desired function name in handler
@@ -20,7 +20,7 @@ def get_handler(func_name: str, path: Path = None, handler_name: str = None) -> 
     if handler_name is None and path is None:
         raise RuntimeError(f'"handler_name" and "path" can\'t both be None. Please provide one or the other')
 
-    _registry = plugins.get_registry()
+    _registry = get_registry()
     if handler_name is not None:
         handler = _registry.get_handler_by_name(handler_name, func_name=func_name)
 
@@ -43,9 +43,10 @@ def read_from_file(path: Union[Path, str], handler_name: str = None, **handler_k
     Returns:
         FDL:
     """
+    path = Path(path)
     handler = get_handler(func_name='read_from_file', path=path, handler_name=handler_name)
 
-    return handler.read_from_file(Path(path), **handler_kwargs)
+    return handler.read_from_file(path, **handler_kwargs)
 
 
 def read_from_string(s: str, handler_name: str = 'fdl', **handler_kwargs: Optional[Any]) -> 'FDL':
@@ -65,7 +66,7 @@ def read_from_string(s: str, handler_name: str = 'fdl', **handler_kwargs: Option
     return handler.read_from_string(s, **handler_kwargs)
 
 
-def write_to_file(fdl: 'FDL', path: Union[Path, str], handler_name: str = 'fdl', **handler_kwargs: Optional[Any]):
+def write_to_file(fdl: 'FDL', path: Union[Path, str], handler_name: str = None, **handler_kwargs: Optional[Any]):
     """
     Handler agnostic function to write a file based on an FDL. A suitable handler will be chosen based
     on `path` or `handler_name`
@@ -76,8 +77,9 @@ def write_to_file(fdl: 'FDL', path: Union[Path, str], handler_name: str = 'fdl',
         handler_name: name of handler to use
         **handler_kwargs: arguments passed to handler
     """
+    path = Path(path)
     handler = get_handler(func_name='write_to_file', path=path, handler_name=handler_name)
-    handler.write_to_file(fdl, Path(path), **handler_kwargs)
+    handler.write_to_file(fdl, path, **handler_kwargs)
 
 
 def write_to_string(fdl: 'FDL', handler_name: str = 'fdl', **handler_kwargs: Optional[Any]):
