@@ -1,4 +1,4 @@
-# Plugins
+# About Plugins
 
 PyFDL supports plugins for expanding the toolkit.  
 This may be useful to add support for converting frame line definitions in another formats to FDL or 
