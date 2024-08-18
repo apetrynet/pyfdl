@@ -13,12 +13,12 @@ round values of dimensions accordingly.
 A canvas+framing decision for a "raw" camera canvas should in theory keep more precision than a 
 canvas+framing decision for a conformed VFX plate. 
 
-The rules for rounding strategy are the same as for [CanvasTemplate.round](Classes/common.md#pyfdl.RoundStrategy)
+The rules for rounding strategy are the same as for [CanvasTemplate.round](FDL Classes/common.md#pyfdl.RoundStrategy)
 
 
-The [default](Classes/common.md#pyfdl.DEFAULT_ROUNDING_STRATEGY) strategy is to round dimensions to 
+The [default](FDL Classes/common.md#pyfdl.DEFAULT_ROUNDING_STRATEGY) strategy is to round dimensions to 
 even numbers, but this may be overridden by setting the rounding strategy to 
-[`NO_ROUNDING`](Classes/common.md#pyfdl.NO_ROUNDING)
+[`NO_ROUNDING`](FDL Classes/common.md#pyfdl.NO_ROUNDING)
 
 Here are a couple examples of setting the rounding strategy:
 ```python
