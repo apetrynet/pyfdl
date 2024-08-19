@@ -20,6 +20,11 @@ This is the default behavior for rounding the values of dimensions. The rules ar
 This will disable rounding of values in dimensions. Exception being `Canvas.dimensions` when
 created by a canvas templates
 
+::: pyfdl.set_rounding_strategy
+
+::: pyfdl.rounding_strategy
+
+
 ## Base Classes
 
 Below is a collection of the common classes that are used by other classes.
