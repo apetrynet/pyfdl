@@ -72,6 +72,10 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#pyfdl.NO_ROUNDING">NO_ROUNDING</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.set_rounding_strategy">set_rounding_strategy</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.rounding_strategy">rounding_strategy</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#base-classes">Base Classes</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#pyfdl.Base">Base</a>
@@ -81,8 +85,6 @@
     <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Base.check_required">check_required</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Base.from_dict">from_dict</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Base.set_rounding_strategy">set_rounding_strategy</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#pyfdl.Base.to_dict">to_dict</a>
     </li>
@@ -237,7 +239,7 @@ rounding of values</p>
 
 
 <h2 id="pyfdl.DEFAULT_ROUNDING_STRATEGY" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.DEFAULT_ROUNDING_STRATEGY = {'even': 'even', 'mode': 'round'}</code>
+            <code class="highlight language-python">pyfdl.DEFAULT_ROUNDING_STRATEGY = NO_ROUNDING</code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
@@ -272,7 +274,37 @@ rounding of values</p>
 
 </div><p>This will disable rounding of values in dimensions. Exception being <code>Canvas.dimensions</code> when
 created by a canvas templates</p>
-<h2 id="base-classes">Base Classes</h2>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="pyfdl.set_rounding_strategy" class="doc doc-heading">
+            <code class="highlight language-python">pyfdl.set_rounding_strategy(rules)</code>
+
+</h2>
+
+
+    <div class="doc doc-contents first">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="pyfdl.rounding_strategy" class="doc doc-heading">
+            <code class="highlight language-python">pyfdl.rounding_strategy()</code>
+
+</h2>
+
+
+    <div class="doc doc-contents first">
+
+    </div>
+
+</div><h2 id="base-classes">Base Classes</h2>
 <p>Below is a collection of the common classes that are used by other classes.</p>
 
 
@@ -475,70 +507,6 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
 )              –
               <div class="doc-md-description">
                 <p>and instance of the current class</p>
-              </div>
-            </li>
-        </ul>
-      </td>
-    </tr>
-  </tbody>
-</table>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="pyfdl.Base.set_rounding_strategy" class="doc doc-heading">
-            <code class="highlight language-python">set_rounding_strategy(rules=DEFAULT_ROUNDING_STRATEGY)</code>
-
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
-  </span>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-      <p>Set the global rounding strategy for dimensions. The rules are the same as for
-<code>CanvasTemplate.round</code> but are passed as a dictionary.
-Passing <code>None</code> to the <code>rule</code> argument will disable all rounding for dimensions.</p>
-<p>Default rules are: <code>{'even': 'even', 'mode': 'round'}</code></p>
-<p>Available options:</p>
-
-
-<details class="even" open>
-  <summary>even</summary>
-  <p>"whole" = to nearest integer,
-"even" = to nearest even-numbered integer</p>
-</details>
-
-<details class="mode" open>
-  <summary>mode</summary>
-  <p>"up" = always round up,
-"down" = always round down
-"round" = standard rounding: &gt;= +0.5 rounds up and &lt; +0.5 rounds down</p>
-</details>
-
-<table class="field-list">
-  <colgroup>
-    <col class="field-name" />
-    <col class="field-body" />
-  </colgroup>
-  <tbody valign="top">
-    <tr class="field">
-      <th class="field-name">Parameters:</th>
-      <td class="field-body">
-        <ul class="first simple">
-            <li>
-              <b><code>rules</code></b>
-                  (<code><span title="typing.Union">Union</span>[dict, None]</code>, default:
-                      <code><a class="autorefs autorefs-internal" title="pyfdl.common.DEFAULT_ROUNDING_STRATEGY" href="#pyfdl.DEFAULT_ROUNDING_STRATEGY">DEFAULT_ROUNDING_STRATEGY</a></code>
-)
-              –
-              <div class="doc-md-description">
-                <p>will default to <code>{'even': 'even', 'mode': 'round'}</code> if rules is <code>None</code></p>
               </div>
             </li>
         </ul>

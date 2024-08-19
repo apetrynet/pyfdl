@@ -50,8 +50,12 @@
     <li class="toctree-l2"><a class="reference internal" href="#install">Install</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#about-rounding">About rounding</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#setting-the-global-rounding-strategy">Setting the global rounding strategy</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#usage-examples">Usage Examples</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#create-an-fdl-from-scratch">Create an FDL from scratch</a>
     </li>
@@ -137,24 +141,27 @@ round values of dimensions accordingly.<br />
 A canvas+framing decision for a "raw" camera canvas should in theory keep more precision than a 
 canvas+framing decision for a conformed VFX plate. </p>
 <p>The rules for rounding strategy are the same as for <a href="../FDL%20Classes/common/#pyfdl.RoundStrategy">CanvasTemplate.round</a></p>
-<p>The <a href="../FDL%20Classes/common/#pyfdl.DEFAULT_ROUNDING_STRATEGY">default</a> strategy is to round dimensions to 
-even numbers, but this may be overridden by setting the rounding strategy to 
-<a href="../FDL%20Classes/common/#pyfdl.NO_ROUNDING"><code>NO_ROUNDING</code></a></p>
-<p>Here are a couple examples of setting the rounding strategy:</p>
+<p>The <a href="../FDL%20Classes/common/#pyfdl.DEFAULT_ROUNDING_STRATEGY">default</a> strategy is to not round dimensions and keep float values where applicable, but this may be 
+overridden by setting the rounding strategy via the 
+<a href="../FDL%20Classes/common/#pyfdl.set_rounding_strategy"><code>set_rounding_strategy()</code></a> function</p>
+<blockquote>
+<p><strong>NOTE!</strong> The rounding strategy is set globally for where rounding applies except for <code>CanvasTemplate.round</code> 
+which follows its own rules.</p>
+</blockquote>
+<h3 id="setting-the-global-rounding-strategy">Setting the global rounding strategy</h3>
+<p>Here are a some examples of how to set the rounding strategy:</p>
 <pre><code class="language-python">import pyfdl
 
-fdl = pyfdl.FDL()
-
-# No rounding may either be set by passing the NO_ROUNDING variable
-fdl.set_rounding_strategy(pyfdl.NO_ROUNDING)
+# No rounding (default behavior) may either be set by passing the NO_ROUNDING variable
+pyfdl.set_rounding_strategy(pyfdl.NO_ROUNDING)
 
 # Or by explicitly passing None
-fdl.set_rounding_strategy(None)
+pyfdl.set_rounding_strategy(None)
 
 # For other requirements pass a dictionary with the rules
-fdl.set_rounding_strategy({'even': 'whole', 'mode': 'up'})
+pyfdl.set_rounding_strategy({'even': 'whole', 'mode': 'up'})
 </code></pre>
-<h2 id="examples">Examples</h2>
+<h2 id="usage-examples">Usage Examples</h2>
 <h3 id="create-an-fdl-from-scratch">Create an FDL from scratch</h3>
 <pre><code class="language-python">import pyfdl
 from pyfdl import Canvas, FramingIntent, Dimensions, Point
