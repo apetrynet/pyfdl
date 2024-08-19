@@ -99,8 +99,8 @@ class Canvas(Base):
         self._physical_dimensions = dim
 
     def place_framing_intent(self, framing_intent: FramingIntent) -> str:
-        """Create a new [FramingDecision](framing_decision.md#Framing Decision) based on the provided
-        [FramingIntent](framing_intent.md#Framing Intent) and add it to the
+        """Create a new [FramingDecision](framing_decision.md#pyfdl.FramingDecision) based on the provided
+        [FramingIntent](framing_intent.md#pyfdl.FramingIntent) and add it to the
         collection of framing decisions.
 
         The framing decision's properties are calculated for you.
@@ -141,7 +141,7 @@ class Canvas(Base):
     ) -> 'Canvas':
         """
         Create a new `Canvas` from the provided `source_canvas` and `framing_decision`
-        based on a [CanvasTemplate](canvas_template.md#Canvas Template)
+        based on a [CanvasTemplate](canvas_template.md#pyfdl.CanvasTemplate)
 
         Args:
             canvas_template: describing how to handle incoming `Canvas` and `FramingDecision`
