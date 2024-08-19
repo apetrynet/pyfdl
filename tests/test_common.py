@@ -4,15 +4,11 @@ import pyfdl
 
 
 def test_set_rounding_strategy(base_subclass, sample_rounding_strategy_obj):
-    obj = base_subclass()
-    assert obj.rounding_strategy.to_dict() == pyfdl.DEFAULT_ROUNDING_STRATEGY
+    assert pyfdl.rounding_strategy() == pyfdl.RoundStrategy(**pyfdl.DEFAULT_ROUNDING_STRATEGY)
 
     override = {"even": "whole", "mode": "up"}
     pyfdl.set_rounding_strategy(rules=override)
-    assert obj.rounding_strategy.to_dict() == override
-
-    # # Reset to default to not mess up other tests
-    # obj.set_rounding_strategy(pyfdl.DEFAULT_ROUNDING_STRATEGY)
+    assert pyfdl.rounding_strategy().to_dict() == override
 
 
 def test_base_empty(base_subclass):
@@ -159,6 +155,8 @@ def test_dimensions_to_dict():
 
 
 def test_dimensions_scale_by():
+    # Overriding rounding to match values in sample
+    pyfdl.set_rounding_strategy({'even': 'even', 'mode': 'round'})
     dim_1 = pyfdl.Dimensions(width=1.1, height=2.2, dtype=int)
     dim_1.scale_by(2)
     assert (dim_1.width, dim_1.height) == (2, 4)

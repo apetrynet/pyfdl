@@ -10,7 +10,8 @@ FDL_SCHEMA_VERSION = {'major': FDL_SCHEMA_MAJOR, 'minor': FDL_SCHEMA_MINOR}
 
 _ROUNDING = None
 NO_ROUNDING = {}
-DEFAULT_ROUNDING_STRATEGY = {'even': 'even', 'mode': 'round'}
+DEFAULT_ROUNDING_STRATEGY = NO_ROUNDING
+# DEFAULT_ROUNDING_STRATEGY = {'even': 'even', 'mode': 'round'}
 
 
 def set_rounding_strategy(rules: Union[dict, None]):
