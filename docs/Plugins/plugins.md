@@ -13,9 +13,10 @@ FDL files.
 
 ## Writing a handler plugin
 There are only a couple of requirements for a handler.  
-1. The handler needs to be a class with a `name` variable. If your handler deals with files you should 
+
+ 1. The handler needs to be a class with a `name` variable. If your handler deals with files you should 
  provide a `suffixes` variable containing a list of suffixes to support. Suffixes include the dot like. ".yml" 
-2. The module needs to provide a function, example: `register_plugin(registry)` which accepts one argument for 
+ 2. The module needs to provide a function, example: `register_plugin(registry)` which accepts one argument for 
  the registry. This function will call `registry.add_handler(<HANDLER_INSTANCE>)` with an instance of your 
  handler.
 
@@ -69,7 +70,7 @@ In your pyproject.toml or setup.py make sure to add your package/module like so:
 yaml_handler = "yaml_handler:register_plugin"
 ```
 
-You are free to name your register function whatever you like, but make sure you add it after the module name
+You are free to name your register function whatever you like, but make sure you add it after the module name.  
 If you don't provide a function name PyFDL will assume the function is named `register_plugin` and will
 ignore your plugin if that is not the case.
 

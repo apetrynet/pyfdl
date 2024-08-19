@@ -1,12 +1,5 @@
 # Getting Started
 
-## Install
-> **NOTE!** Please note that at the time of writing this PyFDL is not released on PyPi. 
-> Please refer to README.md for instructions. 
-```
-pip install pyfdl
-```
-
 ## About rounding
 As different parts of a pipeline requires different levels of precision we have an option to 
 round values of dimensions accordingly.  
@@ -16,7 +9,7 @@ canvas+framing decision for a conformed VFX plate.
 The rules for rounding strategy are the same as for [CanvasTemplate.round](FDL Classes/common.md#pyfdl.RoundStrategy)
 
 
-The [default](FDL Classes/common.md#pyfdl.DEFAULT_ROUNDING_STRATEGY) strategy is to not round dimensions and keep float values where applicable, but this may be 
+The [default](FDL Classes/common.md#pyfdl.DEFAULT_ROUNDING_STRATEGY) strategy is to not apply rounding and keep float values where applicable, but this may be 
 overridden by setting the rounding strategy via the 
 [`set_rounding_strategy()`](FDL Classes/common.md#pyfdl.set_rounding_strategy) function
 
