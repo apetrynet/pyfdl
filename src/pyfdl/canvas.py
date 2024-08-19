@@ -60,10 +60,6 @@ class Canvas(Base):
         self.anamorphic_squeeze = anamorphic_squeeze
         self.framing_decisions = framing_decisions or TypedCollection(FramingDecision)
 
-        # Make sure we have a rounding strategy
-        if Base.rounding_strategy is None:
-            Base.set_rounding_strategy()
-
     @property
     def dimensions(self) -> Union[Dimensions, None]:
         return self._dimensions

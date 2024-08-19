@@ -1,6 +1,6 @@
 from typing import Union
 
-from pyfdl import Base, Dimensions, Point
+from pyfdl import Base, Dimensions, Point, rounding_strategy
 
 
 class FramingDecision(Base):
@@ -40,10 +40,6 @@ class FramingDecision(Base):
         self.anchor_point = anchor_point
         self.protection_dimensions = protection_dimensions
         self.protection_anchor_point = protection_anchor_point
-
-        # Make sure we have a rounding strategy
-        if Base.rounding_strategy is None:
-            Base.set_rounding_strategy()
 
     @property
     def dimensions(self) -> Union[Dimensions, None]:
@@ -100,7 +96,7 @@ class FramingDecision(Base):
 
         if framing_intent.protection > 0:
             protection_dimensions = Dimensions(width=width, height=height)
-            framing_decision.protection_dimensions = cls.rounding_strategy.round_dimensions(
+            framing_decision.protection_dimensions = rounding_strategy().round_dimensions(
                 protection_dimensions
             )
             framing_decision.adjust_protection_anchor_point(canvas)
@@ -114,7 +110,7 @@ class FramingDecision(Base):
             width=width * (1 - framing_intent.protection),
             height=height * (1 - framing_intent.protection)
         )
-        framing_decision.dimensions = cls.rounding_strategy.round_dimensions(dimensions)
+        framing_decision.dimensions = rounding_strategy().round_dimensions(dimensions)
         framing_decision.adjust_anchor_point(canvas)
 
         return framing_decision

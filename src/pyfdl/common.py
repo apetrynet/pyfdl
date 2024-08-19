@@ -8,8 +8,29 @@ FDL_SCHEMA_MAJOR = 1
 FDL_SCHEMA_MINOR = 0
 FDL_SCHEMA_VERSION = {'major': FDL_SCHEMA_MAJOR, 'minor': FDL_SCHEMA_MINOR}
 
-DEFAULT_ROUNDING_STRATEGY = {'even': 'even', 'mode': 'round'}
+_ROUNDING = None
 NO_ROUNDING = {}
+DEFAULT_ROUNDING_STRATEGY = {'even': 'even', 'mode': 'round'}
+
+
+def set_rounding_strategy(rules: Union[dict, None]):
+    global NO_ROUNDING
+    global DEFAULT_ROUNDING_STRATEGY
+    global _ROUNDING
+
+    if rules is None:
+        rules = NO_ROUNDING
+
+    _ROUNDING = RoundStrategy(**rules)
+
+
+def rounding_strategy() -> 'RoundStrategy':
+    global _ROUNDING
+    global DEFAULT_ROUNDING_STRATEGY
+    if _ROUNDING is None:
+        set_rounding_strategy(DEFAULT_ROUNDING_STRATEGY)
+
+    return _ROUNDING
 
 
 class Base:
@@ -26,9 +47,6 @@ class Base:
     # Attribute used as a unique identifier
     id_attribute = "id"
 
-    # The rounding strategy is used when rounding dimensions
-    rounding_strategy = None
-
     def __init__(self):
         """Base class not to be instanced directly.
 
@@ -44,7 +62,10 @@ class Base:
                     subclasses of [Base](#Base)
 
             """
-        ...
+
+    @property
+    def rounding_strategy(self) -> 'RoundStrategy':
+        return rounding_strategy()
 
     def apply_defaults(self) -> None:
         """Applies default values defined in the `defaults` attribute to attributes that are `None`"""
@@ -158,34 +179,6 @@ class Base:
             kwargs[keyword] = value
 
         return cls(**kwargs)
-
-    @classmethod
-    def set_rounding_strategy(cls, rules: Union[dict, None] = DEFAULT_ROUNDING_STRATEGY) -> None:
-        """
-        Set the global rounding strategy for dimensions. The rules are the same as for
-        `CanvasTemplate.round` but are passed as a dictionary.
-        Passing `None` to the `rule` argument will disable all rounding for dimensions.
-
-        Default rules are: `{'even': 'even', 'mode': 'round'}`
-
-        Available options:
-
-        even:
-            "whole" = to nearest integer,
-            "even" = to nearest even-numbered integer
-
-        mode:
-            "up" = always round up,
-            "down" = always round down
-            "round" = standard rounding: >= +0.5 rounds up and < +0.5 rounds down
-
-        Args:
-            rules: will default to `{'even': 'even', 'mode': 'round'}` if rules is `None`
-        """
-        if rules is None:
-            rules = NO_ROUNDING
-
-        Base.rounding_strategy = RoundStrategy(**rules)
 
     @staticmethod
     def generate_uuid():
@@ -330,9 +323,6 @@ class Dimensions(Base):
         self.width = width
         self.height = height
 
-        if Base.rounding_strategy is None:
-            Base.set_rounding_strategy()
-
     def scale_by(self, factor: float) -> None:
         """
         Scale the dimensions by the provider factor
@@ -433,7 +423,10 @@ class RoundStrategy(Base):
         super().__init__()
         self.even = even
         self.mode = mode
-        self.rounding_strategy = None
+
+    @property
+    def rounding_strategy(self) -> 'RoundStrategy':
+        return self
 
     @property
     def even(self):

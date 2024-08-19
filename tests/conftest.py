@@ -6,7 +6,7 @@ import pyfdl
 
 @pytest.fixture(autouse=True)
 def consistent_rounding():
-    pyfdl.Base.set_rounding_strategy(pyfdl.DEFAULT_ROUNDING_STRATEGY)
+    pyfdl.set_rounding_strategy(pyfdl.DEFAULT_ROUNDING_STRATEGY)
 
 
 @pytest.fixture(autouse=True)
@@ -68,7 +68,7 @@ def base_subclass():
             self.self_reference = self_reference
 
             # Make sure we have a rounding strategy
-            self.set_rounding_strategy(pyfdl.DEFAULT_ROUNDING_STRATEGY)
+            # self.set_rounding_strategy(pyfdl.DEFAULT_ROUNDING_STRATEGY)
 
     return BaseSubclass
 

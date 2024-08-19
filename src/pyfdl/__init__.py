@@ -2,12 +2,14 @@ from .common import (
     Base,
     Dimensions,
     Point,
+    rounding_strategy,
     RoundStrategy,
     DEFAULT_ROUNDING_STRATEGY,
     FDL_SCHEMA_MAJOR,
     FDL_SCHEMA_MINOR,
     FDL_SCHEMA_VERSION,
     NO_ROUNDING,
+    set_rounding_strategy,
     TypedCollection
 )
 from .header import Header
@@ -40,7 +42,9 @@ __all__ = [
     'Point',
     'read_from_file',
     'read_from_string',
+    'rounding_strategy',
     'RoundStrategy',
+    'set_rounding_strategy',
     'TypedCollection',
     'write_to_file',
     'write_to_string'

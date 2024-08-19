@@ -3,6 +3,18 @@ import pytest
 import pyfdl
 
 
+def test_set_rounding_strategy(base_subclass, sample_rounding_strategy_obj):
+    obj = base_subclass()
+    assert obj.rounding_strategy.to_dict() == pyfdl.DEFAULT_ROUNDING_STRATEGY
+
+    override = {"even": "whole", "mode": "up"}
+    pyfdl.set_rounding_strategy(rules=override)
+    assert obj.rounding_strategy.to_dict() == override
+
+    # # Reset to default to not mess up other tests
+    # obj.set_rounding_strategy(pyfdl.DEFAULT_ROUNDING_STRATEGY)
+
+
 def test_base_empty(base_subclass):
     obj = base_subclass()
     assert isinstance(obj, base_subclass)
@@ -65,18 +77,6 @@ def test_base_to_dict(base_subclass, base_class_dict):
     obj.id = None
     with pytest.raises(pyfdl.FDLError):
         obj.to_dict()
-
-
-def test_base_set_rounding_strategy(base_subclass, sample_rounding_strategy_obj):
-    obj = base_subclass()
-    assert obj.rounding_strategy.to_dict() == pyfdl.DEFAULT_ROUNDING_STRATEGY
-
-    override = {"even": "whole", "mode": "up"}
-    obj.set_rounding_strategy(rules=override)
-    assert obj.rounding_strategy.to_dict() == override
-
-    # Reset to default to not mess up other tests
-    obj.set_rounding_strategy(pyfdl.DEFAULT_ROUNDING_STRATEGY)
 
 
 def test_base_generate_uuid(base_subclass):
@@ -169,7 +169,7 @@ def test_dimensions_scale_by():
 
     # Check if scaling follows rounding rules
     dim_3 = pyfdl.Dimensions(width=1.1, height=2.2, dtype=int)
-    dim_3.rounding_strategy = pyfdl.RoundStrategy(**{"even": "whole", "mode": "up"})
+    pyfdl.set_rounding_strategy({"even": "whole", "mode": "up"})
     dim_3.scale_by(2)
     assert (dim_3.width, dim_3.height) == (3, 5)
 
