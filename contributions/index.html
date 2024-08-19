@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Contributions - PyFDL</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Contributions";
+        var mkdocs_page_input_path = "contributions.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> PyFDL
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Welcome to PyFDL</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Contributions</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#response-time">Response Time</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#package-management">Package Management</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#checklist-for-contributions">Checklist For Contributions</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#fork-the-repo">Fork the repo</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#create-a-feature-branch">Create a feature branch</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#write-code">Write code</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#write-unittests">Write unittests</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#documentation">Documentation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#submitting-a-pull-request">Submitting a Pull Request</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">FDL Classes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../FDL%20Classes/canvas/">Canvas</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../FDL%20Classes/canvas_template/">Canvas Template</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../FDL%20Classes/common/">Common</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../FDL%20Classes/context/">Context</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../FDL%20Classes/errors/">Errors</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../FDL%20Classes/fdl/">FDL</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../FDL%20Classes/framing_decision/">Framing Decision</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../FDL%20Classes/framing_intent/">Framing Intent</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../FDL%20Classes/header/">Header</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Handlers</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../Handlers/handlers/">Handlers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Plugins</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../Plugins/plugins/">About Plugins</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Plugins/registry/">Plugin Registry</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">PyFDL</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Contributions</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/apetrynet/pyfdl/edit/master/docs/contributions.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="contributions">Contributions</h1>
+<p>Contributions come in many forms, be it reporting bugs, giving feedback or submitting code. It's all welcome 
+as our goal is to provide a useful toolkit that suits the needs of its users.</p>
+<h2 id="response-time">Response Time</h2>
+<p>At the time of writing this, PyFDL is developed primarily in my spare time. Please excuse any delays in answering 
+questions or reviewing of code. I'll do my best to respond as quickly as I can.</p>
+<h2 id="package-management">Package Management</h2>
+<p>PyFDL uses <a href="https://hatch.pypa.io">Hatch</a> for package management. 
+Please refer to their documentation for more info on usage.</p>
+<p>There is an environment setup for unit testing.</p>
+<pre><code class="language-commandline">hatch run test:test
+# or
+hatch test
+</code></pre>
+<p>And a default shell for an interactive python session and so on.</p>
+<pre><code class="language-commandline">hatch shell
+</code></pre>
+<p>To build and serve the documentation locally, you may use one of the following commands.</p>
+<pre><code class="language-commandline"># Only build the docs. You'll find them in the &quot;site&quot; folder
+hatch run docs:build
+
+# Serve the docs on localhost:8000
+hatch run docs:serve
+</code></pre>
+<h2 id="checklist-for-contributions">Checklist For Contributions</h2>
+<h3 id="fork-the-repo">Fork the repo</h3>
+<p>Please fork the repo on GitHub and clone your fork locally.<br />
+<code>git clone git@github.com:&lt;USERNAME&gt;/pyfdl.git</code></p>
+<h3 id="create-a-feature-branch">Create a feature branch</h3>
+<p>Always work in a feature branch. <strong><em>Do not submit Pull Requests directly from "main"</em></strong><br />
+Name your branch something relatable to the feature you're adding or a bug your fixing. 
+Only address one feature/bug in a branch to the best of your judgement.<br />
+<code>git checkout -b my_feature_branch</code>  </p>
+<h3 id="write-code">Write code</h3>
+<p>Please try to follow the style of the project when writing code.<br />
+Use type hints and provide docstrings in your code.</p>
+<h3 id="write-unittests">Write unittests</h3>
+<p>All contributions should provide tests for new/updated behavior. We use <a href="https://docs.pytest.org/en/stable/">pytest</a>, please consult 
+their documentation for info on usage.
+New sample files may be added to the <code>tests/sample_data</code> folder if needed</p>
+<h3 id="documentation">Documentation</h3>
+<p>Please add/update relevant documentation. We use <a href="https://www.mkdocs.org/">mkdocs</a> and 
+<a href="https://mkdocstrings.github.io/">mkdocstrings</a></p>
+<blockquote>
+<p><strong>NOTE!</strong> All python code blocks will get tested, so make sure to write valid examples.</p>
+</blockquote>
+<p>If you need to split your code blocks in the documentation, but would like to refer to each block, add your
+markdown file to the <code>USE_MEM</code> list in the <code>tests/test_docs.py</code> file</p>
+<h3 id="submitting-a-pull-request">Submitting a Pull Request</h3>
+<p>Push your feature branch to your repo and open a Pull Request on GitHub.<br />
+Branches on "apetrynet's" GitHub repo that get merged into "main" are deleted on GitHub to keep a clean repo. <br />
+<code>git push origin my_feature_branch</code></p>
+<p>Continue to push to this branch until the Pull Request is merged</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="Welcome to PyFDL"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../getting_started/" class="btn btn-neutral float-right" title="Getting Started">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/apetrynet/pyfdl" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../getting_started/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -44,11 +44,13 @@
                 <li class="toctree-l1"><a class="reference internal" href="..">Welcome to PyFDL</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../contributions/">Contributions</a>
+                </li>
+              </ul>
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="#">Getting Started</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#install">Install</a>
-    </li>
     <li class="toctree-l2"><a class="reference internal" href="#about-rounding">About rounding</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#setting-the-global-rounding-strategy">Setting the global rounding strategy</a>
@@ -64,10 +66,6 @@
         </ul>
     </li>
     </ul>
-                </li>
-              </ul>
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../top_level_functions/">Top Level Functions</a>
                 </li>
               </ul>
               <p class="caption"><span class="caption-text">FDL Classes</span></p>
@@ -128,20 +126,13 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="getting-started">Getting Started</h1>
-<h2 id="install">Install</h2>
-<blockquote>
-<p><strong>NOTE!</strong> Please note that at the time of writing this PyFDL is not released on PyPi. 
-Please refer to README.md for instructions. </p>
-</blockquote>
-<pre><code>pip install pyfdl
-</code></pre>
 <h2 id="about-rounding">About rounding</h2>
 <p>As different parts of a pipeline requires different levels of precision we have an option to 
 round values of dimensions accordingly.<br />
 A canvas+framing decision for a "raw" camera canvas should in theory keep more precision than a 
 canvas+framing decision for a conformed VFX plate. </p>
 <p>The rules for rounding strategy are the same as for <a href="../FDL%20Classes/common/#pyfdl.RoundStrategy">CanvasTemplate.round</a></p>
-<p>The <a href="../FDL%20Classes/common/#pyfdl.DEFAULT_ROUNDING_STRATEGY">default</a> strategy is to not round dimensions and keep float values where applicable, but this may be 
+<p>The <a href="../FDL%20Classes/common/#pyfdl.DEFAULT_ROUNDING_STRATEGY">default</a> strategy is to not apply rounding and keep float values where applicable, but this may be 
 overridden by setting the rounding strategy via the 
 <a href="../FDL%20Classes/common/#pyfdl.set_rounding_strategy"><code>set_rounding_strategy()</code></a> function</p>
 <blockquote>
@@ -241,8 +232,8 @@ with NamedTemporaryFile(suffix='.fdl', delete=False) as f:
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href=".." class="btn btn-neutral float-left" title="Welcome to PyFDL"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../top_level_functions/" class="btn btn-neutral float-right" title="Top Level Functions">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../contributions/" class="btn btn-neutral float-left" title="Contributions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../FDL%20Classes/canvas/" class="btn btn-neutral float-right" title="Canvas">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -269,10 +260,10 @@ with NamedTemporaryFile(suffix='.fdl', delete=False) as f:
         </span>
     
     
-      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../contributions/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../top_level_functions/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../FDL%20Classes/canvas/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
