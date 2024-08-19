@@ -37,6 +37,14 @@ keywords = ["film", "tv", "editing", "editorial", "fdl", "asc", "conform", "refo
 [tool.hatch.version]
 path = "src/pyfdl/__init__.py"
 
+[tool.hatch.envs.hatch-test]
+dependencies = [
+    "pip",
+    "pytest",
+    "mktestdocs",
+    "pyyaml"
+]
+
 [tool.hatch.envs.test]
 dependencies = [
     "pytest",
