@@ -60,8 +60,8 @@ class FramingDecision(Base):
     @classmethod
     def from_framing_intent(cls, canvas: 'Canvas', framing_intent: 'FramingIntent') -> 'FramingDecision':
         """
-        Create a new [FramingDecision](framing_decision.md#Framing Decision) based on the provided
-        [Canvas](canvas.md#Canvas) and [FramingIntent](framing_intent.md#Framing Intent)
+        Create a new [FramingDecision](framing_decision.md#pyfdl.FramingDecision) based on the provided
+        [Canvas](canvas.md#pyfdl.Canvas) and [FramingIntent](framing_intent.md#pyfdl.FramingIntent)
 
         The framing decision's properties are calculated for you.
         If the canvas has effective dimensions set, these will be used for the calculations.
@@ -169,7 +169,7 @@ class FramingDecision(Base):
         """
         Adjust this object's `protection_anchor_point` if `protection_dimensions` are set.
         Please note that the `h_method` and `v_method` are primarily used when creating a canvas based on
-        a [canvas template](canvas.md#from_canvas_template)
+        a [canvas template](canvas.md#pyfdl.Canvas.from_canvas_template)
 
         Args:
             canvas: to fetch anchor point from in case protection_anchor_point is not set

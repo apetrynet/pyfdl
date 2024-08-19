@@ -60,7 +60,7 @@ class Base:
                     Supports linked attributes like: "effective_dimensions.effective_anchor_point" where
                     "effective_anchor_point" is required if "effective_dimensions" is set
                 defaults: map default values to attributes. In addition to primitive values supports: callable,
-                    subclasses of [Base](#Base)
+                    subclasses of [Base](common.md#pyfdl.Base)
 
             """
 
@@ -406,7 +406,7 @@ class RoundStrategy(Base):
 
     def __init__(self, even: str = None, mode: str = None):
         """Describes how to handle rounding canvas dimensions when applying a
-        [CanvasTemplate](canvas_template.md#canvas_template).
+        [CanvasTemplate](canvas_template.md#pyfdl.CanvasTemplate).
 
         Args:
             even:
