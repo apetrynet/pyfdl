@@ -35,6 +35,8 @@ def test_place_framing_intent(sample_framing_intent_obj, sample_canvas_obj, samp
     intent = sample_framing_intent_obj
     canvas = sample_canvas_obj
 
+    # Overriding rounding to match sample values
+    pyfdl.set_rounding_strategy({'even': 'even', 'mode': 'round'})
     decision_id = canvas.place_framing_intent(intent)
     assert decision_id == f'{canvas.id}-{intent.id}'
 

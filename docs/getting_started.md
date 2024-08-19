@@ -16,27 +16,29 @@ canvas+framing decision for a conformed VFX plate.
 The rules for rounding strategy are the same as for [CanvasTemplate.round](FDL Classes/common.md#pyfdl.RoundStrategy)
 
 
-The [default](FDL Classes/common.md#pyfdl.DEFAULT_ROUNDING_STRATEGY) strategy is to round dimensions to 
-even numbers, but this may be overridden by setting the rounding strategy to 
-[`NO_ROUNDING`](FDL Classes/common.md#pyfdl.NO_ROUNDING)
+The [default](FDL Classes/common.md#pyfdl.DEFAULT_ROUNDING_STRATEGY) strategy is to not round dimensions and keep float values where applicable, but this may be 
+overridden by setting the rounding strategy via the 
+[`set_rounding_strategy()`](FDL Classes/common.md#pyfdl.set_rounding_strategy) function
 
-Here are a couple examples of setting the rounding strategy:
+> **NOTE!** The rounding strategy is set globally for where rounding applies except for `CanvasTemplate.round` 
+> which follows its own rules.
+
+### Setting the global rounding strategy
+Here are a some examples of how to set the rounding strategy:
 ```python
 import pyfdl
 
-fdl = pyfdl.FDL()
-
-# No rounding may either be set by passing the NO_ROUNDING variable
-fdl.set_rounding_strategy(pyfdl.NO_ROUNDING)
+# No rounding (default behavior) may either be set by passing the NO_ROUNDING variable
+pyfdl.set_rounding_strategy(pyfdl.NO_ROUNDING)
 
 # Or by explicitly passing None
-fdl.set_rounding_strategy(None)
+pyfdl.set_rounding_strategy(None)
 
 # For other requirements pass a dictionary with the rules
-fdl.set_rounding_strategy({'even': 'whole', 'mode': 'up'})
+pyfdl.set_rounding_strategy({'even': 'whole', 'mode': 'up'})
 ```
 
-## Examples
+## Usage Examples
 ### Create an FDL from scratch
 
 ```python
