@@ -28,7 +28,7 @@ N/A Not applicable
 You'll find the latest published documentation on PyFDL [here](https://apetrynet.github.io/pyfdl/)
 
 # Contributions
-Contributions are welcome. Please refer to the [contributing](https://apetrynet.github.io/pyfdl/contributing) page in the docs for more info. 
+Contributions are welcome. Please refer to the [contributions](https://apetrynet.github.io/pyfdl/contributions) page in the docs for more info. 
 
 # Schema Files
 PyFDL ships with JSON schema definition files kindly provided by [ASC MITC](https://github.com/ascmitc/fdl).  
