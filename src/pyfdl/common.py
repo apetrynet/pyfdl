@@ -1,6 +1,6 @@
 import math
 import uuid
-from typing import Any, Union, Type
+from typing import Any, Type, Union
 
 from pyfdl.errors import FDLError
 
@@ -142,7 +142,7 @@ class Base:
 
         missing = self.check_required()
         if missing:
-            raise FDLError(f'{repr(self)} is missing some required attributes: {missing}')
+            raise FDLError(f'{self!r} is missing some required attributes: {missing}')
 
         return data
 

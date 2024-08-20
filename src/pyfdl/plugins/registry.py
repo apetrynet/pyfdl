@@ -1,9 +1,9 @@
 import sys
 from importlib import import_module, resources
 from importlib.metadata import entry_points
-from typing import Union, Any
+from typing import Any, Union
 
-from pyfdl.errors import UnknownHandlerError, HandlerError
+from pyfdl.errors import UnknownHandlerError
 
 _REGISTRY = None
 

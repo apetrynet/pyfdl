@@ -1,13 +1,6 @@
 from typing import Tuple, Union
 
-from pyfdl import (
-    Base,
-    Dimensions,
-    Point,
-    FramingDecision,
-    TypedCollection,
-    FramingIntent
-)
+from pyfdl import Base, Dimensions, FramingDecision, FramingIntent, Point, TypedCollection
 
 
 class Canvas(Base):

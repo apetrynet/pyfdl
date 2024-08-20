@@ -1,19 +1,19 @@
 import json
-
-import jsonschema
 from pathlib import Path
 
+import jsonschema
+
 from pyfdl import (
-    Base,
-    Canvas,
-    Header,
-    FramingIntent,
-    Context,
-    CanvasTemplate,
-    TypedCollection,
     FDL_SCHEMA_MAJOR,
     FDL_SCHEMA_MINOR,
-    FDL_SCHEMA_VERSION
+    FDL_SCHEMA_VERSION,
+    Base,
+    Canvas,
+    CanvasTemplate,
+    Context,
+    FramingIntent,
+    Header,
+    TypedCollection,
 )
 from pyfdl.errors import FDLError, FDLValidationError
 
@@ -169,9 +169,9 @@ class FDL(Base):
         minor = self.version.get('minor') if self.version else FDL_SCHEMA_MINOR
 
         schema_path = Path(__file__).parent.joinpath(
-            f'schema',
+            'schema',
             f'v{major}.{minor}',
-            f'ascfdl.schema.json'
+            'ascfdl.schema.json'
         )
         with schema_path.open('rb') as fp:
             schema = json.load(fp)

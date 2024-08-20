@@ -1,6 +1,6 @@
 from typing import Union
 
-from pyfdl import Base, Dimensions, TypedCollection
+from pyfdl import Base, Dimensions
 
 
 class FramingIntent(Base):

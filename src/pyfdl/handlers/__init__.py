@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional, Any, Union
+from typing import Any, Optional, Union
 
 from pyfdl.plugins import get_registry
 
@@ -18,7 +18,7 @@ def get_handler(func_name: str, path: Union[Path, str] = None, handler_name: str
     """
 
     if handler_name is None and path is None:
-        raise RuntimeError(f'"handler_name" and "path" can\'t both be None. Please provide one or the other')
+        raise RuntimeError('"handler_name" and "path" can\'t both be None. Please provide one or the other')
 
     _registry = get_registry()
     if handler_name is not None:

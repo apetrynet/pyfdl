@@ -1,6 +1,6 @@
 import pathlib
-import pytest
 
+import pytest
 from mktestdocs import check_md_file
 
 # files listed here will set memory to True for sequential code blocks

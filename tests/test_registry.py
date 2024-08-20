@@ -2,9 +2,9 @@ import pip
 import pytest
 
 import pyfdl.plugins.registry
-from pyfdl.plugins import get_registry
-from pyfdl.handlers.fdl_handler import FDLHandler
 from pyfdl.errors import UnknownHandlerError
+from pyfdl.handlers.fdl_handler import FDLHandler
+from pyfdl.plugins import get_registry
 
 
 @pytest.fixture

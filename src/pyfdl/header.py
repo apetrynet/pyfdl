@@ -1,4 +1,3 @@
-import uuid
 
 from pyfdl import FDL_SCHEMA_VERSION, Base
 

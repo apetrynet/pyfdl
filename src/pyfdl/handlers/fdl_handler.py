@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import IO, Union
+from typing import Union
 
 from pyfdl import FDL
 
