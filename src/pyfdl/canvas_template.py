@@ -1,6 +1,6 @@
 from typing import List, Union
 
-from pyfdl import Base, Dimensions, RoundStrategy
+from .common import Base, Dimensions, RoundStrategy
 from pyfdl.errors import FDLError
 
 

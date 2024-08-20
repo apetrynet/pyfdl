@@ -3,19 +3,13 @@ from pathlib import Path
 
 import jsonschema
 
-from pyfdl import (
-    FDL_SCHEMA_MAJOR,
-    FDL_SCHEMA_MINOR,
-    FDL_SCHEMA_VERSION,
-    Base,
-    Canvas,
-    CanvasTemplate,
-    Context,
-    FramingIntent,
-    Header,
-    TypedCollection,
-)
-from pyfdl.errors import FDLError, FDLValidationError
+from .common import FDL_SCHEMA_MAJOR, FDL_SCHEMA_MINOR, FDL_SCHEMA_VERSION, Base, TypedCollection
+from .canvas import Canvas
+from .canvas_template import CanvasTemplate
+from .context import Context
+from .framing_intent import FramingIntent
+from .header import Header
+from .errors import FDLError, FDLValidationError
 
 
 class FDL(Base):

@@ -1,6 +1,6 @@
 from typing import Union
 
-from pyfdl import Base, Dimensions, Point, rounding_strategy
+from .common import Base, Dimensions, Point, rounding_strategy
 
 
 class FramingDecision(Base):
