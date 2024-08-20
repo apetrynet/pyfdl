@@ -6,10 +6,7 @@ import pytest
 import pyfdl
 
 SAMPLE_FDL_DIR = Path(__file__).parent.joinpath("sample_data")
-SAMPLE_FDL_FILE = Path(
-    SAMPLE_FDL_DIR,
-    "Scenario-9__FDL_DeliveredToVFXVendor.fdl"
-)
+SAMPLE_FDL_FILE = Path(SAMPLE_FDL_DIR, "Scenario-9__FDL_DeliveredToVFXVendor.fdl")
 
 
 def test_read_from_file_unvalidated():
@@ -32,7 +29,7 @@ def test_read_from_string():
 
 
 def test_write_to_file(tmp_path):
-    my_path = Path(tmp_path, 'myfdl.fdl')
+    my_path = Path(tmp_path, "myfdl.fdl")
     fdl1 = pyfdl.read_from_file(SAMPLE_FDL_FILE)
 
     pyfdl.write_to_file(fdl1, my_path)
@@ -72,9 +69,9 @@ def test_setting_default_framing_id(sample_framing_intent_obj):
     assert fdl.default_framing_intent == sample_framing_intent_obj.id
 
     with pytest.raises(pyfdl.FDLError) as err:
-        fdl.default_framing_intent = 'nogood'
+        fdl.default_framing_intent = "nogood"
 
-    assert "Default framing intent: \"nogood\" not found in" in str(err.value)
+    assert 'Default framing intent: "nogood" not found in' in str(err.value)
 
 
 def test_place_canvas_in_context(sample_canvas_obj, sample_context_obj):

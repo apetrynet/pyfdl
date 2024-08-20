@@ -7,7 +7,7 @@ from mktestdocs import check_md_file
 USE_MEM = ["plugins.md"]
 
 
-@pytest.mark.parametrize('fpath', pathlib.Path("docs").glob("**/*.md"), ids=str)
+@pytest.mark.parametrize("fpath", pathlib.Path("docs").glob("**/*.md"), ids=str)
 def test_all_docs(fpath):
     mem = False
     if fpath.name in USE_MEM:

@@ -20,32 +20,28 @@ from pyfdl.errors import FDLError, FDLValidationError
 
 class FDL(Base):
     attributes = [
-        'uuid',
-        'version',
-        'fdl_creator',
-        'default_framing_intent',
-        'framing_intents',
-        'contexts',
-        'canvas_templates'
+        "uuid",
+        "version",
+        "fdl_creator",
+        "default_framing_intent",
+        "framing_intents",
+        "contexts",
+        "canvas_templates",
     ]
-    kwarg_map = {'uuid': 'uuid_'}
-    required = ['uuid', 'version']
-    defaults = {'uuid': Base.generate_uuid, 'fdl_creator': 'PyFDL', 'version': FDL_SCHEMA_VERSION}
-    object_map = {
-        'framing_intents': FramingIntent,
-        'contexts': Context,
-        'canvas_templates': CanvasTemplate
-    }
+    kwarg_map = {"uuid": "uuid_"}
+    required = ["uuid", "version"]
+    defaults = {"uuid": Base.generate_uuid, "fdl_creator": "PyFDL", "version": FDL_SCHEMA_VERSION}
+    object_map = {"framing_intents": FramingIntent, "contexts": Context, "canvas_templates": CanvasTemplate}
 
     def __init__(
-            self,
-            uuid_: str = None,
-            version: dict = None,
-            fdl_creator: str = None,
-            default_framing_intent: str = None,
-            framing_intents: TypedCollection = None,
-            contexts: TypedCollection = None,
-            canvas_templates: TypedCollection = None
+        self,
+        uuid_: str = None,
+        version: dict = None,
+        fdl_creator: str = None,
+        default_framing_intent: str = None,
+        framing_intents: TypedCollection = None,
+        contexts: TypedCollection = None,
+        canvas_templates: TypedCollection = None,
     ):
         super().__init__()
         self.uuid = uuid_
@@ -80,8 +76,12 @@ class FDL(Base):
         Returns:
             Header: based on attributes
         """
-        header = Header(uuid_=self.uuid, version=self.version, fdl_creator=self.fdl_creator,
-                        default_framing_intent=self.default_framing_intent)
+        header = Header(
+            uuid_=self.uuid,
+            version=self.version,
+            fdl_creator=self.fdl_creator,
+            default_framing_intent=self.default_framing_intent,
+        )
 
         return header
 
@@ -104,8 +104,7 @@ class FDL(Base):
     def default_framing_intent(self, framing_intent_id: str):
         if framing_intent_id and framing_intent_id not in self.framing_intents:
             raise FDLError(
-                f"Default framing intent: \"{framing_intent_id}\" not found in "
-                f"registered framing intents."
+                f'Default framing intent: "{framing_intent_id}" not found in ' f"registered framing intents."
             )
 
         self._default_framing_intent = framing_intent_id
@@ -134,15 +133,14 @@ class FDL(Base):
         for canvas in canvases:
             if canvases.get(canvas.source_canvas_id) is None:
                 errors.append(
-                    f'{canvas.source_canvas_id} (canvas.source_canvas_id) not found in '
-                    f'registered canvases'
+                    f"{canvas.source_canvas_id} (canvas.source_canvas_id) not found in " f"registered canvases"
                 )
 
             for framing_decision in canvas.framing_decisions:
                 if framing_decision.framing_intent_id not in self.framing_intents:
                     errors.append(
-                        f'{framing_decision}.framing_intent_id ({framing_decision.framing_intent_id}) '
-                        f'not found in registered framing intents'
+                        f"{framing_decision}.framing_intent_id ({framing_decision.framing_intent_id}) "
+                        f"not found in registered framing intents"
                     )
 
         # Check structure and values against json schema
@@ -152,11 +150,8 @@ class FDL(Base):
             errors.append(str(error))
 
         if errors:
-            nl = '\n'
-            raise FDLValidationError(
-                f"Validation failed!\n"
-                f"{f'{nl}'.join(errors)}"
-            )
+            nl = "\n"
+            raise FDLValidationError(f"Validation failed!\n" f"{f'{nl}'.join(errors)}")
 
     def load_schema(self) -> dict:
         """Load a jsonschema based on the version in `Header` or default to current version
@@ -165,15 +160,11 @@ class FDL(Base):
         Returns:
             schema:
         """
-        major = self.version.get('major') if self.version else FDL_SCHEMA_MAJOR
-        minor = self.version.get('minor') if self.version else FDL_SCHEMA_MINOR
+        major = self.version.get("major") if self.version else FDL_SCHEMA_MAJOR
+        minor = self.version.get("minor") if self.version else FDL_SCHEMA_MINOR
 
-        schema_path = Path(__file__).parent.joinpath(
-            'schema',
-            f'v{major}.{minor}',
-            'ascfdl.schema.json'
-        )
-        with schema_path.open('rb') as fp:
+        schema_path = Path(__file__).parent.joinpath("schema", f"v{major}.{minor}", "ascfdl.schema.json")
+        with schema_path.open("rb") as fp:
             schema = json.load(fp)
 
         return schema

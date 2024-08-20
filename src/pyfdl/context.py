@@ -2,9 +2,9 @@ from pyfdl import Base, Canvas, TypedCollection
 
 
 class Context(Base):
-    attributes = ['label', 'context_creator', 'canvases']
-    defaults = {'context_creator': 'PyFDL'}
-    object_map = {'canvases': Canvas}
+    attributes = ["label", "context_creator", "canvases"]
+    defaults = {"context_creator": "PyFDL"}
+    object_map = {"canvases": Canvas}
     id_attribute = "label"
 
     def __init__(self, label: str = None, context_creator: str = None, canvases: TypedCollection = None):

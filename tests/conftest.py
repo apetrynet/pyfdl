@@ -15,8 +15,8 @@ def consistent_rounding():
 def cleanup_temp_files():
     yield
 
-    files = list(Path(tempfile.gettempdir()).glob('*.fdl'))
-    files += Path(tempfile.gettempdir()).glob('*.yml')
+    files = list(Path(tempfile.gettempdir()).glob("*.fdl"))
+    files += Path(tempfile.gettempdir()).glob("*.yml")
     # Remove temp files
     for file in files:
         file.unlink(missing_ok=True)
@@ -34,7 +34,7 @@ def base_subclass():
             "point": pyfdl.Point,
             "dimensions": pyfdl.Dimensions,
             "collection": pyfdl.FramingIntent,
-            "round": pyfdl.RoundStrategy
+            "round": pyfdl.RoundStrategy,
         }
         # List of required attributes
         required = ["id", "string.point"]
@@ -43,20 +43,20 @@ def base_subclass():
             "id": "my_id",
             "callable": pyfdl.Base.generate_uuid,
             "instance": pyfdl.RoundStrategy,
-            "self_reference": "self.id"
+            "self_reference": "self.id",
         }
 
         def __init__(
-                self,
-                id_=None,
-                string=None,
-                point=None,
-                dimensions=None,
-                collection=None,
-                round_=None,
-                callable_=None,
-                instance=None,
-                self_reference=None
+            self,
+            id_=None,
+            string=None,
+            point=None,
+            dimensions=None,
+            collection=None,
+            round_=None,
+            callable_=None,
+            instance=None,
+            self_reference=None,
         ):
             super().__init__()
             self.id = id_
@@ -85,7 +85,7 @@ def base_class_kwargs(sample_framing_intent_obj, sample_rounding_strategy_obj):
         "point": pyfdl.Point(x=0, y=0),
         "dimensions": pyfdl.Dimensions(width=1920, height=1080),
         "collection": collection,
-        "round_": sample_rounding_strategy_obj
+        "round_": sample_rounding_strategy_obj,
     }
 
     return kwargs
@@ -101,7 +101,7 @@ def base_class_dict():
         "collection": [
             {"label": "1.78-1", "id": "FDLSMP03", "aspect_ratio": {"width": 16, "height": 9}, "protection": 0.088}
         ],
-        "round": {"even": "even", "mode": "round"}
+        "round": {"even": "even", "mode": "round"},
     }
 
     return d
@@ -123,7 +123,7 @@ def sample_framing_intent_obj():
         label="1.78-1 Framing",
         id_="FDLSMP03",
         aspect_ratio=pyfdl.Dimensions(width=16, height=9, dtype=int),
-        protection=0.088
+        protection=0.088,
     )
 
     return framing_intent
@@ -138,7 +138,7 @@ def sample_framing_decision_obj():
         dimensions=pyfdl.Dimensions(width=4728, height=3456),
         anchor_point=pyfdl.Point(x=228, y=432),
         protection_dimensions=pyfdl.Dimensions(width=5184, height=3790),
-        protection_anchor_point=pyfdl.Point(x=0, y=265)
+        protection_anchor_point=pyfdl.Point(x=0, y=265),
     )
     return fd
 
@@ -155,7 +155,7 @@ def sample_canvas_obj():
         photosite_dimensions=pyfdl.Dimensions(width=5184, height=4320),
         physical_dimensions=pyfdl.Dimensions(width=25.92, height=21.60),
         anamorphic_squeeze=1.30,
-        framing_decisions=pyfdl.TypedCollection(pyfdl.FramingDecision)
+        framing_decisions=pyfdl.TypedCollection(pyfdl.FramingDecision),
     )
 
     return canvas
@@ -164,9 +164,7 @@ def sample_canvas_obj():
 @pytest.fixture
 def sample_context_obj():
     ctx = pyfdl.Context(
-        label="PanavisionDXL2",
-        context_creator="ASC FDL Committee",
-        canvases=pyfdl.TypedCollection(pyfdl.Canvas)
+        label="PanavisionDXL2", context_creator="ASC FDL Committee", canvases=pyfdl.TypedCollection(pyfdl.Canvas)
     )
 
     return ctx
@@ -184,7 +182,7 @@ def sample_canvas_template_obj():
         alignment_method_vertical="center",
         alignment_method_horizontal="center",
         preserve_from_source_canvas="canvas.dimensions",
-        round_=pyfdl.RoundStrategy(even="even", mode="up")
+        round_=pyfdl.RoundStrategy(even="even", mode="up"),
     )
     return canvas_template
 
@@ -198,8 +196,8 @@ def sample_rounding_strategy_obj():
 def simple_handler():
     class SimpleHandler:
         def __init__(self):
-            self.name = 'simple'
-            self.suffixes = ['.ext']
+            self.name = "simple"
+            self.suffixes = [".ext"]
 
         def read_from_string(self, s: str) -> str:
             return s
