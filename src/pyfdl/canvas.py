@@ -1,8 +1,10 @@
-from typing import Tuple, Union
+from typing import Optional, TypeVar, Union
 
 from .common import Base, Dimensions, Point, TypedCollection
 from .framing_decision import FramingDecision
 from .framing_intent import FramingIntent
+
+CanvasTemplate = TypeVar("CanvasTemplate")
 
 
 class Canvas(Base):
@@ -32,16 +34,16 @@ class Canvas(Base):
 
     def __init__(
         self,
-        label: str = None,
-        id_: str = None,
-        source_canvas_id: str = None,
-        dimensions: Dimensions = None,
-        effective_dimensions: Dimensions = None,
-        effective_anchor_point: Point = None,
-        photosite_dimensions: Dimensions = None,
-        physical_dimensions: Dimensions = None,
-        anamorphic_squeeze: float = None,
-        framing_decisions: TypedCollection = None,
+        label: Optional[str] = None,
+        id_: Optional[str] = None,
+        source_canvas_id: Optional[str] = None,
+        dimensions: Optional[Dimensions] = None,
+        effective_dimensions: Optional[Dimensions] = None,
+        effective_anchor_point: Optional[Point] = None,
+        photosite_dimensions: Optional[Dimensions] = None,
+        physical_dimensions: Optional[Dimensions] = None,
+        anamorphic_squeeze: Optional[float] = None,
+        framing_decisions: Optional[TypedCollection] = None,
     ):
         super().__init__()
         self.label = label
@@ -114,7 +116,7 @@ class Canvas(Base):
 
         return framing_decision.id
 
-    def get_dimensions(self) -> Tuple[Dimensions, Point]:
+    def get_dimensions(self) -> tuple[Dimensions, Point]:
         """Get the most relevant dimensions and anchor point for the canvas.
         `effective_dimensions` and `effective_anchor_point` win over `dimensions`
 
@@ -130,7 +132,7 @@ class Canvas(Base):
     @classmethod
     def from_canvas_template(
         cls,
-        canvas_template: "CanvasTemplate",
+        canvas_template: CanvasTemplate,
         source_canvas: "Canvas",
         source_framing_decision: Union[FramingDecision, int] = 0,
     ) -> "Canvas":
@@ -147,7 +149,7 @@ class Canvas(Base):
             canvas: based on the provided canvas template and sources
 
         """
-        if type(source_framing_decision) is int:
+        if isinstance(source_framing_decision, int):
             source_framing_decision = source_canvas.framing_decisions[source_framing_decision]
 
         canvas = Canvas(

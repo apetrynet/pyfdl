@@ -1,15 +1,16 @@
 import json
 from pathlib import Path
+from typing import Optional
 
 import jsonschema
 
-from .common import FDL_SCHEMA_MAJOR, FDL_SCHEMA_MINOR, FDL_SCHEMA_VERSION, Base, TypedCollection
 from .canvas import Canvas
 from .canvas_template import CanvasTemplate
+from .common import FDL_SCHEMA_MAJOR, FDL_SCHEMA_MINOR, FDL_SCHEMA_VERSION, Base, TypedCollection
 from .context import Context
+from .errors import FDLError, FDLValidationError
 from .framing_intent import FramingIntent
 from .header import Header
-from .errors import FDLError, FDLValidationError
 
 
 class FDL(Base):
@@ -29,13 +30,13 @@ class FDL(Base):
 
     def __init__(
         self,
-        uuid_: str = None,
-        version: dict = None,
-        fdl_creator: str = None,
-        default_framing_intent: str = None,
-        framing_intents: TypedCollection = None,
-        contexts: TypedCollection = None,
-        canvas_templates: TypedCollection = None,
+        uuid_: Optional[str] = None,
+        version: Optional[dict] = None,
+        fdl_creator: Optional[str] = None,
+        default_framing_intent: Optional[str] = None,
+        framing_intents: Optional[TypedCollection] = None,
+        contexts: Optional[TypedCollection] = None,
+        canvas_templates: Optional[TypedCollection] = None,
     ):
         super().__init__()
         self.uuid = uuid_
@@ -97,9 +98,8 @@ class FDL(Base):
     @default_framing_intent.setter
     def default_framing_intent(self, framing_intent_id: str):
         if framing_intent_id and framing_intent_id not in self.framing_intents:
-            raise FDLError(
-                f'Default framing intent: "{framing_intent_id}" not found in ' f"registered framing intents."
-            )
+            msg = f'Default framing intent: "{framing_intent_id}" not found in ' f"registered framing intents."
+            raise FDLError(msg)
 
         self._default_framing_intent = framing_intent_id
 
@@ -132,7 +132,7 @@ class FDL(Base):
 
             for framing_decision in canvas.framing_decisions:
                 if framing_decision.framing_intent_id not in self.framing_intents:
-                    errors.append(
+                    errors.append(  # noqa: PERF401
                         f"{framing_decision}.framing_intent_id ({framing_decision.framing_intent_id}) "
                         f"not found in registered framing intents"
                     )
@@ -141,11 +141,12 @@ class FDL(Base):
         v = jsonschema.validators.validator_for(self._schema)
         validator = v(schema=self._schema, format_checker=v.FORMAT_CHECKER)
         for error in validator.iter_errors(self.to_dict()):
-            errors.append(str(error))
+            errors.append(str(error))  # noqa: PERF401
 
         if errors:
             nl = "\n"
-            raise FDLValidationError(f"Validation failed!\n" f"{f'{nl}'.join(errors)}")
+            msg = f"Validation failed!\n" f"{f'{nl}'.join(errors)}"
+            raise FDLValidationError(msg)
 
     def load_schema(self) -> dict:
         """Load a jsonschema based on the version in `Header` or default to current version

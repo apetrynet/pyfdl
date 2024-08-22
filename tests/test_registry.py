@@ -16,9 +16,9 @@ def install_plugins():
 
 
 def test_loading_registry():
-    pyfdl.plugins.registry._REGISTRY = None
+    pyfdl.plugins.registry._REGISTRY = None  # noqa
     assert isinstance(get_registry(), pyfdl.plugins.registry.PluginRegistry)
-    assert pyfdl.plugins.registry._REGISTRY is not None
+    assert pyfdl.plugins.registry._REGISTRY is not None  # noqa
 
     id_ = id(get_registry())
     get_registry(reload=True)
@@ -30,7 +30,7 @@ def test_load_builtin():
     assert isinstance(_registry.handlers["fdl"], FDLHandler)
 
 
-def test_load_plugin(capsys, install_plugins):
+def test_load_plugin(capsys, install_plugins):  # noqa
     _registry = get_registry(reload=True)
     assert _registry.handlers.get("myhandler1") is not None
     assert _registry.handlers.get("myhandler2") is not None

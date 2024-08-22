@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pyfdl import FDL_SCHEMA_VERSION, Base
 
 
@@ -8,7 +10,11 @@ class Header(Base):
     defaults = {"uuid": Base.generate_uuid, "fdl_creator": "PyFDL", "version": FDL_SCHEMA_VERSION}
 
     def __init__(
-        self, uuid_: str = None, version: dict = None, fdl_creator: str = None, default_framing_intent: str = None
+        self,
+        uuid_: Optional[str] = None,
+        version: Optional[dict] = None,
+        fdl_creator: Optional[str] = None,
+        default_framing_intent: Optional[str] = None,
     ):
         super().__init__()
         self.uuid = uuid_

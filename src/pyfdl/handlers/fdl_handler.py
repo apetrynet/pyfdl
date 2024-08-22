@@ -1,8 +1,10 @@
 import json
 from pathlib import Path
-from typing import Union
+from typing import TypeVar, Union
 
 from pyfdl import FDL
+
+PluginRegistry = TypeVar("PluginRegistry")
 
 
 class FDLHandler:
@@ -88,7 +90,7 @@ class FDLHandler:
         return json.dumps(fdl.to_dict(), indent=indent, sort_keys=False)
 
 
-def register_plugin(registry: "PluginReistry"):
+def register_plugin(registry: PluginRegistry):
     """
     Mandatory function to register handler in the registry. Called by the PluginRegistry itself.
 

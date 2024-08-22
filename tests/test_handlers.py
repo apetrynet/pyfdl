@@ -6,13 +6,13 @@ from pyfdl.plugins import get_registry
 
 
 @pytest.mark.parametrize(
-    "path, handler_name, expected_name",
-    (
-        ["/some/filename.fdl", None, "fdl"],
-        [None, "fdl", "fdl"],
-        [None, "simple", "simple"],
-        ["/some/filename.ext", None, "simple"],
-    ),
+    ("path", "handler_name", "expected_name"),
+    [
+        ("/some/filename.fdl", None, "fdl"),
+        (None, "fdl", "fdl"),
+        (None, "simple", "simple"),
+        ("/some/filename.ext", None, "simple"),
+    ],
 )
 def test_get_handler(simple_handler, path, handler_name, expected_name):
     reg = get_registry(reload=True)

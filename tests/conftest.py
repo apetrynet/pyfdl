@@ -22,7 +22,7 @@ def cleanup_temp_files():
         file.unlink(missing_ok=True)
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 def base_subclass():
     class BaseSubclass(pyfdl.Base):
         # Holds a list of known attributes

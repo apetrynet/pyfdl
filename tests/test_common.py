@@ -3,7 +3,7 @@ import pytest
 import pyfdl
 
 
-def test_set_rounding_strategy(base_subclass, sample_rounding_strategy_obj):
+def test_set_rounding_strategy():
     assert pyfdl.rounding_strategy() == pyfdl.RoundStrategy(**pyfdl.DEFAULT_ROUNDING_STRATEGY)
 
     override = {"even": "whole", "mode": "up"}
@@ -25,7 +25,7 @@ def test_base_from_dict(base_subclass, base_class_dict):
     assert isinstance(obj1.point, pyfdl.Point)
     assert isinstance(obj1.dimensions, pyfdl.Dimensions)
     assert isinstance(obj1.collection, pyfdl.TypedCollection)
-    assert obj1.collection._cls == pyfdl.FramingIntent
+    assert obj1.collection._cls == pyfdl.FramingIntent  # noqa
     assert isinstance(obj1.collection[0], pyfdl.FramingIntent)
     assert isinstance(obj1.round, pyfdl.RoundStrategy)
 
@@ -38,7 +38,7 @@ def test_base_from_kwargs(base_subclass, base_class_kwargs):
     assert isinstance(obj1.point, pyfdl.Point)
     assert isinstance(obj1.dimensions, pyfdl.Dimensions)
     assert isinstance(obj1.collection, pyfdl.TypedCollection)
-    assert obj1.collection._cls == pyfdl.FramingIntent
+    assert obj1.collection._cls == pyfdl.FramingIntent  # noqa
     assert isinstance(obj1.collection[0], pyfdl.FramingIntent)
     assert isinstance(obj1.round, pyfdl.RoundStrategy)
 
@@ -143,7 +143,7 @@ def test_typed_collection_contents(sample_framing_intent_obj):
     collection.add(framing_intent)
     assert framing_intent in collection
     assert framing_intent.id in collection
-    assert [_fi for _fi in collection] == [framing_intent]
+    assert list(collection) == [framing_intent]
 
 
 def test_dimensions_to_dict():
@@ -180,7 +180,7 @@ def test_dimensions_copy():
 
 
 @pytest.mark.parametrize(
-    "source_dim,compare_dim,expected",
+    ("source_dim", "compare_dim", "expected"),
     [
         ((1920, 1080), (1921, 1080), True),
         ((1920, 1080), (1920, 1081), True),
@@ -195,7 +195,7 @@ def test_dimensions_lt(source_dim, compare_dim, expected):
 
 
 @pytest.mark.parametrize(
-    "source_dim,compare_dim,expected",
+    ("source_dim", "compare_dim", "expected"),
     [((1920, 1080), (1921, 1080), False), ((1920, 1080), (1920, 1081), False), ((1920, 1080), (1920, 1080), True)],
 )
 def test_dimensions_eq(source_dim, compare_dim, expected):
@@ -203,7 +203,7 @@ def test_dimensions_eq(source_dim, compare_dim, expected):
 
 
 @pytest.mark.parametrize(
-    "source_dim,compare_dim,expected",
+    ("source_dim", "compare_dim", "expected"),
     [
         ((1920, 1080), (1921, 1080), False),
         ((1920, 1080), (1920, 1081), False),
@@ -231,7 +231,7 @@ def test_rounding_strategy_validation():
 
 
 @pytest.mark.parametrize(
-    "rules,dimensions,dtype,expected",
+    ("rules", "dimensions", "dtype", "expected"),
     [
         ({"even": "even", "mode": "up"}, {"width": 19, "height": 79}, int, (20, 80)),
         ({"even": "even", "mode": "up"}, {"width": 19, "height": 79}, float, (20, 80)),

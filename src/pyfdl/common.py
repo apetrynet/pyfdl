@@ -1,6 +1,6 @@
 import math
 import uuid
-from typing import Any, Type, Union
+from typing import Any, Optional, Union
 
 from pyfdl.errors import FDLError
 
@@ -15,9 +15,7 @@ DEFAULT_ROUNDING_STRATEGY = NO_ROUNDING
 
 
 def set_rounding_strategy(rules: Union[dict, None]):
-    global NO_ROUNDING
-    global DEFAULT_ROUNDING_STRATEGY
-    global _ROUNDING
+    global _ROUNDING  # noqa
 
     if rules is None:
         rules = NO_ROUNDING
@@ -26,8 +24,6 @@ def set_rounding_strategy(rules: Union[dict, None]):
 
 
 def rounding_strategy() -> "RoundStrategy":
-    global _ROUNDING
-    global DEFAULT_ROUNDING_STRATEGY
     if _ROUNDING is None:
         set_rounding_strategy(DEFAULT_ROUNDING_STRATEGY)
 
@@ -125,10 +121,9 @@ class Base:
             value = getattr(self, key)
 
             # check if empty value should be omitted
-            if key not in self.required and not value:
+            if key not in self.required and not value and not isinstance(value, TypedCollection):
                 # Keys with arrays as values should pass (for now?)
-                if not isinstance(value, TypedCollection):
-                    continue
+                continue
 
             # Arrays (aka lists) contain other objects
             if isinstance(value, TypedCollection):
@@ -142,7 +137,8 @@ class Base:
 
         missing = self.check_required()
         if missing:
-            raise FDLError(f"{self!r} is missing some required attributes: {missing}")
+            msg = f"{self!r} is missing some required attributes: {missing}"
+            raise FDLError(msg)
 
         return data
 
@@ -220,20 +216,23 @@ class TypedCollection:
         """
 
         if not isinstance(item, self._cls):
-            raise TypeError(
+            msg = (
                 f'This container does not accept items of type: "{type(item)}". '
                 f'Please provide items of type: "{self._cls}"'
             )
+            raise TypeError(msg)
 
         item_id = self._get_item_id(item)
 
         if item_id:
             if item_id in self._data:
-                raise FDLError(f'{item.__class__.__name__}.{self._cls.id_attribute} ("{item_id}") already exists.')
+                msg = f'{item.__class__.__name__}.{self._cls.id_attribute} ("{item_id}") already exists.'
+                raise FDLError(msg)
             self._data[item_id] = item
 
         else:
-            raise FDLError(f'Item must have a valid identifier ("{self._cls.id_attribute}"), not None or empty string')
+            msg = f'Item must have a valid identifier ("{self._cls.id_attribute}"), not None or empty string'
+            raise FDLError(msg)
 
     def get(self, item_id: str) -> Union[Any, None]:
         """Get an item in the collection
@@ -277,8 +276,7 @@ class TypedCollection:
         return len(self._data)
 
     def __iter__(self):
-        for item in self._data.values():
-            yield item
+        yield from self._data.values()
 
     def __getitem__(self, item):
         return self.get(self.ids[item])
@@ -287,7 +285,7 @@ class TypedCollection:
         # We support both looking for an item by item.id and "string" for future use of collection
         try:
             item_id = self._get_item_id(item)
-            return item_id in self._data
+            return item_id in self._data  # noqa
 
         except AttributeError:
             return item in self._data
@@ -298,7 +296,10 @@ class Dimensions(Base):
     required = ["width", "height"]
 
     def __init__(
-        self, width: Union[int, float], height: Union[int, float], dtype: Union[Type[int], Type[float]] = float
+        self,
+        width: Union[int, float],
+        height: Union[int, float],
+        dtype: Union[int, float] = float,  # noqa
     ):
         """
         Dimensions may be either `ints` or `floats`. You may pass the desired data type at instantiation.
@@ -395,7 +396,7 @@ class RoundStrategy(Base):
     required = ["even", "mode"]
     defaults = {"even": "even", "mode": "up"}
 
-    def __init__(self, even: str = None, mode: str = None):
+    def __init__(self, even: Optional[str] = None, mode: Optional[str] = None):
         """Describes how to handle rounding canvas dimensions when applying a
         [CanvasTemplate](canvas_template.md#pyfdl.CanvasTemplate).
 
@@ -428,9 +429,9 @@ class RoundStrategy(Base):
     def even(self, value):
         valid_options = ("even", "whole")
         if value is not None and value not in valid_options:
-            raise FDLError(
-                f'"{value}" is not a valid option for "even".\n' f"Please use one of the following: {valid_options}"
-            )
+            msg = f'"{value}" is not a valid option for "even".\n' f"Please use one of the following: {valid_options}"
+
+            raise FDLError(msg)
 
         self._even = value
 
@@ -442,9 +443,8 @@ class RoundStrategy(Base):
     def mode(self, value):
         valid_options = ("up", "down", "round")
         if value is not None and value not in valid_options:
-            raise FDLError(
-                f'"{value}" is not a valid option for "mode".\n' f"Please use one of the following: {valid_options}"
-            )
+            msg = f'"{value}" is not a valid option for "mode".\n' f"Please use one of the following: {valid_options}"
+            raise FDLError(msg)
 
         self._mode = value
 

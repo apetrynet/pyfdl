@@ -4,7 +4,7 @@ import pyfdl
 
 
 @pytest.mark.parametrize(
-    "intent_ratio,canvas_dim,canvas_eff,canvas_sqz,protection,expected_dim,expected_prot",
+    ("intent_ratio", "canvas_dim", "canvas_eff", "canvas_sqz", "protection", "expected_dim", "expected_prot"),
     [
         # one to one
         ((16, 9), (1920, 1080), None, 1, 0, (1920, 1080), None),
@@ -54,7 +54,7 @@ def test_from_framing_intent(
 
 
 @pytest.mark.parametrize(
-    "h_method, v_method, protection_dim, protection_pnt, expected",
+    ("h_method", "v_method", "protection_dim", "protection_pnt", "expected"),
     [
         ("left", "top", None, None, (0, 0)),
         ("left", "top", (550, 550), (0, 0), (25, 25)),
@@ -88,16 +88,12 @@ def test_adjust_anchor_point(h_method, v_method, protection_dim, protection_pnt,
 
 
 @pytest.mark.parametrize(
-    "h_method, v_method, expected",
+    ("h_method", "v_method", "expected"),
     [
         ("left", "top", (0, 0)),
         ("left", "center", (0, 225)),
         ("left", "bottom", (0, 450)),
-        (
-            "center",
-            "top",
-            (225, 0),
-        ),
+        ("center", "top", (225, 0)),
         ("center", "center", (225, 225)),
         ("center", "bottom", (225, 450)),
         ("right", "top", (450, 0)),

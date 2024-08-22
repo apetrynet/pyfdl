@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Optional, Union
 
 from .common import Base, Dimensions
 
@@ -10,7 +10,13 @@ class FramingIntent(Base):
     required = ["id", "aspect_ratio"]
     defaults = {"protection": 0}
 
-    def __init__(self, label: str = None, id_: str = None, aspect_ratio: Dimensions = None, protection: float = None):
+    def __init__(
+        self,
+        label: Optional[str] = None,
+        id_: Optional[str] = None,
+        aspect_ratio: Optional[Dimensions] = None,
+        protection: Optional[float] = None,
+    ):
         super().__init__()
         self.id = id_
         self.label = label

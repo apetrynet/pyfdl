@@ -1,7 +1,7 @@
-from typing import List, Union
+from typing import Optional, Union
 
 from .common import Base, Dimensions, RoundStrategy
-from pyfdl.errors import FDLError
+from .errors import FDLError
 
 
 class CanvasTemplate(Base):
@@ -41,18 +41,18 @@ class CanvasTemplate(Base):
 
     def __init__(
         self,
-        label: str = None,
-        id_: str = None,
-        target_dimensions: Dimensions = None,
-        target_anamorphic_squeeze: float = None,
-        fit_source: str = None,
-        fit_method: str = None,
-        alignment_method_vertical: str = None,
-        alignment_method_horizontal: str = None,
-        preserve_from_source_canvas: str = None,
-        maximum_dimensions: Dimensions = None,
-        pad_to_maximum: bool = None,
-        round_: RoundStrategy = None,
+        label: Optional[str] = None,
+        id_: Optional[str] = None,
+        target_dimensions: Optional[Dimensions] = None,
+        target_anamorphic_squeeze: Optional[float] = None,
+        fit_source: Optional[str] = None,
+        fit_method: Optional[str] = None,
+        alignment_method_vertical: Optional[str] = None,
+        alignment_method_horizontal: Optional[str] = None,
+        preserve_from_source_canvas: Optional[str] = None,
+        maximum_dimensions: Optional[Dimensions] = None,
+        pad_to_maximum: Optional[bool] = None,
+        round_: Optional[RoundStrategy] = None,
     ):
         super().__init__()
         self.label = label
@@ -101,10 +101,11 @@ class CanvasTemplate(Base):
             "canvas.effective_dimensions",
         )
         if value is not None and value not in valid_options:
-            raise FDLError(
+            msg = (
                 f'"{value}" is not a valid option for "fit_source".\n'
                 f"Please use one of the following: {valid_options}"
             )
+            raise FDLError(msg)
 
         self._fit_source = value
 
@@ -116,10 +117,11 @@ class CanvasTemplate(Base):
     def fit_method(self, value: str):
         valid_options = ("width", "height", "fit_all", "fill")
         if value is not None and value not in valid_options:
-            raise FDLError(
+            msg = (
                 f'"{value}" is not a valid option for "fit_method".\n'
                 f"Please use one of the following: {valid_options}"
             )
+            raise FDLError(msg)
 
         self._fit_method = value
 
@@ -131,10 +133,11 @@ class CanvasTemplate(Base):
     def alignment_method_vertical(self, value):
         valid_options = ("center", "top", "bottom")
         if value is not None and value not in valid_options:
-            raise FDLError(
+            msg = (
                 f'"{value}" is not a valid option for "alignment_method_vertical".\n'
                 f"Please use one of the following: {valid_options}"
             )
+            raise FDLError(msg)
 
         self._alignment_method_vertical = value
 
@@ -146,10 +149,11 @@ class CanvasTemplate(Base):
     def alignment_method_horizontal(self, value):
         valid_options = ("center", "left", "right")
         if value is not None and value not in valid_options:
-            raise FDLError(
+            msg = (
                 f'"{value}" is not a valid option for "alignment_method_horizontal".\n'
                 f"Please use one of the following: {valid_options}"
             )
+            raise FDLError(msg)
 
         self._alignment_method_horizontal = value
 
@@ -167,14 +171,15 @@ class CanvasTemplate(Base):
             "canvas.effective_dimensions",
         )
         if value is not None and value not in valid_options:
-            raise FDLError(
+            msg = (
                 f'"{value}" is not a valid option for "preserve_from_source_canvas".\n'
                 f"Please use one of the following: {valid_options}"
             )
+            raise FDLError(msg)
 
         self._preserve_from_source_canvas = value
 
-    def get_desqueezed_width(self, source_width: Union[float, int], squeeze_factor: float) -> Union[float, int]:
+    def get_desqueezed_width(self, source_width: float, squeeze_factor: float) -> float:
         """
         Get the de-squeezed width also considering the `target_anamorphic_squeeze`.
         Used to calculate scaling of canvases and framing decisions.
@@ -224,11 +229,10 @@ class CanvasTemplate(Base):
                 # Target wider than source
                 scale_factor = self.target_dimensions.height / source_dimensions.height
 
-        elif self.fit_method == "fill":
+        elif self.fit_method == "fill" and target_aspect < source_aspect:
             # What's left outside the target dimensions due to fill?
-            if target_aspect < source_aspect:
-                # Source wider than target
-                scale_factor = self.target_dimensions.height / source_dimensions.height
+            # Source wider than target
+            scale_factor = self.target_dimensions.height / source_dimensions.height
 
         return scale_factor
 
@@ -284,12 +288,12 @@ class CanvasTemplate(Base):
                 height *= adjustment_scale
 
         size = Dimensions(width=width, height=height)
-        # TODO consider returning crop True/False
+        # TODO: consider returning crop True/False
         #  or at least coordinates outside of frame like data window vs display window in EXR
 
         return size
 
-    def get_transfer_keys(self) -> List[str]:
+    def get_transfer_keys(self) -> list[str]:
         """
         Get a list of attributes to transfer from source to destination in the order that
         preserves all attributes between `fit_source` and `preserve_from_canvas`

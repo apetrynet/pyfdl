@@ -1,6 +1,9 @@
-from typing import Union
+from typing import Optional, TypeVar, Union
 
 from .common import Base, Dimensions, Point, rounding_strategy
+
+Canvas = TypeVar("Canvas")
+FramingIntent = TypeVar("FramingIntent")
 
 
 class FramingDecision(Base):
@@ -24,13 +27,13 @@ class FramingDecision(Base):
 
     def __init__(
         self,
-        label: str = None,
-        id_: str = None,
-        framing_intent_id: str = None,
-        dimensions: Dimensions = None,
-        anchor_point: Point = None,
-        protection_dimensions: Dimensions = None,
-        protection_anchor_point: Point = None,
+        label: Optional[str] = None,
+        id_: Optional[str] = None,
+        framing_intent_id: Optional[str] = None,
+        dimensions: Optional[Dimensions] = None,
+        anchor_point: Optional[Point] = None,
+        protection_dimensions: Optional[Dimensions] = None,
+        protection_anchor_point: Optional[Point] = None,
     ):
         super().__init__()
         self.label = label
@@ -58,7 +61,7 @@ class FramingDecision(Base):
         self._protection_dimensions = dim
 
     @classmethod
-    def from_framing_intent(cls, canvas: "Canvas", framing_intent: "FramingIntent") -> "FramingDecision":
+    def from_framing_intent(cls, canvas: Canvas, framing_intent: FramingIntent) -> "FramingDecision":
         """
         Create a new [FramingDecision](framing_decision.md#pyfdl.FramingDecision) based on the provided
         [Canvas](canvas.md#pyfdl.Canvas) and [FramingIntent](framing_intent.md#pyfdl.FramingIntent)
@@ -110,7 +113,7 @@ class FramingDecision(Base):
 
         return framing_decision
 
-    def adjust_anchor_point(self, canvas: "Canvas", h_method: str = "center", v_method: str = "center") -> None:
+    def adjust_anchor_point(self, canvas: Canvas, h_method: str = "center", v_method: str = "center") -> None:
         """
         Adjust this object's `anchor_point` either relative to `protection_anchor_point`
         or `canvas.effective_anchor_point`
@@ -123,7 +126,7 @@ class FramingDecision(Base):
             v_method: vertical alignment ('top', 'center', 'bottom')
         """
 
-        # TODO check if anchor point is shifted before centering
+        # TODO: check if anchor point is shifted before centering
         active_dimensions, active_anchor_point = canvas.get_dimensions()
 
         offset_point = self.protection_anchor_point or active_anchor_point
@@ -152,7 +155,7 @@ class FramingDecision(Base):
         self.anchor_point = Point(x=x, y=y)
 
     def adjust_protection_anchor_point(
-        self, canvas: "Canvas", h_method: str = "center", v_method: str = "center"
+        self, canvas: Canvas, h_method: str = "center", v_method: str = "center"
     ) -> None:
         """
         Adjust this object's `protection_anchor_point` if `protection_dimensions` are set.

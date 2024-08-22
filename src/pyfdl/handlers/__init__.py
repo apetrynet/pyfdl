@@ -1,10 +1,11 @@
 from pathlib import Path
 from typing import Any, Optional, Union
 
+from pyfdl.fdl import FDL
 from pyfdl.plugins import get_registry
 
 
-def get_handler(func_name: str, path: Union[Path, str] = None, handler_name: str = None) -> Any:
+def get_handler(func_name: str, path: Optional[Union[Path, str]] = None, handler_name: Optional[str] = None) -> Any:
     """
     Convenience function to get a handler matching the provided arguments.
 
@@ -18,7 +19,8 @@ def get_handler(func_name: str, path: Union[Path, str] = None, handler_name: str
     """
 
     if handler_name is None and path is None:
-        raise RuntimeError('"handler_name" and "path" can\'t both be None. Please provide one or the other')
+        msg = '"handler_name" and "path" can\'t both be None. Please provide one or the other'
+        raise RuntimeError(msg)
 
     _registry = get_registry()
     if handler_name is not None:
@@ -31,7 +33,9 @@ def get_handler(func_name: str, path: Union[Path, str] = None, handler_name: str
     return handler
 
 
-def read_from_file(path: Union[Path, str], handler_name: str = None, **handler_kwargs: Optional[Any]) -> "FDL":
+def read_from_file(
+    path: Union[Path, str], handler_name: Optional[str] = None, **handler_kwargs: Optional[Any]
+) -> "FDL":
     """
     Handler agnostic function for producing an FDL from a file. A suitable handler will be
     chosen based on `path` or `handler_name`.
@@ -67,7 +71,9 @@ def read_from_string(s: str, handler_name: str = "fdl", **handler_kwargs: Option
     return handler.read_from_string(s, **handler_kwargs)
 
 
-def write_to_file(fdl: "FDL", path: Union[Path, str], handler_name: str = None, **handler_kwargs: Optional[Any]):
+def write_to_file(
+    fdl: FDL, path: Union[Path, str], handler_name: Optional[str] = None, **handler_kwargs: Optional[Any]
+):
     """
     Handler agnostic function to write a file based on an FDL. A suitable handler will be chosen based
     on `path` or `handler_name`
@@ -83,7 +89,7 @@ def write_to_file(fdl: "FDL", path: Union[Path, str], handler_name: str = None, 
     handler.write_to_file(fdl, path, **handler_kwargs)
 
 
-def write_to_string(fdl: "FDL", handler_name: str = "fdl", **handler_kwargs: Optional[Any]):
+def write_to_string(fdl: FDL, handler_name: str = "fdl", **handler_kwargs: Optional[Any]):
     """
     Handler agnostic function for producing a string representation of an FDL. A suitable handler will
     be chosen based on `handler_name`.

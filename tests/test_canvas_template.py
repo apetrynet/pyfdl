@@ -4,7 +4,7 @@ import pyfdl
 
 
 @pytest.mark.parametrize(
-    "fit_source,fail",
+    ("fit_source", "fail"),
     [
         ("framing_decision.dimensions", "IWillFail"),
         ("framing_decision.protection_dimensions", "IWillFail"),
@@ -23,7 +23,7 @@ def test_fit_source_enum_validation(fit_source, fail):
 
 
 @pytest.mark.parametrize(
-    "fit_method,fail",
+    ("fit_method", "fail"),
     [("width", "IWillFail"), ("height", "IWillFail"), ("fit_all", "IWillFail"), ("fill", "IWillFail")],
 )
 def test_fit_method_enum_validation(fit_method, fail):
@@ -37,7 +37,7 @@ def test_fit_method_enum_validation(fit_method, fail):
 
 
 @pytest.mark.parametrize(
-    "alignment,fail",
+    ("alignment", "fail"),
     [
         ("center", "IWillFail"),
         ("top", "IWillFail"),
@@ -55,7 +55,7 @@ def test_alignment_method_vertical_enum_validation(alignment, fail):
 
 
 @pytest.mark.parametrize(
-    "alignment,fail",
+    ("alignment", "fail"),
     [
         ("left", "IWillFail"),
         ("center", "IWillFail"),
@@ -73,7 +73,7 @@ def test_alignment_method_horizontal_enum_validation(alignment, fail):
 
 
 @pytest.mark.parametrize(
-    "preserve,fail",
+    ("preserve", "fail"),
     [
         ("none", "IWillFail"),
         ("framing_decision.dimensions", "IWillFail"),
@@ -93,7 +93,7 @@ def test_preserve_from_source_canvas_enum_validation(preserve, fail):
 
 
 @pytest.mark.parametrize(
-    "source_width,squeeze_factor,target_squeeze,expected",
+    ("source_width", "squeeze_factor", "target_squeeze", "expected"),
     [
         (100, 2, 1, 200),
         (100, 2, 2, 100),
@@ -108,7 +108,7 @@ def test_get_desqueezed_width(sample_canvas_template_obj, source_width, squeeze_
 
 
 @pytest.mark.parametrize(
-    "fit_method,target_dim,source_dim,source_sqz,expected",
+    ("fit_method", "target_dim", "source_dim", "source_sqz", "expected"),
     [
         ("width", (1920, 1080), (960, 540), 1, 2),
         ("height", (1920, 1080), (960, 540), 1, 2),
@@ -140,7 +140,7 @@ def test_get_scale_factor(sample_canvas_template_obj, fit_method, target_dim, so
 
 
 @pytest.mark.parametrize(
-    "fit_method,target_dim,source_dim,source_sqz,expected",
+    ("fit_method", "target_dim", "source_dim", "source_sqz", "expected"),
     [  # Same aspect
         ("width", (1920, 1080), (960, 540), 1, (1920, 1080)),
         ("height", (1920, 1080), (960, 540), 1, (1920, 1080)),
@@ -172,7 +172,7 @@ def test_fit_source_to_target(sample_canvas_template_obj, fit_method, target_dim
 
 
 @pytest.mark.parametrize(
-    "fit_source,preserve,expected",
+    ("fit_source", "preserve", "expected"),
     [
         (
             "framing_decision.dimensions",
