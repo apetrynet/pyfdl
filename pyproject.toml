@@ -63,6 +63,9 @@ dependencies = [
     "mkdocs-autorefs"
 ]
 
+[tool.ruff.lint]
+ignore = ["RET504", "RUF012", "FA100", "TID252", "FBT001", "FBT002"]
+
 [tool.hatch.envs.docs.scripts]
 build = "mkdocs build --clean --strict"
 serve = "mkdocs serve --dev-addr localhost:8000"

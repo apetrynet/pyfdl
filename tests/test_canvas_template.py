@@ -4,13 +4,13 @@ import pyfdl
 
 
 @pytest.mark.parametrize(
-    'fit_source,fail',
+    ("fit_source", "fail"),
     [
-        ('framing_decision.dimensions', 'IWillFail'),
-        ('framing_decision.protection_dimensions', 'IWillFail'),
-        ('canvas.dimensions', 'IWillFail'),
-        ('canvas.effective_dimensions', 'IWillFail')
-    ]
+        ("framing_decision.dimensions", "IWillFail"),
+        ("framing_decision.protection_dimensions", "IWillFail"),
+        ("canvas.dimensions", "IWillFail"),
+        ("canvas.effective_dimensions", "IWillFail"),
+    ],
 )
 def test_fit_source_enum_validation(fit_source, fail):
     canvas_template = pyfdl.CanvasTemplate()
@@ -23,13 +23,8 @@ def test_fit_source_enum_validation(fit_source, fail):
 
 
 @pytest.mark.parametrize(
-    'fit_method,fail',
-    [
-        ('width', 'IWillFail'),
-        ('height', 'IWillFail'),
-        ('fit_all', 'IWillFail'),
-        ('fill', 'IWillFail')
-    ]
+    ("fit_method", "fail"),
+    [("width", "IWillFail"), ("height", "IWillFail"), ("fit_all", "IWillFail"), ("fill", "IWillFail")],
 )
 def test_fit_method_enum_validation(fit_method, fail):
     canvas_template = pyfdl.CanvasTemplate()
@@ -42,12 +37,12 @@ def test_fit_method_enum_validation(fit_method, fail):
 
 
 @pytest.mark.parametrize(
-    'alignment,fail',
+    ("alignment", "fail"),
     [
-        ('center', 'IWillFail'),
-        ('top', 'IWillFail'),
-        ('bottom', 'IWillFail'),
-    ]
+        ("center", "IWillFail"),
+        ("top", "IWillFail"),
+        ("bottom", "IWillFail"),
+    ],
 )
 def test_alignment_method_vertical_enum_validation(alignment, fail):
     canvas_template = pyfdl.CanvasTemplate()
@@ -60,12 +55,12 @@ def test_alignment_method_vertical_enum_validation(alignment, fail):
 
 
 @pytest.mark.parametrize(
-    'alignment,fail',
+    ("alignment", "fail"),
     [
-        ('left', 'IWillFail'),
-        ('center', 'IWillFail'),
-        ('right', 'IWillFail'),
-    ]
+        ("left", "IWillFail"),
+        ("center", "IWillFail"),
+        ("right", "IWillFail"),
+    ],
 )
 def test_alignment_method_horizontal_enum_validation(alignment, fail):
     canvas_template = pyfdl.CanvasTemplate()
@@ -78,14 +73,14 @@ def test_alignment_method_horizontal_enum_validation(alignment, fail):
 
 
 @pytest.mark.parametrize(
-    'preserve,fail',
+    ("preserve", "fail"),
     [
-        ('none', 'IWillFail'),
-        ('framing_decision.dimensions', 'IWillFail'),
-        ('framing_decision.protection_dimensions', 'IWillFail'),
-        ('canvas.dimensions', 'IWillFail'),
-        ('canvas.effective_dimensions', 'IWillFail')
-    ]
+        ("none", "IWillFail"),
+        ("framing_decision.dimensions", "IWillFail"),
+        ("framing_decision.protection_dimensions", "IWillFail"),
+        ("canvas.dimensions", "IWillFail"),
+        ("canvas.effective_dimensions", "IWillFail"),
+    ],
 )
 def test_preserve_from_source_canvas_enum_validation(preserve, fail):
     canvas_template = pyfdl.CanvasTemplate()
@@ -98,13 +93,13 @@ def test_preserve_from_source_canvas_enum_validation(preserve, fail):
 
 
 @pytest.mark.parametrize(
-    'source_width,squeeze_factor,target_squeeze,expected',
+    ("source_width", "squeeze_factor", "target_squeeze", "expected"),
     [
         (100, 2, 1, 200),
         (100, 2, 2, 100),
         (100, 2, 1.5, 200 / 1.5),
-        (100, 2, 0, 100)    # target anamorphic squeeze of 0 is same as source
-    ]
+        (100, 2, 0, 100),  # target anamorphic squeeze of 0 is same as source
+    ],
 )
 def test_get_desqueezed_width(sample_canvas_template_obj, source_width, squeeze_factor, target_squeeze, expected):
     template = sample_canvas_template_obj
@@ -113,33 +108,29 @@ def test_get_desqueezed_width(sample_canvas_template_obj, source_width, squeeze_
 
 
 @pytest.mark.parametrize(
-    'fit_method,target_dim,source_dim,source_sqz,expected',
+    ("fit_method", "target_dim", "source_dim", "source_sqz", "expected"),
     [
-        ('width', (1920, 1080), (960, 540), 1, 2),
-        ('height', (1920, 1080), (960, 540), 1, 2),
-        ('fit_all', (1920, 1080), (960, 540), 1, 2),
-        ('fill', (1920, 1080), (960, 540), 1, 2),
-
-        ('width', (1920, 1080), (960, 1080), 2, 1),
-        ('height', (1920, 1080), (960, 1080), 2, 1),
-        ('fit_all', (1920, 1080), (960, 1080), 2, 1),
-        ('fill', (1920, 1080), (960, 1080), 2, 1),
-
-        ('width', (1000, 500), (250, 500), 1, 4),
-        ('height', (1000, 500), (250, 500), 1, 1),
-        ('fit_all', (1000, 500), (250, 500), 1, 1),
-        ('fill', (1000, 500), (250, 500), 1, 4),
-
-        ('width', (960, 540), (1920, 1080), 1, .5),
-        ('height', (960, 540), (1920, 1080), 1, .5),
-        ('fit_all', (960, 540), (1920, 1080), 1, .5),
-        ('fill', (960, 540), (1920, 1080), 1, .5),
-
-        ('width', (250, 500), (1000, 500), 1, .25),
-        ('height', (250, 500), (1000, 500), 1, 1),
-        ('fit_all', (250, 500), (1000, 500), 1, .25),
-        ('fill', (250, 500), (1000, 500), 1, 1)
-    ]
+        ("width", (1920, 1080), (960, 540), 1, 2),
+        ("height", (1920, 1080), (960, 540), 1, 2),
+        ("fit_all", (1920, 1080), (960, 540), 1, 2),
+        ("fill", (1920, 1080), (960, 540), 1, 2),
+        ("width", (1920, 1080), (960, 1080), 2, 1),
+        ("height", (1920, 1080), (960, 1080), 2, 1),
+        ("fit_all", (1920, 1080), (960, 1080), 2, 1),
+        ("fill", (1920, 1080), (960, 1080), 2, 1),
+        ("width", (1000, 500), (250, 500), 1, 4),
+        ("height", (1000, 500), (250, 500), 1, 1),
+        ("fit_all", (1000, 500), (250, 500), 1, 1),
+        ("fill", (1000, 500), (250, 500), 1, 4),
+        ("width", (960, 540), (1920, 1080), 1, 0.5),
+        ("height", (960, 540), (1920, 1080), 1, 0.5),
+        ("fit_all", (960, 540), (1920, 1080), 1, 0.5),
+        ("fill", (960, 540), (1920, 1080), 1, 0.5),
+        ("width", (250, 500), (1000, 500), 1, 0.25),
+        ("height", (250, 500), (1000, 500), 1, 1),
+        ("fit_all", (250, 500), (1000, 500), 1, 0.25),
+        ("fill", (250, 500), (1000, 500), 1, 1),
+    ],
 )
 def test_get_scale_factor(sample_canvas_template_obj, fit_method, target_dim, source_dim, source_sqz, expected):
     template = sample_canvas_template_obj
@@ -149,28 +140,28 @@ def test_get_scale_factor(sample_canvas_template_obj, fit_method, target_dim, so
 
 
 @pytest.mark.parametrize(
-    'fit_method,target_dim,source_dim,source_sqz,expected',
-    [   # Same aspect
-        ('width', (1920, 1080), (960, 540), 1, (1920, 1080)),
-        ('height', (1920, 1080), (960, 540), 1, (1920, 1080)),
-        ('fit_all', (1920, 1080), (960, 540), 1, (1920, 1080)),
-        ('fill', (1920, 1080), (960, 540), 1, (1920, 1080)),
+    ("fit_method", "target_dim", "source_dim", "source_sqz", "expected"),
+    [  # Same aspect
+        ("width", (1920, 1080), (960, 540), 1, (1920, 1080)),
+        ("height", (1920, 1080), (960, 540), 1, (1920, 1080)),
+        ("fit_all", (1920, 1080), (960, 540), 1, (1920, 1080)),
+        ("fill", (1920, 1080), (960, 540), 1, (1920, 1080)),
         # Same aspect, but difference squeeze
-        ('width', (1920, 1080), (480, 540), 2, (1920, 1080)),
-        ('height', (1920, 1080), (480, 540), 2, (1920, 1080)),
-        ('fit_all', (1920, 1080), (480, 540), 2, (1920, 1080)),
-        ('fill', (1920, 1080), (480, 540), 2, (1920, 1080)),
+        ("width", (1920, 1080), (480, 540), 2, (1920, 1080)),
+        ("height", (1920, 1080), (480, 540), 2, (1920, 1080)),
+        ("fit_all", (1920, 1080), (480, 540), 2, (1920, 1080)),
+        ("fill", (1920, 1080), (480, 540), 2, (1920, 1080)),
         # Taller than target
-        ('width', (1920, 1080), (540, 960), 1, (1920, 1080)),
-        ('height', (1920, 1080), (540, 960), 1, (607.5, 1080)),
-        ('fit_all', (1920, 1080), (540, 960), 1, (607.5, 1080)),
-        ('fill', (1920, 1080), (540, 960), 1, (1920, 1080)),
+        ("width", (1920, 1080), (540, 960), 1, (1920, 1080)),
+        ("height", (1920, 1080), (540, 960), 1, (607.5, 1080)),
+        ("fit_all", (1920, 1080), (540, 960), 1, (607.5, 1080)),
+        ("fill", (1920, 1080), (540, 960), 1, (1920, 1080)),
         # Wider than target
-        ('width', (1920, 1080), (960, 500), 1, (1920, 1000)),
-        ('height', (1920, 1080), (960, 500), 1, (1920, 1080)),
-        ('fit_all', (1920, 1080), (960, 500), 1, (1920, 1000)),
-        ('fill', (1920, 1080), (960, 500), 1, (1920, 1080)),
-    ]
+        ("width", (1920, 1080), (960, 500), 1, (1920, 1000)),
+        ("height", (1920, 1080), (960, 500), 1, (1920, 1080)),
+        ("fit_all", (1920, 1080), (960, 500), 1, (1920, 1000)),
+        ("fill", (1920, 1080), (960, 500), 1, (1920, 1080)),
+    ],
 )
 def test_fit_source_to_target(sample_canvas_template_obj, fit_method, target_dim, source_dim, source_sqz, expected):
     template = sample_canvas_template_obj
@@ -181,7 +172,7 @@ def test_fit_source_to_target(sample_canvas_template_obj, fit_method, target_dim
 
 
 @pytest.mark.parametrize(
-    'fit_source,preserve,expected',
+    ("fit_source", "preserve", "expected"),
     [
         (
             "framing_decision.dimensions",
@@ -190,31 +181,13 @@ def test_fit_source_to_target(sample_canvas_template_obj, fit_method, target_dim
                 "framing_decision.dimensions",
                 "framing_decision.protection_dimensions",
                 "canvas.effective_dimensions",
-                "canvas.dimensions"
-            ]
+                "canvas.dimensions",
+            ],
         ),
-        (
-                "framing_decision.dimensions",
-                "framing_decision.dimensions",
-                [
-                    "framing_decision.dimensions"
-                ]
-        ),
-        (
-                "framing_decision.dimensions",
-                "none",
-                [
-                    "framing_decision.dimensions"
-                ]
-        ),
-        (
-                "framing_decision.dimensions",
-                None,
-                [
-                    "framing_decision.dimensions"
-                ]
-        )
-    ]
+        ("framing_decision.dimensions", "framing_decision.dimensions", ["framing_decision.dimensions"]),
+        ("framing_decision.dimensions", "none", ["framing_decision.dimensions"]),
+        ("framing_decision.dimensions", None, ["framing_decision.dimensions"]),
+    ],
 )
 def test_get_transfer_keys(sample_canvas_template_obj, fit_source, preserve, expected):
     template = sample_canvas_template_obj

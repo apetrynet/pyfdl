@@ -6,10 +6,7 @@ import pytest
 import pyfdl
 
 SAMPLE_FDL_DIR = Path(__file__).parent.joinpath("sample_data")
-SAMPLE_FDL_FILE = Path(
-    SAMPLE_FDL_DIR,
-    "Scenario-9__FDL_DeliveredToVFXVendor.fdl"
-)
+SAMPLE_FDL_FILE = Path(SAMPLE_FDL_DIR, "Scenario-9__FDL_DeliveredToVFXVendor.fdl")
 
 
 def test_read_from_file_unvalidated():
@@ -32,7 +29,7 @@ def test_read_from_string():
 
 
 def test_write_to_file(tmp_path):
-    my_path = Path(tmp_path, 'myfdl.fdl')
+    my_path = Path(tmp_path, "myfdl.fdl")
     fdl1 = pyfdl.read_from_file(SAMPLE_FDL_FILE)
 
     pyfdl.write_to_file(fdl1, my_path)
@@ -72,9 +69,9 @@ def test_setting_default_framing_id(sample_framing_intent_obj):
     assert fdl.default_framing_intent == sample_framing_intent_obj.id
 
     with pytest.raises(pyfdl.FDLError) as err:
-        fdl.default_framing_intent = 'nogood'
+        fdl.default_framing_intent = "nogood"
 
-    assert "Default framing intent: \"nogood\" not found in" in str(err.value)
+    assert 'Default framing intent: "nogood" not found in' in str(err.value)
 
 
 def test_place_canvas_in_context(sample_canvas_obj, sample_context_obj):
@@ -90,14 +87,14 @@ def test_place_canvas_in_context(sample_canvas_obj, sample_context_obj):
     assert new_context.canvases.get(sample_canvas_obj.id) == sample_canvas_obj
 
 
-def test_validate_missing_requirements(sample_framing_intent_obj, sample_canvas_obj):
+def test_validate_missing_requirements():
     fdl = pyfdl.FDL()
     # This raises FDLError as  header is missing required attributes
     with pytest.raises(pyfdl.FDLError):
         fdl.validate()
 
 
-def test_validate_schema_rule(sample_framing_intent_obj, sample_canvas_obj):
+def test_validate_schema_rule(sample_framing_intent_obj):
     fdl = pyfdl.FDL()
     fdl.apply_defaults()
 
@@ -120,7 +117,7 @@ def test_validate_missing_source_framing_intent(sample_framing_intent_obj, sampl
         fdl.validate()
 
 
-def test_validate_missing_source_canvas_id(sample_framing_intent_obj, sample_canvas_obj):
+def test_validate_missing_source_canvas_id(sample_canvas_obj):
     fdl = pyfdl.FDL()
     fdl.apply_defaults()
     fdl.place_canvas_in_context(context_label="test", canvas=sample_canvas_obj)

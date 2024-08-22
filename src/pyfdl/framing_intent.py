@@ -1,22 +1,21 @@
-from typing import Union
+from typing import Optional, Union
 
-from pyfdl import Base, Dimensions, TypedCollection
+from .common import Base, Dimensions
 
 
 class FramingIntent(Base):
-
-    attributes = ['id', 'label', 'aspect_ratio', 'protection']
-    kwarg_map = {'id': 'id_'}
-    object_map = {'aspect_ratio': Dimensions}
-    required = ['id', 'aspect_ratio']
-    defaults = {'protection': 0}
+    attributes = ["id", "label", "aspect_ratio", "protection"]
+    kwarg_map = {"id": "id_"}
+    object_map = {"aspect_ratio": Dimensions}
+    required = ["id", "aspect_ratio"]
+    defaults = {"protection": 0}
 
     def __init__(
-            self,
-            label: str = None,
-            id_: str = None,
-            aspect_ratio: Dimensions = None,
-            protection: float = None
+        self,
+        label: Optional[str] = None,
+        id_: Optional[str] = None,
+        aspect_ratio: Optional[Dimensions] = None,
+        protection: Optional[float] = None,
     ):
         super().__init__()
         self.id = id_
@@ -35,10 +34,11 @@ class FramingIntent(Base):
             self._aspect_ratio.dtype = int
 
     def __repr__(self):
-        return (f'{self.__class__.__name__}('
-                f'label="{self.label}", '
-                f'id="{self.id}", '
-                f'aspect_ratio={self.aspect_ratio}, '
-                f'protection={self.protection}'
-                f')'
-                )
+        return (
+            f"{self.__class__.__name__}("
+            f'label="{self.label}", '
+            f'id="{self.id}", '
+            f"aspect_ratio={self.aspect_ratio}, "
+            f"protection={self.protection}"
+            f")"
+        )

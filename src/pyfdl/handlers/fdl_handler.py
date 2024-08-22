@@ -1,8 +1,10 @@
 import json
 from pathlib import Path
-from typing import IO, Union
+from typing import TypeVar, Union
 
 from pyfdl import FDL
+
+PluginRegistry = TypeVar("PluginRegistry")
 
 
 class FDLHandler:
@@ -10,8 +12,8 @@ class FDLHandler:
         """
         The default built-in FDL handler. Takes care of reading and writing FDL files
         """
-        self.name = 'fdl'
-        self.suffixes = ['.fdl']
+        self.name = "fdl"
+        self.suffixes = [".fdl"]
 
     def read_from_file(self, path: Path, validate: bool = True) -> FDL:
         """
@@ -28,7 +30,7 @@ class FDLHandler:
             FDL:
         """
 
-        with path.open('r') as fp:
+        with path.open("r") as fp:
             raw = fp.read()
             return self.read_from_string(raw, validate=validate)
 
@@ -53,7 +55,7 @@ class FDLHandler:
 
         return fdl
 
-    def write_to_file(self, fdl: FDL,  path: Path, validate: bool = True, indent: Union[int, None] = 2):
+    def write_to_file(self, fdl: FDL, path: Path, validate: bool = True, indent: Union[int, None] = 2):
         """Dump an FDL to a file.
 
         Args:
@@ -65,7 +67,7 @@ class FDLHandler:
         Raises:
             jsonschema.exceptions.ValidationError: if the contents doesn't follow the spec
         """
-        with path.open('w') as fp:
+        with path.open("w") as fp:
             fp.write(self.write_to_string(fdl, validate=validate, indent=indent))
 
     def write_to_string(self, fdl: FDL, validate: bool = True, indent: Union[int, None] = 2) -> str:
@@ -88,7 +90,7 @@ class FDLHandler:
         return json.dumps(fdl.to_dict(), indent=indent, sort_keys=False)
 
 
-def register_plugin(registry: 'PluginReistry'):
+def register_plugin(registry: PluginRegistry):
     """
     Mandatory function to register handler in the registry. Called by the PluginRegistry itself.
 

@@ -1,62 +1,58 @@
-from typing import Union, List
+from typing import Optional, Union
 
-from pyfdl import Base, Dimensions, RoundStrategy
-from pyfdl.errors import FDLError
+from .common import Base, Dimensions, RoundStrategy
+from .errors import FDLError
 
 
 class CanvasTemplate(Base):
     attributes = [
-        'label',
-        'id',
-        'target_dimensions',
-        'target_anamorphic_squeeze',
-        'fit_source',
-        'fit_method',
-        'alignment_method_vertical',
-        'alignment_method_horizontal',
-        'preserve_from_source_canvas',
-        'maximum_dimensions',
-        'pad_to_maximum',
-        'round'
+        "label",
+        "id",
+        "target_dimensions",
+        "target_anamorphic_squeeze",
+        "fit_source",
+        "fit_method",
+        "alignment_method_vertical",
+        "alignment_method_horizontal",
+        "preserve_from_source_canvas",
+        "maximum_dimensions",
+        "pad_to_maximum",
+        "round",
     ]
 
-    kwarg_map = {'id': 'id_', 'round': 'round_'}
-    object_map = {
-        'target_dimensions': Dimensions,
-        'maximum_dimensions': Dimensions,
-        'round': RoundStrategy
-    }
+    kwarg_map = {"id": "id_", "round": "round_"}
+    object_map = {"target_dimensions": Dimensions, "maximum_dimensions": Dimensions, "round": RoundStrategy}
     required = [
-        'id',
-        'target_dimensions',
-        'target_anamorphic_squeeze',
-        'fit_source',
-        'fit_method',
-        'pad_to_maximum.maximum_dimensions'
+        "id",
+        "target_dimensions",
+        "target_anamorphic_squeeze",
+        "fit_source",
+        "fit_method",
+        "pad_to_maximum.maximum_dimensions",
     ]
     defaults = {
-        'target_anamorphic_squeeze': 1,
-        'fit_source': 'framing_decision.dimensions',
-        'alignment_method_vertical': 'center',
-        'alignment_method_horizontal': 'center',
-        'preserve_from_source_canvas': 'none',
-        'pad_to_maximum': False
+        "target_anamorphic_squeeze": 1,
+        "fit_source": "framing_decision.dimensions",
+        "alignment_method_vertical": "center",
+        "alignment_method_horizontal": "center",
+        "preserve_from_source_canvas": "none",
+        "pad_to_maximum": False,
     }
 
     def __init__(
-            self,
-            label: str = None,
-            id_: str = None,
-            target_dimensions: Dimensions = None,
-            target_anamorphic_squeeze: float = None,
-            fit_source: str = None,
-            fit_method: str = None,
-            alignment_method_vertical: str = None,
-            alignment_method_horizontal: str = None,
-            preserve_from_source_canvas: str = None,
-            maximum_dimensions: Dimensions = None,
-            pad_to_maximum: bool = None,
-            round_: RoundStrategy = None
+        self,
+        label: Optional[str] = None,
+        id_: Optional[str] = None,
+        target_dimensions: Optional[Dimensions] = None,
+        target_anamorphic_squeeze: Optional[float] = None,
+        fit_source: Optional[str] = None,
+        fit_method: Optional[str] = None,
+        alignment_method_vertical: Optional[str] = None,
+        alignment_method_horizontal: Optional[str] = None,
+        preserve_from_source_canvas: Optional[str] = None,
+        maximum_dimensions: Optional[Dimensions] = None,
+        pad_to_maximum: Optional[bool] = None,
+        round_: Optional[RoundStrategy] = None,
     ):
         super().__init__()
         self.label = label
@@ -99,16 +95,17 @@ class CanvasTemplate(Base):
     @fit_source.setter
     def fit_source(self, value: str):
         valid_options = (
-            'framing_decision.dimensions',
-            'framing_decision.protection_dimensions',
-            'canvas.dimensions',
-            'canvas.effective_dimensions'
+            "framing_decision.dimensions",
+            "framing_decision.protection_dimensions",
+            "canvas.dimensions",
+            "canvas.effective_dimensions",
         )
         if value is not None and value not in valid_options:
-            raise FDLError(
+            msg = (
                 f'"{value}" is not a valid option for "fit_source".\n'
-                f'Please use one of the following: {valid_options}'
+                f"Please use one of the following: {valid_options}"
             )
+            raise FDLError(msg)
 
         self._fit_source = value
 
@@ -118,12 +115,13 @@ class CanvasTemplate(Base):
 
     @fit_method.setter
     def fit_method(self, value: str):
-        valid_options = ('width', 'height', 'fit_all', 'fill')
+        valid_options = ("width", "height", "fit_all", "fill")
         if value is not None and value not in valid_options:
-            raise FDLError(
+            msg = (
                 f'"{value}" is not a valid option for "fit_method".\n'
-                f'Please use one of the following: {valid_options}'
+                f"Please use one of the following: {valid_options}"
             )
+            raise FDLError(msg)
 
         self._fit_method = value
 
@@ -133,12 +131,13 @@ class CanvasTemplate(Base):
 
     @alignment_method_vertical.setter
     def alignment_method_vertical(self, value):
-        valid_options = ('center', 'top', 'bottom')
+        valid_options = ("center", "top", "bottom")
         if value is not None and value not in valid_options:
-            raise FDLError(
+            msg = (
                 f'"{value}" is not a valid option for "alignment_method_vertical".\n'
-                f'Please use one of the following: {valid_options}'
+                f"Please use one of the following: {valid_options}"
             )
+            raise FDLError(msg)
 
         self._alignment_method_vertical = value
 
@@ -148,12 +147,13 @@ class CanvasTemplate(Base):
 
     @alignment_method_horizontal.setter
     def alignment_method_horizontal(self, value):
-        valid_options = ('center', 'left', 'right')
+        valid_options = ("center", "left", "right")
         if value is not None and value not in valid_options:
-            raise FDLError(
+            msg = (
                 f'"{value}" is not a valid option for "alignment_method_horizontal".\n'
-                f'Please use one of the following: {valid_options}'
+                f"Please use one of the following: {valid_options}"
             )
+            raise FDLError(msg)
 
         self._alignment_method_horizontal = value
 
@@ -168,21 +168,18 @@ class CanvasTemplate(Base):
             "framing_decision.dimensions",
             "framing_decision.protection_dimensions",
             "canvas.dimensions",
-            "canvas.effective_dimensions"
+            "canvas.effective_dimensions",
         )
         if value is not None and value not in valid_options:
-            raise FDLError(
+            msg = (
                 f'"{value}" is not a valid option for "preserve_from_source_canvas".\n'
-                f'Please use one of the following: {valid_options}'
+                f"Please use one of the following: {valid_options}"
             )
+            raise FDLError(msg)
 
         self._preserve_from_source_canvas = value
 
-    def get_desqueezed_width(
-            self,
-            source_width: Union[float, int],
-            squeeze_factor: float
-    ) -> Union[float, int]:
+    def get_desqueezed_width(self, source_width: float, squeeze_factor: float) -> float:
         """
         Get the de-squeezed width also considering the `target_anamorphic_squeeze`.
         Used to calculate scaling of canvases and framing decisions.
@@ -205,11 +202,7 @@ class CanvasTemplate(Base):
 
         return width
 
-    def get_scale_factor(
-            self,
-            source_dimensions: Dimensions,
-            source_anamorphic_squeeze: float
-    ) -> float:
+    def get_scale_factor(self, source_dimensions: Dimensions, source_anamorphic_squeeze: float) -> float:
         """
         Calculate the scale factor used when creating a new `Canvas` and `FramingDecision`
 
@@ -228,27 +221,22 @@ class CanvasTemplate(Base):
         target_aspect = self.target_dimensions.width / self.target_dimensions.height
         source_aspect = source_width / source_dimensions.height
 
-        if self.fit_method == 'height':
+        if self.fit_method == "height":
             scale_factor = self.target_dimensions.height / source_dimensions.height
 
-        elif self.fit_method == 'fit_all':
+        elif self.fit_method == "fit_all":
             if target_aspect > source_aspect:
                 # Target wider than source
                 scale_factor = self.target_dimensions.height / source_dimensions.height
 
-        elif self.fit_method == 'fill':
+        elif self.fit_method == "fill" and target_aspect < source_aspect:
             # What's left outside the target dimensions due to fill?
-            if target_aspect < source_aspect:
-                # Source wider than target
-                scale_factor = self.target_dimensions.height / source_dimensions.height
+            # Source wider than target
+            scale_factor = self.target_dimensions.height / source_dimensions.height
 
         return scale_factor
 
-    def fit_source_to_target(
-            self,
-            source_dimensions: Dimensions,
-            source_anamorphic_squeeze: float
-    ) -> Dimensions:
+    def fit_source_to_target(self, source_dimensions: Dimensions, source_anamorphic_squeeze: float) -> Dimensions:
         """
         Calculate the dimensions of `fit_source` inside `target_dimensions` based on `fit_mode`
 
@@ -267,26 +255,26 @@ class CanvasTemplate(Base):
         width = self.target_dimensions.width
         height = self.target_dimensions.height
 
-        if self.fit_method == 'width':
+        if self.fit_method == "width":
             width = self.target_dimensions.width
             # If scaled height exceeds target height, we crop the excess
             height = min(
                 # round_to_even(source_dimensions.height * scale_factor),
                 source_dimensions.height * scale_factor,
-                self.target_dimensions.height
+                self.target_dimensions.height,
             )
 
-        elif self.fit_method == 'height':
+        elif self.fit_method == "height":
             height = self.target_dimensions.height
             scale_factor = height / source_dimensions.height
             # If scaled width exceeds target width, we crop the excess
             width = min(
                 # round_to_even(source_width * scale_factor),
                 source_width * scale_factor,
-                self.target_dimensions.width
+                self.target_dimensions.width,
             )
 
-        elif self.fit_method == 'fit_all':
+        elif self.fit_method == "fit_all":
             width = source_width * scale_factor
             height = source_dimensions.height * scale_factor
             if source_dimensions > self.target_dimensions:
@@ -300,12 +288,12 @@ class CanvasTemplate(Base):
                 height *= adjustment_scale
 
         size = Dimensions(width=width, height=height)
-        # TODO consider returning crop True/False
+        # TODO: consider returning crop True/False
         #  or at least coordinates outside of frame like data window vs display window in EXR
 
         return size
 
-    def get_transfer_keys(self) -> List[str]:
+    def get_transfer_keys(self) -> list[str]:
         """
         Get a list of attributes to transfer from source to destination in the order that
         preserves all attributes between `fit_source` and `preserve_from_canvas`
@@ -319,31 +307,31 @@ class CanvasTemplate(Base):
                 "framing_decision.dimensions",
                 "framing_decision.protection_dimensions",
                 "canvas.effective_dimensions",
-                "canvas.dimensions"
+                "canvas.dimensions",
             ],
             "framing_decision.protection_dimensions": [
                 "framing_decision.protection_dimensions",
                 "framing_decision.dimensions",
                 "canvas.effective_dimensions",
-                "canvas.dimensions"
+                "canvas.dimensions",
             ],
             "canvas.effective_dimensions": [
                 "canvas.effective_dimensions",
                 "framing_decision.protection_dimensions",
                 "framing_decision.dimensions",
-                "canvas.dimensions"
+                "canvas.dimensions",
             ],
             "canvas.dimensions": [
                 "canvas.dimensions",
                 "framing_decision.protection_dimensions",
                 "framing_decision.dimensions",
-                "canvas.effective_dimensions"
-            ]
+                "canvas.effective_dimensions",
+            ],
         }
         keys = dimension_routing_map[self.fit_source]
         preserve = self.preserve_from_source_canvas
 
-        if preserve in [None, 'none']:
+        if preserve in [None, "none"]:
             preserve = self.fit_source
 
         first = keys.index(self.fit_source)

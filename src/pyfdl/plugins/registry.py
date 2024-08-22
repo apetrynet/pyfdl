@@ -1,11 +1,12 @@
 import sys
 from importlib import import_module, resources
 from importlib.metadata import entry_points
-from typing import Union, Any
+from typing import Any, TypeVar, Union
 
-from pyfdl.errors import UnknownHandlerError, HandlerError
+from pyfdl.errors import UnknownHandlerError
 
 _REGISTRY = None
+Handler = TypeVar("Handler")
 
 
 class PluginRegistry:
@@ -22,13 +23,13 @@ class PluginRegistry:
         """
         Load the built-in handlers
         """
-        anchor = 'pyfdl.handlers'
+        anchor = "pyfdl.handlers"
         for module in resources.files(anchor).iterdir():
-            if module.name.startswith('_') or module.suffix != '.py':
+            if module.name.startswith("_") or module.suffix != ".py":
                 continue
             module_name = module.stem
-            mod = import_module(f'{anchor}.{module_name}')
-            if hasattr(mod, 'register_plugin'):
+            mod = import_module(f"{anchor}.{module_name}")
+            if hasattr(mod, "register_plugin"):
                 mod.register_plugin(self)
 
     def load_plugins(self):
@@ -36,10 +37,10 @@ class PluginRegistry:
         Load plugins from the "pyfdl.plugins" namespace.
         """
         try:
-            plugin_packages = entry_points(group='pyfdl.plugins')
+            plugin_packages = entry_points(group="pyfdl.plugins")
         except TypeError:
             # Python < 3.10
-            plugin_packages = entry_points().get('pyfdl.plugins', [])
+            plugin_packages = entry_points().get("pyfdl.plugins", [])
 
         for plugin in plugin_packages:
             try:
@@ -47,22 +48,19 @@ class PluginRegistry:
                     register_func = plugin.load()
                 else:
                     mod = plugin.load()
-                    register_func = getattr(mod, 'register_plugin', None)
+                    register_func = getattr(mod, "register_plugin", None)
 
                 if register_func is None:
-                    print(
+                    print(  # noqa: T201
                         f'Unable to find a registration function in plugin: "{plugin.name}". '
-                        f'Please consult documentation on plugins to solve this.',
-                        file=sys.stderr
+                        "Please consult documentation on plugins to solve this.",
+                        file=sys.stderr,
                     )
 
                 register_func(self)
 
             except (ModuleNotFoundError, TypeError) as err:
-                print(
-                    f'Unable to load plugin: "{plugin.name}" due to: "{err}"',
-                    file=sys.stderr
-                )
+                print(f'Unable to load plugin: "{plugin.name}" due to: "{err}"', file=sys.stderr)  # noqa
 
     def add_handler(self, handler: Any):
         """
@@ -72,7 +70,7 @@ class PluginRegistry:
         """
         self.handlers.setdefault(handler.name, handler)
 
-    def get_handler_by_name(self, handler_name: str, func_name: str) -> Union['Handler', None]:
+    def get_handler_by_name(self, handler_name: str, func_name: str) -> Union[Handler, None]:
         """
         Get a registered handler by `handler_name`, and
         make sure it has a function (`func_name`) to call
@@ -91,13 +89,14 @@ class PluginRegistry:
         if hasattr(handler, func_name):
             return handler
 
-        raise UnknownHandlerError(
+        msg = (
             f'No handler by name: "{handler_name}" with function: "{func_name}" seems to be registered. '
-            f'Please check that a plugin containing this handler is properly installed'
-            f'or use one of the following registered handlers: {sorted(self.handlers.keys())}'
+            "Please check that a plugin containing this handler is properly installed"
+            f"or use one of the following registered handlers: {sorted(self.handlers.keys())}"
         )
+        raise UnknownHandlerError(msg)
 
-    def get_handler_by_suffix(self, suffix: str, func_name: str) -> Union['Handler', None]:
+    def get_handler_by_suffix(self, suffix: str, func_name: str) -> Union[Handler, None]:
         """
         Get a registered handler by `suffix`, and
         make sure it has a function (`func_name`) to call
@@ -114,17 +113,18 @@ class PluginRegistry:
             error:
         """
         for handler in self.handlers.values():
-            if not hasattr(handler, 'suffixes'):
+            if not hasattr(handler, "suffixes"):
                 continue
 
             if suffix in handler.suffixes and hasattr(handler, func_name):
                 return handler
 
-        raise UnknownHandlerError(
+        msg = (
             f'No handler supporting suffix: "{suffix}" and function: "{func_name}" seems to be registered. '
-            f'Please check that a plugin supporting this suffix is properly installed'
-            f'or use one of the following registered handlers: {sorted(self.handlers.keys())}'
+            "Please check that a plugin supporting this suffix is properly installed"
+            f"or use one of the following registered handlers: {sorted(self.handlers.keys())}"
         )
+        raise UnknownHandlerError(msg)
 
 
 def get_registry(reload: bool = False) -> PluginRegistry:
@@ -134,7 +134,7 @@ def get_registry(reload: bool = False) -> PluginRegistry:
     Returns:
         registry:
     """
-    global _REGISTRY
+    global _REGISTRY  # noqa
     if _REGISTRY is None or reload:
         _REGISTRY = PluginRegistry()
 

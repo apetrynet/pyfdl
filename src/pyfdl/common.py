@@ -1,12 +1,12 @@
 import math
 import uuid
-from typing import Any, Union, Type
+from typing import Any, Optional, Union
 
 from pyfdl.errors import FDLError
 
 FDL_SCHEMA_MAJOR = 1
 FDL_SCHEMA_MINOR = 0
-FDL_SCHEMA_VERSION = {'major': FDL_SCHEMA_MAJOR, 'minor': FDL_SCHEMA_MINOR}
+FDL_SCHEMA_VERSION = {"major": FDL_SCHEMA_MAJOR, "minor": FDL_SCHEMA_MINOR}
 
 _ROUNDING = None
 NO_ROUNDING = {}
@@ -15,9 +15,7 @@ DEFAULT_ROUNDING_STRATEGY = NO_ROUNDING
 
 
 def set_rounding_strategy(rules: Union[dict, None]):
-    global NO_ROUNDING
-    global DEFAULT_ROUNDING_STRATEGY
-    global _ROUNDING
+    global _ROUNDING  # noqa
 
     if rules is None:
         rules = NO_ROUNDING
@@ -25,9 +23,7 @@ def set_rounding_strategy(rules: Union[dict, None]):
     _ROUNDING = RoundStrategy(**rules)
 
 
-def rounding_strategy() -> 'RoundStrategy':
-    global _ROUNDING
-    global DEFAULT_ROUNDING_STRATEGY
+def rounding_strategy() -> "RoundStrategy":
     if _ROUNDING is None:
         set_rounding_strategy(DEFAULT_ROUNDING_STRATEGY)
 
@@ -51,21 +47,21 @@ class Base:
     def __init__(self):
         """Base class not to be instanced directly.
 
-            Attributes:
-                attributes: list of attributes described in FDL spec
-                kwarg_map: map attribute names that clash with reserved builtin python functions to safe alternatives
-                    like: (id -> id_) and (uuid -> uuid_)
-                object_map: map attributes to custom classes
-                required: list of required attributes.
-                    Supports linked attributes like: "effective_dimensions.effective_anchor_point" where
-                    "effective_anchor_point" is required if "effective_dimensions" is set
-                defaults: map default values to attributes. In addition to primitive values supports: callable,
-                    subclasses of [Base](common.md#pyfdl.Base)
+        Attributes:
+            attributes: list of attributes described in FDL spec
+            kwarg_map: map attribute names that clash with reserved builtin python functions to safe alternatives
+                like: (id -> id_) and (uuid -> uuid_)
+            object_map: map attributes to custom classes
+            required: list of required attributes.
+                Supports linked attributes like: "effective_dimensions.effective_anchor_point" where
+                "effective_anchor_point" is required if "effective_dimensions" is set
+            defaults: map default values to attributes. In addition to primitive values supports: callable,
+                subclasses of [Base](common.md#pyfdl.Base)
 
-            """
+        """
 
     @property
-    def rounding_strategy(self) -> 'RoundStrategy':
+    def rounding_strategy(self) -> "RoundStrategy":
         return rounding_strategy()
 
     def apply_defaults(self) -> None:
@@ -80,8 +76,8 @@ class Base:
                 elif isinstance(value, Base):
                     setattr(self, key, value.apply_defaults())
                 # Value is an attribute of this instance
-                elif isinstance(value, str) and 'self.' in value:
-                    setattr(self, key, getattr(self, value.strip('self.')))
+                elif isinstance(value, str) and "self." in value:
+                    setattr(self, key, getattr(self, value.strip("self.")))
                 # Value is whatever
                 else:
                     setattr(self, key, value)
@@ -99,8 +95,8 @@ class Base:
         for required_key in self.required:
             # Check for dependant attributes.
             # Like "effective_anchor_point" required if "effective_dimensions" is provided
-            if '.' in required_key:
-                attr1, attr2 = required_key.split('.')
+            if "." in required_key:
+                attr1, attr2 = required_key.split(".")
                 if getattr(self, attr1) is not None and getattr(self, attr2) is None:
                     missing.append(attr2)
 
@@ -125,10 +121,9 @@ class Base:
             value = getattr(self, key)
 
             # check if empty value should be omitted
-            if key not in self.required and not value:
+            if key not in self.required and not value and not isinstance(value, TypedCollection):
                 # Keys with arrays as values should pass (for now?)
-                if not isinstance(value, TypedCollection):
-                    continue
+                continue
 
             # Arrays (aka lists) contain other objects
             if isinstance(value, TypedCollection):
@@ -142,7 +137,8 @@ class Base:
 
         missing = self.check_required()
         if missing:
-            raise FDLError(f'{repr(self)} is missing some required attributes: {missing}')
+            msg = f"{self!r} is missing some required attributes: {missing}"
+            raise FDLError(msg)
 
         return data
 
@@ -186,7 +182,7 @@ class Base:
         return str(uuid.uuid4())
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__}'
+        return f"{self.__class__.__name__}"
 
     def __str__(self) -> str:
         return str(self.to_dict())
@@ -220,24 +216,23 @@ class TypedCollection:
         """
 
         if not isinstance(item, self._cls):
-            raise TypeError(
-                f"This container does not accept items of type: \"{type(item)}\". "
-                f"Please provide items of type: \"{self._cls}\""
+            msg = (
+                f'This container does not accept items of type: "{type(item)}". '
+                f'Please provide items of type: "{self._cls}"'
             )
+            raise TypeError(msg)
 
         item_id = self._get_item_id(item)
 
         if item_id:
             if item_id in self._data:
-                raise FDLError(
-                    f"{item.__class__.__name__}.{self._cls.id_attribute} (\"{item_id}\") already exists."
-                )
+                msg = f'{item.__class__.__name__}.{self._cls.id_attribute} ("{item_id}") already exists.'
+                raise FDLError(msg)
             self._data[item_id] = item
 
         else:
-            raise FDLError(
-                f"Item must have a valid identifier (\"{self._cls.id_attribute}\"), not None or empty string"
-            )
+            msg = f'Item must have a valid identifier ("{self._cls.id_attribute}"), not None or empty string'
+            raise FDLError(msg)
 
     def get(self, item_id: str) -> Union[Any, None]:
         """Get an item in the collection
@@ -281,8 +276,7 @@ class TypedCollection:
         return len(self._data)
 
     def __iter__(self):
-        for item in self._data.values():
-            yield item
+        yield from self._data.values()
 
     def __getitem__(self, item):
         return self.get(self.ids[item])
@@ -291,21 +285,21 @@ class TypedCollection:
         # We support both looking for an item by item.id and "string" for future use of collection
         try:
             item_id = self._get_item_id(item)
-            return item_id in self._data
+            return item_id in self._data  # noqa
 
         except AttributeError:
             return item in self._data
 
 
 class Dimensions(Base):
-    attributes = ['width', 'height']
-    required = ['width', 'height']
+    attributes = ["width", "height"]
+    required = ["width", "height"]
 
     def __init__(
-            self,
-            width: Union[int, float],
-            height: Union[int, float],
-            dtype: Union[Type[int], Type[float]] = float
+        self,
+        width: Union[int, float],
+        height: Union[int, float],
+        dtype: Union[int, float] = float,  # noqa
     ):
         """
         Dimensions may be either `ints` or `floats`. You may pass the desired data type at instantiation.
@@ -337,7 +331,7 @@ class Dimensions(Base):
         if self.dtype == int:
             self.width, self.height = self.rounding_strategy.round_dimensions(self)
 
-    def copy(self) -> 'Dimensions':
+    def copy(self) -> "Dimensions":
         """
         Create a copy of these dimensions
 
@@ -349,7 +343,7 @@ class Dimensions(Base):
 
     def to_dict(self) -> dict:
         # TODO: do we round before casting to int?
-        return {'width': self.dtype(self.width), 'height': self.dtype(self.height)}
+        return {"width": self.dtype(self.width), "height": self.dtype(self.height)}
 
     def __iter__(self):
         return iter((self.width, self.height))
@@ -368,15 +362,13 @@ class Dimensions(Base):
 
     def __repr__(self):
         return (
-            f"{self.__class__.__name__}("
-            f"width={self.dtype(self.width)}, "
-            f"height={self.dtype(self.height)}"
-            f")")
+            f"{self.__class__.__name__}(" f"width={self.dtype(self.width)}, " f"height={self.dtype(self.height)}" f")"
+        )
 
 
 class Point(Base):
-    attributes = ['x', 'y']
-    required = ['x', 'y']
+    attributes = ["x", "y"]
+    required = ["x", "y"]
 
     def __init__(self, x: float, y: float):
         """Point properly formatted
@@ -400,11 +392,11 @@ class Point(Base):
 
 
 class RoundStrategy(Base):
-    attributes = ['even', 'mode']
-    required = ['even', 'mode']
-    defaults = {'even': 'even', 'mode': 'up'}
+    attributes = ["even", "mode"]
+    required = ["even", "mode"]
+    defaults = {"even": "even", "mode": "up"}
 
-    def __init__(self, even: str = None, mode: str = None):
+    def __init__(self, even: Optional[str] = None, mode: Optional[str] = None):
         """Describes how to handle rounding canvas dimensions when applying a
         [CanvasTemplate](canvas_template.md#pyfdl.CanvasTemplate).
 
@@ -426,7 +418,7 @@ class RoundStrategy(Base):
         self.mode = mode
 
     @property
-    def rounding_strategy(self) -> 'RoundStrategy':
+    def rounding_strategy(self) -> "RoundStrategy":
         return self
 
     @property
@@ -435,12 +427,11 @@ class RoundStrategy(Base):
 
     @even.setter
     def even(self, value):
-        valid_options = ('even', 'whole')
+        valid_options = ("even", "whole")
         if value is not None and value not in valid_options:
-            raise FDLError(
-                f'"{value}" is not a valid option for "even".\n'
-                f'Please use one of the following: {valid_options}'
-            )
+            msg = f'"{value}" is not a valid option for "even".\n' f"Please use one of the following: {valid_options}"
+
+            raise FDLError(msg)
 
         self._even = value
 
@@ -450,19 +441,14 @@ class RoundStrategy(Base):
 
     @mode.setter
     def mode(self, value):
-        valid_options = ('up', 'down', 'round')
+        valid_options = ("up", "down", "round")
         if value is not None and value not in valid_options:
-            raise FDLError(
-                f'"{value}" is not a valid option for "mode".\n'
-                f'Please use one of the following: {valid_options}'
-            )
+            msg = f'"{value}" is not a valid option for "mode".\n' f"Please use one of the following: {valid_options}"
+            raise FDLError(msg)
 
         self._mode = value
 
-    def round_dimensions(
-            self,
-            dimensions: Dimensions
-    ) -> Dimensions:
+    def round_dimensions(self, dimensions: Dimensions) -> Dimensions:
         """
         Round the provided dimensions based on the rules defined in this object
 
@@ -474,17 +460,13 @@ class RoundStrategy(Base):
 
         """
 
-        mode_map = {
-            'up': math.ceil,
-            'down': math.floor,
-            'round': round
-        }
+        mode_map = {"up": math.ceil, "down": math.floor, "round": round}
 
         width = dimensions.width
         height = dimensions.height
 
         adjust = 1
-        if self.even == 'even':
+        if self.even == "even":
             adjust = 2
 
         if self.mode is not None:
@@ -495,7 +477,7 @@ class RoundStrategy(Base):
 
     def __eq__(self, other):
         if isinstance(other, dict):
-            return self.even == other.get('even') and self.mode == other.get('mode')
+            return self.even == other.get("even") and self.mode == other.get("mode")
 
         return self.even == other.even and self.mode == other.mode
 
