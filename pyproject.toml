@@ -9,7 +9,7 @@ authors = [
 ]
 description = "Toolkit for parsing and producing ASC FDL files"
 dynamic = ["version"]
-license = {file="LICENSE"}
+license = "Apache-2.0"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
@@ -73,4 +73,7 @@ serve = "mkdocs serve --dev-addr localhost:8000"
 [tool.hatch.build.targets.sdist]
 # Ensure the sdist includes a setup.py for older pip versions
 support-legacy = true
-exclude = [".github"]
+only-include = ["src/pyfdl"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pyfdl"]
