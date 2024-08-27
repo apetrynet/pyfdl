@@ -33,10 +33,12 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
 
-      - uses: pypa/hatch@install
-        name: Build packages
+      - name: setup python
+        uses: actions/setup-python@v5
+
+      - name: Build packages
+        uses: pypa/hatch@install
         run: hatch build -c -t sdist -t wheel
 
       - uses: actions/upload-artifact@v4
