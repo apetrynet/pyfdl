@@ -42,11 +42,8 @@ jobs:
       - run: hatch build -c -t sdist -t wheel
 
       - uses: actions/upload-artifact@v4
-        name: Upload wheel
+        name: Upload artifacts
         with:
-          path: dist/pyfdl-*.whl
-
-      - uses: actions/upload-artifact@v4
-        name: Upload sdist
-        with:
-          path: sdist/pyfdl-*.tar.gz
+          path: |
+            dist/pyfdl-*.whl
+            sdist/pyfdl-*.tar.gz
