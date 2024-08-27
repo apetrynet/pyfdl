@@ -71,9 +71,9 @@ build = "mkdocs build --clean --strict"
 serve = "mkdocs serve --dev-addr localhost:8000"
 
 [tool.hatch.build.targets.sdist]
-# Ensure the sdist includes a setup.py for older pip versions
-support-legacy = true
 only-include = ["src/pyfdl"]
+directory = "sdist"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pyfdl"]
+directory = "dist"
