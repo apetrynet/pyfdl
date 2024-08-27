@@ -28,7 +28,7 @@ jobs:
     - uses: pypa/hatch@install
     - run: hatch test -py ${{ matrix.python-version }}
 
-  build_artifacts:
+  upload_artifacts:
     needs: test_pyfdl
     runs-on: "ubuntu-latest"
     steps:
@@ -36,14 +36,21 @@ jobs:
 
       - name: setup python
         uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
       - uses: pypa/hatch@install
         name: Build packages
       - run: hatch build -c -t sdist -t wheel
 
       - uses: actions/upload-artifact@v4
-        name: Upload artifacts
+        name: Upload wheel
         with:
-          path: |
-            dist/pyfdl-*.whl
-            sdist/pyfdl-*.tar.gz
+          name: wheel
+          path: dist/pyfdl-*.whl
+
+      - uses: actions/upload-artifact@v4
+        name: Upload sdist
+        with:
+          name: sdist
+          path: sdist/pyfdl-*.tar.gz
