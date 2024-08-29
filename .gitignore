@@ -1,4 +1,6 @@
-/fdl/
 .idea
 **/__pycache__/
-site/**
+site
+.venv
+dist
+sdist
