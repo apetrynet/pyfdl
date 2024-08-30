@@ -4,11 +4,6 @@ from pyfdl import FDL_SCHEMA_VERSION, Base
 
 
 class Header(Base):
-    attributes = ["uuid", "version", "fdl_creator", "default_framing_intent"]
-    kwarg_map = {"uuid": "uuid_"}
-    required = ["uuid", "version"]
-    defaults = {"uuid": Base.generate_uuid, "fdl_creator": "PyFDL", "version": FDL_SCHEMA_VERSION}
-
     def __init__(
         self,
         uuid_: Optional[str] = None,
@@ -17,6 +12,11 @@ class Header(Base):
         default_framing_intent: Optional[str] = None,
     ):
         super().__init__()
+        self.attributes = ["uuid", "version", "fdl_creator", "default_framing_intent"]
+        self.kwarg_map = {"uuid": "uuid_"}
+        self.required = ["uuid", "version"]
+        self.defaults = {"uuid": Base.generate_uuid, "fdl_creator": "PyFDL", "version": FDL_SCHEMA_VERSION}
+
         self.uuid = uuid_
         self.version = version
         self.fdl_creator = fdl_creator

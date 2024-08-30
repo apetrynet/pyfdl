@@ -11,7 +11,6 @@ FDL_SCHEMA_VERSION = {"major": FDL_SCHEMA_MAJOR, "minor": FDL_SCHEMA_MINOR}
 _ROUNDING = None
 NO_ROUNDING = {}
 DEFAULT_ROUNDING_STRATEGY = NO_ROUNDING
-# DEFAULT_ROUNDING_STRATEGY = {'even': 'even', 'mode': 'round'}
 
 
 def set_rounding_strategy(rules: Union[dict, None]):
@@ -31,19 +30,6 @@ def rounding_strategy() -> "RoundStrategy":
 
 
 class Base:
-    # Holds a list of known attributes
-    attributes = []
-    # Maps attribute names that clash with reserved builtin functions to safe alternatives (id -> id_)
-    kwarg_map = {}
-    # Map keys to custom classes
-    object_map = {}
-    # List of required attributes
-    required = []
-    # Default values for attributes
-    defaults = {}
-    # Attribute used as a unique identifier
-    id_attribute = "id"
-
     def __init__(self):
         """Base class not to be instanced directly.
 
@@ -59,6 +45,18 @@ class Base:
                 subclasses of [Base](common.md#pyfdl.Base)
 
         """
+        # Holds a list of known attributes
+        self.attributes = []
+        # Maps attribute names that clash with reserved builtin functions to safe alternatives (id -> id_)
+        self.kwarg_map = {}
+        # Map keys to custom classes
+        self.object_map = {}
+        # List of required attributes
+        self.required = []
+        # Default values for attributes
+        self.defaults = {}
+        # Attribute used as a unique identifier
+        self.id_attribute = "id"
 
     @property
     def rounding_strategy(self) -> "RoundStrategy":
@@ -153,25 +151,28 @@ class Base:
             cls: and instance of the current class
         """
         kwargs = {}
-        for key in cls.attributes:
+        # We only use this to get access to attributes
+        _tmp_instance = cls()
+
+        for key in _tmp_instance.attributes:
             # We get the value before we convert the key to a valid name
             value = raw.get(key)
             if value is None:
                 continue
 
             # Check for keyword override
-            keyword = cls.kwarg_map.get(key, key)
+            keyword = _tmp_instance.kwarg_map.get(key, key)
 
-            if key in cls.object_map:
+            if key in _tmp_instance.object_map:
                 if isinstance(value, list):
-                    _cls = cls.object_map[key]
+                    _cls = _tmp_instance.object_map[key]
 
                     tc = TypedCollection(_cls)
                     for item in value:
                         tc.add(_cls.from_dict(item))
                     value = tc
                 else:
-                    value = cls.object_map[key].from_dict(value)
+                    value = _tmp_instance.object_map[key].from_dict(value)
 
             kwargs[keyword] = value
 
@@ -226,12 +227,12 @@ class TypedCollection:
 
         if item_id:
             if item_id in self._data:
-                msg = f'{item.__class__.__name__}.{self._cls.id_attribute} ("{item_id}") already exists.'
+                msg = f'{item.__class__.__name__}.{item.id_attribute} ("{item_id}") already exists.'
                 raise FDLError(msg)
             self._data[item_id] = item
 
         else:
-            msg = f'Item must have a valid identifier ("{self._cls.id_attribute}"), not None or empty string'
+            msg = f'Item must have a valid identifier ("{item.id_attribute}"), not None or empty string'
             raise FDLError(msg)
 
     def get(self, item_id: str) -> Union[Any, None]:
@@ -267,7 +268,7 @@ class TypedCollection:
         Returns:
             id:
         """
-        return getattr(item, self._cls.id_attribute)
+        return getattr(item, item.id_attribute)
 
     def __bool__(self):
         return bool(self._data)
@@ -292,14 +293,11 @@ class TypedCollection:
 
 
 class Dimensions(Base):
-    attributes = ["width", "height"]
-    required = ["width", "height"]
-
     def __init__(
         self,
-        width: Union[int, float],
-        height: Union[int, float],
-        dtype: Union[int, float] = float,  # noqa
+        width: Optional[Union[int, float]] = None,
+        height: Optional[Union[int, float]] = None,
+        dtype: Optional[Union[int, float]] = float,
     ):
         """
         Dimensions may be either `ints` or `floats`. You may pass the desired data type at instantiation.
@@ -313,6 +311,9 @@ class Dimensions(Base):
         """
 
         super().__init__()
+        self.attributes = ["width", "height"]
+        self.required = ["width", "height"]
+
         self.dtype = dtype
 
         self.width = width
@@ -367,10 +368,7 @@ class Dimensions(Base):
 
 
 class Point(Base):
-    attributes = ["x", "y"]
-    required = ["x", "y"]
-
-    def __init__(self, x: float, y: float):
+    def __init__(self, x: Optional[float] = None, y: Optional[float] = None):
         """Point properly formatted
 
         Args:
@@ -378,6 +376,9 @@ class Point(Base):
             y:
         """
         super().__init__()
+        self.attributes = ["x", "y"]
+        self.required = ["x", "y"]
+
         self.x = x
         self.y = y
 
@@ -392,10 +393,6 @@ class Point(Base):
 
 
 class RoundStrategy(Base):
-    attributes = ["even", "mode"]
-    required = ["even", "mode"]
-    defaults = {"even": "even", "mode": "up"}
-
     def __init__(self, even: Optional[str] = None, mode: Optional[str] = None):
         """Describes how to handle rounding canvas dimensions when applying a
         [CanvasTemplate](canvas_template.md#pyfdl.CanvasTemplate).
@@ -414,6 +411,10 @@ class RoundStrategy(Base):
             FDLError: if you provide a value other than the ones listed above
         """
         super().__init__()
+        self.attributes = ["even", "mode"]
+        self.required = ["even", "mode"]
+        self.defaults = {"even": "even", "mode": "up"}
+
         self.even = even
         self.mode = mode
 

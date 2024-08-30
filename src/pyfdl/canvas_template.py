@@ -5,40 +5,6 @@ from .errors import FDLError
 
 
 class CanvasTemplate(Base):
-    attributes = [
-        "label",
-        "id",
-        "target_dimensions",
-        "target_anamorphic_squeeze",
-        "fit_source",
-        "fit_method",
-        "alignment_method_vertical",
-        "alignment_method_horizontal",
-        "preserve_from_source_canvas",
-        "maximum_dimensions",
-        "pad_to_maximum",
-        "round",
-    ]
-
-    kwarg_map = {"id": "id_", "round": "round_"}
-    object_map = {"target_dimensions": Dimensions, "maximum_dimensions": Dimensions, "round": RoundStrategy}
-    required = [
-        "id",
-        "target_dimensions",
-        "target_anamorphic_squeeze",
-        "fit_source",
-        "fit_method",
-        "pad_to_maximum.maximum_dimensions",
-    ]
-    defaults = {
-        "target_anamorphic_squeeze": 1,
-        "fit_source": "framing_decision.dimensions",
-        "alignment_method_vertical": "center",
-        "alignment_method_horizontal": "center",
-        "preserve_from_source_canvas": "none",
-        "pad_to_maximum": False,
-    }
-
     def __init__(
         self,
         label: Optional[str] = None,
@@ -55,6 +21,40 @@ class CanvasTemplate(Base):
         round_: Optional[RoundStrategy] = None,
     ):
         super().__init__()
+        self.attributes = [
+            "label",
+            "id",
+            "target_dimensions",
+            "target_anamorphic_squeeze",
+            "fit_source",
+            "fit_method",
+            "alignment_method_vertical",
+            "alignment_method_horizontal",
+            "preserve_from_source_canvas",
+            "maximum_dimensions",
+            "pad_to_maximum",
+            "round",
+        ]
+
+        self.kwarg_map = {"id": "id_", "round": "round_"}
+        self.object_map = {"target_dimensions": Dimensions, "maximum_dimensions": Dimensions, "round": RoundStrategy}
+        self.required = [
+            "id",
+            "target_dimensions",
+            "target_anamorphic_squeeze",
+            "fit_source",
+            "fit_method",
+            "pad_to_maximum.maximum_dimensions",
+        ]
+        self.defaults = {
+            "target_anamorphic_squeeze": 1,
+            "fit_source": "framing_decision.dimensions",
+            "alignment_method_vertical": "center",
+            "alignment_method_horizontal": "center",
+            "preserve_from_source_canvas": "none",
+            "pad_to_maximum": False,
+        }
+
         self.label = label
         self.id = id_
         self.target_dimensions = target_dimensions
