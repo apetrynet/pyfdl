@@ -8,30 +8,6 @@ CanvasTemplate = TypeVar("CanvasTemplate")
 
 
 class Canvas(Base):
-    attributes = [
-        "label",
-        "id",
-        "source_canvas_id",
-        "dimensions",
-        "effective_dimensions",
-        "effective_anchor_point",
-        "photosite_dimensions",
-        "physical_dimensions",
-        "anamorphic_squeeze",
-        "framing_decisions",
-    ]
-    kwarg_map = {"id": "id_"}
-    object_map = {
-        "dimensions": Dimensions,
-        "effective_dimensions": Dimensions,
-        "effective_anchor_point": Point,
-        "photosite_dimensions": Dimensions,
-        "physical_dimensions": Dimensions,
-        "framing_decisions": FramingDecision,
-    }
-    required = ["id", "source_canvas_id", "dimensions", "effective_dimensions.effective_anchor_point"]
-    defaults = {"source_canvas_id": "self.id", "anamorphic_squeeze": 1}
-
     def __init__(
         self,
         label: Optional[str] = None,
@@ -46,6 +22,30 @@ class Canvas(Base):
         framing_decisions: Optional[TypedCollection] = None,
     ):
         super().__init__()
+        self.attributes = [
+            "label",
+            "id",
+            "source_canvas_id",
+            "dimensions",
+            "effective_dimensions",
+            "effective_anchor_point",
+            "photosite_dimensions",
+            "physical_dimensions",
+            "anamorphic_squeeze",
+            "framing_decisions",
+        ]
+        self.kwarg_map = {"id": "id_"}
+        self.object_map = {
+            "dimensions": Dimensions,
+            "effective_dimensions": Dimensions,
+            "effective_anchor_point": Point,
+            "photosite_dimensions": Dimensions,
+            "physical_dimensions": Dimensions,
+            "framing_decisions": FramingDecision,
+        }
+        self.required = ["id", "source_canvas_id", "dimensions", "effective_dimensions.effective_anchor_point"]
+        self.defaults = {"source_canvas_id": "self.id", "anamorphic_squeeze": 1}
+
         self.label = label
         self.id = id_
         self.source_canvas_id = source_canvas_id

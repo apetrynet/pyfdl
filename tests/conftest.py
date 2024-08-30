@@ -25,27 +25,6 @@ def cleanup_temp_files():
 @pytest.fixture
 def base_subclass():
     class BaseSubclass(pyfdl.Base):
-        # Holds a list of known attributes
-        attributes = ["id", "string", "point", "dimensions", "collection", "round"]
-        # Maps attribute names that clash with reserved builtin functions to safe alternatives (id -> id_)
-        kwarg_map = {"id": "id_", "round": "round_"}
-        # Map keys to custom classes
-        object_map = {
-            "point": pyfdl.Point,
-            "dimensions": pyfdl.Dimensions,
-            "collection": pyfdl.FramingIntent,
-            "round": pyfdl.RoundStrategy,
-        }
-        # List of required attributes
-        required = ["id", "string.point"]
-        # Default values for attributes
-        defaults = {
-            "id": "my_id",
-            "callable": pyfdl.Base.generate_uuid,
-            "instance": pyfdl.RoundStrategy,
-            "self_reference": "self.id",
-        }
-
         def __init__(
             self,
             id_=None,
@@ -59,6 +38,27 @@ def base_subclass():
             self_reference=None,
         ):
             super().__init__()
+            # Holds a list of known attributes
+            self.attributes = ["id", "string", "point", "dimensions", "collection", "round"]
+            # Maps attribute names that clash with reserved builtin functions to safe alternatives (id -> id_)
+            self.kwarg_map = {"id": "id_", "round": "round_"}
+            # Map keys to custom classes
+            self.object_map = {
+                "point": pyfdl.Point,
+                "dimensions": pyfdl.Dimensions,
+                "collection": pyfdl.FramingIntent,
+                "round": pyfdl.RoundStrategy,
+            }
+            # List of required attributes
+            self.required = ["id", "string.point"]
+            # Default values for attributes
+            self.defaults = {
+                "id": "my_id",
+                "callable": pyfdl.Base.generate_uuid,
+                "instance": pyfdl.RoundStrategy,
+                "self_reference": "self.id",
+            }
+
             self.id = id_
             self.string = string
             self.point = point
@@ -68,9 +68,6 @@ def base_subclass():
             self.callable = callable_
             self.instance = instance
             self.self_reference = self_reference
-
-            # Make sure we have a rounding strategy
-            # self.set_rounding_strategy(pyfdl.DEFAULT_ROUNDING_STRATEGY)
 
     return BaseSubclass
 

@@ -14,20 +14,6 @@ from .header import Header
 
 
 class FDL(Base):
-    attributes = [
-        "uuid",
-        "version",
-        "fdl_creator",
-        "default_framing_intent",
-        "framing_intents",
-        "contexts",
-        "canvas_templates",
-    ]
-    kwarg_map = {"uuid": "uuid_"}
-    required = ["uuid", "version"]
-    defaults = {"uuid": Base.generate_uuid, "fdl_creator": "PyFDL", "version": FDL_SCHEMA_VERSION}
-    object_map = {"framing_intents": FramingIntent, "contexts": Context, "canvas_templates": CanvasTemplate}
-
     def __init__(
         self,
         uuid_: Optional[str] = None,
@@ -39,6 +25,20 @@ class FDL(Base):
         canvas_templates: Optional[TypedCollection] = None,
     ):
         super().__init__()
+        self.attributes = [
+            "uuid",
+            "version",
+            "fdl_creator",
+            "default_framing_intent",
+            "framing_intents",
+            "contexts",
+            "canvas_templates",
+        ]
+        self.kwarg_map = {"uuid": "uuid_"}
+        self.required = ["uuid", "version"]
+        self.defaults = {"uuid": Base.generate_uuid, "fdl_creator": "PyFDL", "version": FDL_SCHEMA_VERSION}
+        self.object_map = {"framing_intents": FramingIntent, "contexts": Context, "canvas_templates": CanvasTemplate}
+
         self.uuid = uuid_
         self.version = version
         self.fdl_creator = fdl_creator

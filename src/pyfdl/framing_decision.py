@@ -7,24 +7,6 @@ FramingIntent = TypeVar("FramingIntent")
 
 
 class FramingDecision(Base):
-    attributes = [
-        "label",
-        "id",
-        "framing_intent_id",
-        "dimensions",
-        "anchor_point",
-        "protection_dimensions",
-        "protection_anchor_point",
-    ]
-    kwarg_map = {"id": "id_"}
-    object_map = {
-        "dimensions": Dimensions,
-        "anchor_point": Point,
-        "protection_dimensions": Dimensions,
-        "protection_anchor_point": Point,
-    }
-    required = ["id", "framing_intent_id", "dimensions", "anchor_point"]
-
     def __init__(
         self,
         label: Optional[str] = None,
@@ -36,6 +18,24 @@ class FramingDecision(Base):
         protection_anchor_point: Optional[Point] = None,
     ):
         super().__init__()
+        self.attributes = [
+            "label",
+            "id",
+            "framing_intent_id",
+            "dimensions",
+            "anchor_point",
+            "protection_dimensions",
+            "protection_anchor_point",
+        ]
+        self.kwarg_map = {"id": "id_"}
+        self.object_map = {
+            "dimensions": Dimensions,
+            "anchor_point": Point,
+            "protection_dimensions": Dimensions,
+            "protection_anchor_point": Point,
+        }
+        self.required = ["id", "framing_intent_id", "dimensions", "anchor_point"]
+
         self.label = label
         self.id = id_
         self.framing_intent_id = framing_intent_id

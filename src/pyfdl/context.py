@@ -4,11 +4,6 @@ from pyfdl import Base, Canvas, TypedCollection
 
 
 class Context(Base):
-    attributes = ["label", "context_creator", "canvases"]
-    defaults = {"context_creator": "PyFDL"}
-    object_map = {"canvases": Canvas}
-    id_attribute = "label"
-
     def __init__(
         self,
         label: Optional[str] = None,
@@ -16,6 +11,11 @@ class Context(Base):
         canvases: Optional[TypedCollection] = None,
     ):
         super().__init__()
+        self.attributes = ["label", "context_creator", "canvases"]
+        self.defaults = {"context_creator": "PyFDL"}
+        self.object_map = {"canvases": Canvas}
+        self.id_attribute = "label"
+
         self.label = label
         self.context_creator = context_creator
         self.canvases = canvases or TypedCollection(Canvas)

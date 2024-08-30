@@ -4,12 +4,6 @@ from .common import Base, Dimensions
 
 
 class FramingIntent(Base):
-    attributes = ["id", "label", "aspect_ratio", "protection"]
-    kwarg_map = {"id": "id_"}
-    object_map = {"aspect_ratio": Dimensions}
-    required = ["id", "aspect_ratio"]
-    defaults = {"protection": 0}
-
     def __init__(
         self,
         label: Optional[str] = None,
@@ -18,6 +12,12 @@ class FramingIntent(Base):
         protection: Optional[float] = None,
     ):
         super().__init__()
+        self.attributes = ["id", "label", "aspect_ratio", "protection"]
+        self.kwarg_map = {"id": "id_"}
+        self.object_map = {"aspect_ratio": Dimensions}
+        self.required = ["id", "aspect_ratio"]
+        self.defaults = {"protection": 0}
+
         self.id = id_
         self.label = label
         self.aspect_ratio = aspect_ratio
