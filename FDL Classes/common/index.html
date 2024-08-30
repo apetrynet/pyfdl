@@ -826,7 +826,7 @@ In addition, a strict control of unique id's is enforced.</p>
 
 
 <h2 id="pyfdl.Dimensions" class="doc doc-heading">
-              <code class="highlight language-python">pyfdl.Dimensions(width, height, dtype=float)</code>
+              <code class="highlight language-python">pyfdl.Dimensions(width=None, height=None, dtype=float)</code>
 
 </h2>
 
@@ -853,7 +853,9 @@ to them</p>
         <ul class="first simple">
             <li>
               <b><code>width</code></b>
-                  (<code><span title="typing.Union">Union</span>[int, float]</code>)
+                  (<code><span title="typing.Optional">Optional</span>[<span title="typing.Union">Union</span>[int, float]]</code>, default:
+                      <code>None</code>
+)
               –
               <div class="doc-md-description">
                 
@@ -861,7 +863,9 @@ to them</p>
             </li>
             <li>
               <b><code>height</code></b>
-                  (<code><span title="typing.Union">Union</span>[int, float]</code>)
+                  (<code><span title="typing.Optional">Optional</span>[<span title="typing.Union">Union</span>[int, float]]</code>, default:
+                      <code>None</code>
+)
               –
               <div class="doc-md-description">
                 
@@ -869,7 +873,7 @@ to them</p>
             </li>
             <li>
               <b><code>dtype</code></b>
-                  (<code><span title="typing.Union">Union</span>[int, float]</code>, default:
+                  (<code><span title="typing.Optional">Optional</span>[<span title="typing.Union">Union</span>[int, float]]</code>, default:
                       <code>float</code>
 )
               –
@@ -989,7 +993,7 @@ to them</p>
 
 
 <h2 id="pyfdl.Point" class="doc doc-heading">
-              <code class="highlight language-python">pyfdl.Point(x, y)</code>
+              <code class="highlight language-python">pyfdl.Point(x=None, y=None)</code>
 
 </h2>
 
@@ -1014,7 +1018,9 @@ to them</p>
         <ul class="first simple">
             <li>
               <b><code>x</code></b>
-                  (<code>float</code>)
+                  (<code><span title="typing.Optional">Optional</span>[float]</code>, default:
+                      <code>None</code>
+)
               –
               <div class="doc-md-description">
                 
@@ -1022,7 +1028,9 @@ to them</p>
             </li>
             <li>
               <b><code>y</code></b>
-                  (<code>float</code>)
+                  (<code><span title="typing.Optional">Optional</span>[float]</code>, default:
+                      <code>None</code>
+)
               –
               <div class="doc-md-description">
                 
