@@ -4,11 +4,11 @@ import pyfdl
 
 
 def test_set_rounding_strategy():
-    assert pyfdl.rounding_strategy() == pyfdl.RoundStrategy(**pyfdl.DEFAULT_ROUNDING_STRATEGY)
+    assert pyfdl.get_rounding_strategy() == pyfdl.DEFAULT_ROUNDING_STRATEGY
 
-    override = {"even": "whole", "mode": "up"}
-    pyfdl.set_rounding_strategy(rules=override)
-    assert pyfdl.rounding_strategy().to_dict() == override
+    override = pyfdl.RoundStrategy(even="whole", mode="up")
+    pyfdl.set_rounding_strategy(strategy=override)
+    assert pyfdl.get_rounding_strategy() == override
 
 
 def test_base_empty(base_subclass):
@@ -156,7 +156,7 @@ def test_dimensions_to_dict():
 
 def test_dimensions_scale_by():
     # Overriding rounding to match values in sample
-    pyfdl.set_rounding_strategy({"even": "even", "mode": "round"})
+    pyfdl.set_rounding_strategy(pyfdl.RoundStrategy(even="even", mode="round"))
     dim_1 = pyfdl.Dimensions(width=1.1, height=2.2, dtype=int)
     dim_1.scale_by(2)
     assert (dim_1.width, dim_1.height) == (2, 4)
@@ -167,7 +167,7 @@ def test_dimensions_scale_by():
 
     # Check if scaling follows rounding rules
     dim_3 = pyfdl.Dimensions(width=1.1, height=2.2, dtype=int)
-    pyfdl.set_rounding_strategy({"even": "whole", "mode": "up"})
+    pyfdl.set_rounding_strategy(pyfdl.RoundStrategy(even="whole", mode="up"))
     dim_3.scale_by(2)
     assert (dim_3.width, dim_3.height) == (3, 5)
 
