@@ -43,7 +43,7 @@ def test_from_framing_intent(
         canvas.effective_dimensions = None
 
     # Override rounding to match values in samples
-    pyfdl.set_rounding_strategy({"even": "even", "mode": "round"})
+    pyfdl.set_rounding_strategy(pyfdl.RoundStrategy(even="even", mode="round"))
     result = pyfdl.FramingDecision.from_framing_intent(canvas=canvas, framing_intent=intent)
     assert result.dimensions == pyfdl.Dimensions(*expected_dim)
 

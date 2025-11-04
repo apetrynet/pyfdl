@@ -21,14 +21,11 @@ Here are a some examples of how to set the rounding strategy:
 ```python
 import pyfdl
 
-# No rounding (default behavior) may either be set by passing the NO_ROUNDING variable
+# No rounding (default behavior) is set by passing the NO_ROUNDING variable
 pyfdl.set_rounding_strategy(pyfdl.NO_ROUNDING)
 
-# Or by explicitly passing None
-pyfdl.set_rounding_strategy(None)
-
-# For other requirements pass a dictionary with the rules
-pyfdl.set_rounding_strategy({'even': 'whole', 'mode': 'up'})
+# For other requirements pass a RoundStrategy instance with the desired rules
+pyfdl.set_rounding_strategy(pyfdl.RoundStrategy(even="whole", mode="up"))
 ```
 
 ## Usage Examples
