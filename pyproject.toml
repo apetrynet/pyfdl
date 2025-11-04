@@ -25,16 +25,10 @@ dependencies = [
     "jsonschema>=4.25.1",
 ]
 
-#[project.scripts]
-#pyfdl = "pyfdl:main"
-
 [project.urls]
 "Source" = "https://github.com/apetrynet/pyfdl"
 "Issues" = "https://github.com/apetrynet/pyfdl/issues"
 "Documentation" = "https://apetrynet.github.io/pyfdl"
-
-#[tool.uv]
-#package = true
 
 [build-system]
 requires = ["hatchling"]
