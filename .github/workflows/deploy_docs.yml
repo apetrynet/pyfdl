@@ -11,12 +11,12 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-python@v5
         with:
           python-version: 3.11
-      - uses: pypa/hatch@install
-      - run: hatch run docs:build
+      - uses: astral-sh/setup-uv@v6
+      - run: uv run mkdocs build --clean --strict
       - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
