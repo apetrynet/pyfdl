@@ -151,7 +151,15 @@
 
 
 
+
+
+
+
+
+
+
   <div class="doc doc-children">
+
 
 
 
@@ -165,7 +173,7 @@
 
 
 <h3 id="pyfdl.plugins.registry.PluginRegistry" class="doc doc-heading">
-              <code class="highlight language-python">PluginRegistry()</code>
+              <code class="highlight language-python"><span class="n">PluginRegistry</span><span class="p">()</span></code>
 
 </h3>
 
@@ -173,7 +181,14 @@
     <div class="doc doc-contents ">
 
 
-      <p>The <code>PluginRegistry</code> loads and registers all plugins and built in handlers.</p>
+        <p>The <code>PluginRegistry</code> loads and registers all plugins and built in handlers.</p>
+
+
+
+
+
+
+
 
 
 
@@ -188,20 +203,22 @@
 
 
 
+
 <div class="doc doc-object doc-function">
 
 
 <h4 id="pyfdl.plugins.registry.PluginRegistry.add_handler" class="doc doc-heading">
-            <code class="highlight language-python">add_handler(handler)</code>
+            <code class="highlight language-python"><span class="n">add_handler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span></code>
 
 </h4>
 
 
     <div class="doc doc-contents ">
 
-      <p>Add a handler to the collection of handlers
+        <p>Add a handler to the collection of handlers
 Args:
     handler: plugin or built-in handler to add</p>
+
 
     </div>
 
@@ -211,14 +228,14 @@ Args:
 
 
 <h4 id="pyfdl.plugins.registry.PluginRegistry.get_handler_by_name" class="doc doc-heading">
-            <code class="highlight language-python">get_handler_by_name(handler_name, func_name)</code>
+            <code class="highlight language-python"><span class="n">get_handler_by_name</span><span class="p">(</span><span class="n">handler_name</span><span class="p">,</span> <span class="n">func_name</span><span class="p">)</span></code>
 
 </h4>
 
 
     <div class="doc doc-contents ">
 
-      <p>Get a registered handler by <code>handler_name</code>, and
+        <p>Get a registered handler by <code>handler_name</code>, and
 make sure it has a function (<code>func_name</code>) to call</p>
 
 
@@ -234,7 +251,7 @@ make sure it has a function (<code>func_name</code>) to call</p>
         <ul class="first simple">
             <li>
               <b><code>handler_name</code></b>
-                  (<code>str</code>)
+                  (<code><span title="str">str</span></code>)
               –
               <div class="doc-md-description">
                 <p>name handler to look for</p>
@@ -242,7 +259,7 @@ make sure it has a function (<code>func_name</code>) to call</p>
             </li>
             <li>
               <b><code>func_name</code></b>
-                  (<code>str</code>)
+                  (<code><span title="str">str</span></code>)
               –
               <div class="doc-md-description">
                 <p>name of function in handler to call</p>
@@ -288,7 +305,7 @@ make sure it has a function (<code>func_name</code>) to call</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-                  <code>error</code>
+                  <code><span title="error">error</span></code>
               –
               <div class="doc-md-description">
                 <p>if no handler by name and function is registered</p>
@@ -299,6 +316,7 @@ make sure it has a function (<code>func_name</code>) to call</p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -307,14 +325,14 @@ make sure it has a function (<code>func_name</code>) to call</p>
 
 
 <h4 id="pyfdl.plugins.registry.PluginRegistry.get_handler_by_suffix" class="doc doc-heading">
-            <code class="highlight language-python">get_handler_by_suffix(suffix, func_name)</code>
+            <code class="highlight language-python"><span class="n">get_handler_by_suffix</span><span class="p">(</span><span class="n">suffix</span><span class="p">,</span> <span class="n">func_name</span><span class="p">)</span></code>
 
 </h4>
 
 
     <div class="doc doc-contents ">
 
-      <p>Get a registered handler by <code>suffix</code>, and
+        <p>Get a registered handler by <code>suffix</code>, and
 make sure it has a function (<code>func_name</code>) to call</p>
 
 
@@ -330,7 +348,7 @@ make sure it has a function (<code>func_name</code>) to call</p>
         <ul class="first simple">
             <li>
               <b><code>suffix</code></b>
-                  (<code>str</code>)
+                  (<code><span title="str">str</span></code>)
               –
               <div class="doc-md-description">
                 <p>including the dot (".fdl")</p>
@@ -338,7 +356,7 @@ make sure it has a function (<code>func_name</code>) to call</p>
             </li>
             <li>
               <b><code>func_name</code></b>
-                  (<code>str</code>)
+                  (<code><span title="str">str</span></code>)
               –
               <div class="doc-md-description">
                 <p>name of function in handler to call</p>
@@ -384,7 +402,7 @@ make sure it has a function (<code>func_name</code>) to call</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-                  <code>error</code>
+                  <code><span title="error">error</span></code>
               –
               <div class="doc-md-description">
                 
@@ -395,6 +413,7 @@ make sure it has a function (<code>func_name</code>) to call</p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -403,14 +422,15 @@ make sure it has a function (<code>func_name</code>) to call</p>
 
 
 <h4 id="pyfdl.plugins.registry.PluginRegistry.load_builtin" class="doc doc-heading">
-            <code class="highlight language-python">load_builtin()</code>
+            <code class="highlight language-python"><span class="n">load_builtin</span><span class="p">()</span></code>
 
 </h4>
 
 
     <div class="doc doc-contents ">
 
-      <p>Load the built-in handlers</p>
+        <p>Load the built-in handlers</p>
+
 
     </div>
 
@@ -420,14 +440,15 @@ make sure it has a function (<code>func_name</code>) to call</p>
 
 
 <h4 id="pyfdl.plugins.registry.PluginRegistry.load_plugins" class="doc doc-heading">
-            <code class="highlight language-python">load_plugins()</code>
+            <code class="highlight language-python"><span class="n">load_plugins</span><span class="p">()</span></code>
 
 </h4>
 
 
     <div class="doc doc-contents ">
 
-      <p>Load plugins from the "pyfdl.plugins" namespace.</p>
+        <p>Load plugins from the "pyfdl.plugins" namespace.</p>
+
 
     </div>
 
@@ -446,14 +467,14 @@ make sure it has a function (<code>func_name</code>) to call</p>
 
 
 <h3 id="pyfdl.plugins.registry.get_registry" class="doc doc-heading">
-            <code class="highlight language-python">get_registry(reload=False)</code>
+            <code class="highlight language-python"><span class="n">get_registry</span><span class="p">(</span><span class="n">reload</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-      <p>Get the active registry containing plugins and built-in handlers</p>
+        <p>Get the active registry containing plugins and built-in handlers</p>
 
 
 <table class="field-list">
@@ -467,7 +488,7 @@ make sure it has a function (<code>func_name</code>) to call</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-<b><code>registry</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.plugins.registry.PluginRegistry" href="#pyfdl.plugins.registry.PluginRegistry">PluginRegistry</a></code>
+<b><code>registry</code></b>(                  <code><a class="autorefs autorefs-internal" title="PluginRegistry() (pyfdl.plugins.registry.PluginRegistry)" href="#pyfdl.plugins.registry.PluginRegistry">PluginRegistry</a></code>
 )              –
               <div class="doc-md-description">
                 
@@ -478,6 +499,7 @@ make sure it has a function (<code>func_name</code>) to call</p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>

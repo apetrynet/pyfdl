@@ -132,14 +132,21 @@
 
 
 <h2 id="pyfdl.CanvasTemplate" class="doc doc-heading">
-              <code class="highlight language-python">pyfdl.CanvasTemplate(label=None, id_=None, target_dimensions=None, target_anamorphic_squeeze=None, fit_source=None, fit_method=None, alignment_method_vertical=None, alignment_method_horizontal=None, preserve_from_source_canvas=None, maximum_dimensions=None, pad_to_maximum=None, round_=None)</code>
+              <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">CanvasTemplate</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target_dimensions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target_anamorphic_squeeze</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fit_source</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fit_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alignment_method_vertical</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alignment_method_horizontal</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">preserve_from_source_canvas</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maximum_dimensions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pad_to_maximum</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">round_</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents first">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.common.Base" href="../common/#pyfdl.Base">Base</a></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.Base() (pyfdl.common.Base)" href="../common/#pyfdl.Base">Base</a></code></p>
+
+
+
+
+
+
+
 
 
 
@@ -155,18 +162,19 @@
 
 
 
+
 <div class="doc doc-object doc-function">
 
 
 <h3 id="pyfdl.CanvasTemplate.fit_source_to_target" class="doc doc-heading">
-            <code class="highlight language-python">fit_source_to_target(source_dimensions, source_anamorphic_squeeze)</code>
+            <code class="highlight language-python"><span class="n">fit_source_to_target</span><span class="p">(</span><span class="n">source_dimensions</span><span class="p">,</span> <span class="n">source_anamorphic_squeeze</span><span class="p">)</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-      <p>Calculate the dimensions of <code>fit_source</code> inside <code>target_dimensions</code> based on <code>fit_mode</code></p>
+        <p>Calculate the dimensions of <code>fit_source</code> inside <code>target_dimensions</code> based on <code>fit_mode</code></p>
 
 
 <table class="field-list">
@@ -181,7 +189,7 @@
         <ul class="first simple">
             <li>
               <b><code>source_dimensions</code></b>
-                  (<code><a class="autorefs autorefs-internal" title="pyfdl.common.Dimensions" href="../common/#pyfdl.Dimensions">Dimensions</a></code>)
+                  (<code><a class="autorefs autorefs-internal" title="pyfdl.Dimensions(width=None, height=None, dtype=float) (pyfdl.common.Dimensions)" href="../common/#pyfdl.Dimensions">Dimensions</a></code>)
               –
               <div class="doc-md-description">
                 
@@ -189,7 +197,7 @@
             </li>
             <li>
               <b><code>source_anamorphic_squeeze</code></b>
-                  (<code>float</code>)
+                  (<code><span title="float">float</span></code>)
               –
               <div class="doc-md-description">
                 
@@ -212,7 +220,7 @@
       <td class="field-body">
         <ul class="first simple">
             <li>
-<b><code>size</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.common.Dimensions" href="../common/#pyfdl.Dimensions">Dimensions</a></code>
+<b><code>size</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.Dimensions(width=None, height=None, dtype=float) (pyfdl.common.Dimensions)" href="../common/#pyfdl.Dimensions">Dimensions</a></code>
 )              –
               <div class="doc-md-description">
                 
@@ -223,6 +231,7 @@
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -231,14 +240,14 @@
 
 
 <h3 id="pyfdl.CanvasTemplate.get_desqueezed_width" class="doc doc-heading">
-            <code class="highlight language-python">get_desqueezed_width(source_width, squeeze_factor)</code>
+            <code class="highlight language-python"><span class="n">get_desqueezed_width</span><span class="p">(</span><span class="n">source_width</span><span class="p">,</span> <span class="n">squeeze_factor</span><span class="p">)</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-      <p>Get the de-squeezed width also considering the <code>target_anamorphic_squeeze</code>.
+        <p>Get the de-squeezed width also considering the <code>target_anamorphic_squeeze</code>.
 Used to calculate scaling of canvases and framing decisions.
 If <code>target_anamorphic_squeeze</code> is 0, it's considered "same as source" and no de-squeeze
 is applied.</p>
@@ -256,7 +265,7 @@ is applied.</p>
         <ul class="first simple">
             <li>
               <b><code>source_width</code></b>
-                  (<code>float</code>)
+                  (<code><span title="float">float</span></code>)
               –
               <div class="doc-md-description">
                 <p>from source <code>Canvas</code> or <code>FramingDecision</code></p>
@@ -264,7 +273,7 @@ is applied.</p>
             </li>
             <li>
               <b><code>squeeze_factor</code></b>
-                  (<code>float</code>)
+                  (<code><span title="float">float</span></code>)
               –
               <div class="doc-md-description">
                 <p>source <code>Canvas.anamorphic_squeeze</code></p>
@@ -287,7 +296,7 @@ is applied.</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-<b><code>width</code></b>(                  <code>float</code>
+<b><code>width</code></b>(                  <code><span title="float">float</span></code>
 )              –
               <div class="doc-md-description">
                 <p>scaled to size</p>
@@ -298,6 +307,7 @@ is applied.</p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -306,14 +316,14 @@ is applied.</p>
 
 
 <h3 id="pyfdl.CanvasTemplate.get_scale_factor" class="doc doc-heading">
-            <code class="highlight language-python">get_scale_factor(source_dimensions, source_anamorphic_squeeze)</code>
+            <code class="highlight language-python"><span class="n">get_scale_factor</span><span class="p">(</span><span class="n">source_dimensions</span><span class="p">,</span> <span class="n">source_anamorphic_squeeze</span><span class="p">)</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-      <p>Calculate the scale factor used when creating a new <code>Canvas</code> and <code>FramingDecision</code></p>
+        <p>Calculate the scale factor used when creating a new <code>Canvas</code> and <code>FramingDecision</code></p>
 
 
 <table class="field-list">
@@ -328,7 +338,7 @@ is applied.</p>
         <ul class="first simple">
             <li>
               <b><code>source_dimensions</code></b>
-                  (<code><a class="autorefs autorefs-internal" title="pyfdl.common.Dimensions" href="../common/#pyfdl.Dimensions">Dimensions</a></code>)
+                  (<code><a class="autorefs autorefs-internal" title="pyfdl.Dimensions(width=None, height=None, dtype=float) (pyfdl.common.Dimensions)" href="../common/#pyfdl.Dimensions">Dimensions</a></code>)
               –
               <div class="doc-md-description">
                 
@@ -336,7 +346,7 @@ is applied.</p>
             </li>
             <li>
               <b><code>source_anamorphic_squeeze</code></b>
-                  (<code>float</code>)
+                  (<code><span title="float">float</span></code>)
               –
               <div class="doc-md-description">
                 
@@ -359,7 +369,7 @@ is applied.</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-<b><code>scale_factor</code></b>(                  <code>float</code>
+<b><code>scale_factor</code></b>(                  <code><span title="float">float</span></code>
 )              –
               <div class="doc-md-description">
                 
@@ -370,6 +380,7 @@ is applied.</p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -378,14 +389,14 @@ is applied.</p>
 
 
 <h3 id="pyfdl.CanvasTemplate.get_transfer_keys" class="doc doc-heading">
-            <code class="highlight language-python">get_transfer_keys()</code>
+            <code class="highlight language-python"><span class="n">get_transfer_keys</span><span class="p">()</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-      <p>Get a list of attributes to transfer from source to destination in the order that
+        <p>Get a list of attributes to transfer from source to destination in the order that
 preserves all attributes between <code>fit_source</code> and <code>preserve_from_canvas</code></p>
 
 
@@ -400,7 +411,7 @@ preserves all attributes between <code>fit_source</code> and <code>preserve_from
       <td class="field-body">
         <ul class="first simple">
             <li>
-<b><code>keys</code></b>(                  <code>list[str]</code>
+<b><code>keys</code></b>(                  <code><span title="list">list</span>[<span title="str">str</span>]</code>
 )              –
               <div class="doc-md-description">
                 
@@ -411,6 +422,7 @@ preserves all attributes between <code>fit_source</code> and <code>preserve_from
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>

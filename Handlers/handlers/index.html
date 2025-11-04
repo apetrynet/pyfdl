@@ -150,14 +150,14 @@ on path.suffix or handler name. </p>
 
 
 <h2 id="pyfdl.read_from_file" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.read_from_file(path, handler_name=None, **handler_kwargs)</code>
+            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">read_from_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">handler_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">handler_kwargs</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents first">
 
-      <p>Handler agnostic function for producing an FDL from a file. A suitable handler will be
+        <p>Handler agnostic function for producing an FDL from a file. A suitable handler will be
 chosen based on <code>path</code> or <code>handler_name</code>.</p>
 
 
@@ -173,7 +173,7 @@ chosen based on <code>path</code> or <code>handler_name</code>.</p>
         <ul class="first simple">
             <li>
               <b><code>path</code></b>
-                  (<code><span title="typing.Union">Union</span>[<span title="pathlib.Path">Path</span>, str]</code>)
+                  (<code><span title="typing.Union">Union</span>[<span title="pathlib.Path">Path</span>, <span title="str">str</span>]</code>)
               –
               <div class="doc-md-description">
                 <p>to the file in question</p>
@@ -181,7 +181,7 @@ chosen based on <code>path</code> or <code>handler_name</code>.</p>
             </li>
             <li>
               <b><code>handler_name</code></b>
-                  (<code><span title="typing.Optional">Optional</span>[str]</code>, default:
+                  (<code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>, default:
                       <code>None</code>
 )
               –
@@ -216,7 +216,7 @@ chosen based on <code>path</code> or <code>handler_name</code>.</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-<b><code>FDL</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.fdl.FDL" href="../../FDL%20Classes/fdl/#pyfdl.FDL">FDL</a></code>
+<b><code>FDL</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.FDL(uuid_=None, version=None, fdl_creator=None, default_framing_intent=None, framing_intents=None, contexts=None, canvas_templates=None) (pyfdl.fdl.FDL)" href="../../FDL%20Classes/fdl/#pyfdl.FDL">FDL</a></code>
 )              –
               <div class="doc-md-description">
                 
@@ -227,6 +227,7 @@ chosen based on <code>path</code> or <code>handler_name</code>.</p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -235,14 +236,14 @@ chosen based on <code>path</code> or <code>handler_name</code>.</p>
 
 
 <h2 id="pyfdl.read_from_string" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.read_from_string(s, handler_name='fdl', **handler_kwargs)</code>
+            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">read_from_string</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">handler_name</span><span class="o">=</span><span class="s1">&#39;fdl&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">handler_kwargs</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents first">
 
-      <p>Handler agnostic function for producing an FDL based on a string. A suitable handler will be
+        <p>Handler agnostic function for producing an FDL based on a string. A suitable handler will be
 chosen based on <code>handler_name</code>. Defaults to "fdl".</p>
 
 
@@ -258,7 +259,7 @@ chosen based on <code>handler_name</code>. Defaults to "fdl".</p>
         <ul class="first simple">
             <li>
               <b><code>s</code></b>
-                  (<code>str</code>)
+                  (<code><span title="str">str</span></code>)
               –
               <div class="doc-md-description">
                 <p>string to convert into an FDL</p>
@@ -266,7 +267,7 @@ chosen based on <code>handler_name</code>. Defaults to "fdl".</p>
             </li>
             <li>
               <b><code>handler_name</code></b>
-                  (<code>str</code>, default:
+                  (<code><span title="str">str</span></code>, default:
                       <code>&#39;fdl&#39;</code>
 )
               –
@@ -301,7 +302,7 @@ chosen based on <code>handler_name</code>. Defaults to "fdl".</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-<b><code>FDL</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.fdl.FDL" href="../../FDL%20Classes/fdl/#pyfdl.FDL">FDL</a></code>
+<b><code>FDL</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.FDL(uuid_=None, version=None, fdl_creator=None, default_framing_intent=None, framing_intents=None, contexts=None, canvas_templates=None) (pyfdl.fdl.FDL)" href="../../FDL%20Classes/fdl/#pyfdl.FDL">FDL</a></code>
 )              –
               <div class="doc-md-description">
                 
@@ -312,6 +313,7 @@ chosen based on <code>handler_name</code>. Defaults to "fdl".</p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -320,14 +322,14 @@ chosen based on <code>handler_name</code>. Defaults to "fdl".</p>
 
 
 <h2 id="pyfdl.write_to_file" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.write_to_file(fdl, path, handler_name=None, **handler_kwargs)</code>
+            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">write_to_file</span><span class="p">(</span><span class="n">fdl</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">handler_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">handler_kwargs</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents first">
 
-      <p>Handler agnostic function to write a file based on an FDL. A suitable handler will be chosen based
+        <p>Handler agnostic function to write a file based on an FDL. A suitable handler will be chosen based
 on <code>path</code> or <code>handler_name</code></p>
 
 
@@ -343,7 +345,7 @@ on <code>path</code> or <code>handler_name</code></p>
         <ul class="first simple">
             <li>
               <b><code>fdl</code></b>
-                  (<code><a class="autorefs autorefs-internal" title="pyfdl.fdl.FDL" href="../../FDL%20Classes/fdl/#pyfdl.FDL">FDL</a></code>)
+                  (<code><a class="autorefs autorefs-internal" title="pyfdl.FDL(uuid_=None, version=None, fdl_creator=None, default_framing_intent=None, framing_intents=None, contexts=None, canvas_templates=None) (pyfdl.fdl.FDL)" href="../../FDL%20Classes/fdl/#pyfdl.FDL">FDL</a></code>)
               –
               <div class="doc-md-description">
                 <p>to write</p>
@@ -351,7 +353,7 @@ on <code>path</code> or <code>handler_name</code></p>
             </li>
             <li>
               <b><code>path</code></b>
-                  (<code><span title="typing.Union">Union</span>[<span title="pathlib.Path">Path</span>, str]</code>)
+                  (<code><span title="typing.Union">Union</span>[<span title="pathlib.Path">Path</span>, <span title="str">str</span>]</code>)
               –
               <div class="doc-md-description">
                 <p>to file</p>
@@ -359,7 +361,7 @@ on <code>path</code> or <code>handler_name</code></p>
             </li>
             <li>
               <b><code>handler_name</code></b>
-                  (<code><span title="typing.Optional">Optional</span>[str]</code>, default:
+                  (<code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>, default:
                       <code>None</code>
 )
               –
@@ -382,6 +384,7 @@ on <code>path</code> or <code>handler_name</code></p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -390,14 +393,14 @@ on <code>path</code> or <code>handler_name</code></p>
 
 
 <h2 id="pyfdl.write_to_string" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.write_to_string(fdl, handler_name='fdl', **handler_kwargs)</code>
+            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">write_to_string</span><span class="p">(</span><span class="n">fdl</span><span class="p">,</span> <span class="n">handler_name</span><span class="o">=</span><span class="s1">&#39;fdl&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">handler_kwargs</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents first">
 
-      <p>Handler agnostic function for producing a string representation of an FDL. A suitable handler will
+        <p>Handler agnostic function for producing a string representation of an FDL. A suitable handler will
 be chosen based on <code>handler_name</code>.</p>
 
 
@@ -413,7 +416,7 @@ be chosen based on <code>handler_name</code>.</p>
         <ul class="first simple">
             <li>
               <b><code>fdl</code></b>
-                  (<code><a class="autorefs autorefs-internal" title="pyfdl.fdl.FDL" href="../../FDL%20Classes/fdl/#pyfdl.FDL">FDL</a></code>)
+                  (<code><a class="autorefs autorefs-internal" title="pyfdl.FDL(uuid_=None, version=None, fdl_creator=None, default_framing_intent=None, framing_intents=None, contexts=None, canvas_templates=None) (pyfdl.fdl.FDL)" href="../../FDL%20Classes/fdl/#pyfdl.FDL">FDL</a></code>)
               –
               <div class="doc-md-description">
                 <p>to write</p>
@@ -421,7 +424,7 @@ be chosen based on <code>handler_name</code>.</p>
             </li>
             <li>
               <b><code>handler_name</code></b>
-                  (<code>str</code>, default:
+                  (<code><span title="str">str</span></code>, default:
                       <code>&#39;fdl&#39;</code>
 )
               –
@@ -443,7 +446,8 @@ be chosen based on <code>handler_name</code>.</p>
       </td>
     </tr>
   </tbody>
-</table>      <p>Returns:</p>
+</table>        <p>Returns:</p>
+
 
     </div>
 
@@ -465,7 +469,15 @@ be chosen based on <code>handler_name</code>.</p>
 
 
 
+
+
+
+
+
+
+
   <div class="doc doc-children">
+
 
 
 
@@ -479,7 +491,7 @@ be chosen based on <code>handler_name</code>.</p>
 
 
 <h3 id="pyfdl.handlers.fdl_handler.FDLHandler" class="doc doc-heading">
-              <code class="highlight language-python">FDLHandler()</code>
+              <code class="highlight language-python"><span class="n">FDLHandler</span><span class="p">()</span></code>
 
 </h3>
 
@@ -487,7 +499,14 @@ be chosen based on <code>handler_name</code>.</p>
     <div class="doc doc-contents ">
 
 
-      <p>The default built-in FDL handler. Takes care of reading and writing FDL files</p>
+        <p>The default built-in FDL handler. Takes care of reading and writing FDL files</p>
+
+
+
+
+
+
+
 
 
 
@@ -502,18 +521,19 @@ be chosen based on <code>handler_name</code>.</p>
 
 
 
+
 <div class="doc doc-object doc-function">
 
 
 <h4 id="pyfdl.handlers.fdl_handler.FDLHandler.read_from_file" class="doc doc-heading">
-            <code class="highlight language-python">read_from_file(path, validate=True)</code>
+            <code class="highlight language-python"><span class="n">read_from_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 </h4>
 
 
     <div class="doc doc-contents ">
 
-      <p>Read an FDL from a file.</p>
+        <p>Read an FDL from a file.</p>
 
 
 <table class="field-list">
@@ -536,7 +556,7 @@ be chosen based on <code>handler_name</code>.</p>
             </li>
             <li>
               <b><code>validate</code></b>
-                  (<code>bool</code>, default:
+                  (<code><span title="bool">bool</span></code>, default:
                       <code>True</code>
 )
               –
@@ -584,7 +604,7 @@ be chosen based on <code>handler_name</code>.</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-<b><code>FDL</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.FDL" href="../../FDL%20Classes/fdl/#pyfdl.FDL">FDL</a></code>
+<b><code>FDL</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.FDL(uuid_=None, version=None, fdl_creator=None, default_framing_intent=None, framing_intents=None, contexts=None, canvas_templates=None) (pyfdl.FDL)" href="../../FDL%20Classes/fdl/#pyfdl.FDL">FDL</a></code>
 )              –
               <div class="doc-md-description">
                 
@@ -595,6 +615,7 @@ be chosen based on <code>handler_name</code>.</p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -603,14 +624,14 @@ be chosen based on <code>handler_name</code>.</p>
 
 
 <h4 id="pyfdl.handlers.fdl_handler.FDLHandler.read_from_string" class="doc doc-heading">
-            <code class="highlight language-python">read_from_string(s, validate=True)</code>
+            <code class="highlight language-python"><span class="n">read_from_string</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 </h4>
 
 
     <div class="doc doc-contents ">
 
-      <p>Read an FDL from a string.</p>
+        <p>Read an FDL from a string.</p>
 
 
 <table class="field-list">
@@ -625,7 +646,7 @@ be chosen based on <code>handler_name</code>.</p>
         <ul class="first simple">
             <li>
               <b><code>s</code></b>
-                  (<code>str</code>)
+                  (<code><span title="str">str</span></code>)
               –
               <div class="doc-md-description">
                 <p>string representation of an FDL</p>
@@ -633,7 +654,7 @@ be chosen based on <code>handler_name</code>.</p>
             </li>
             <li>
               <b><code>validate</code></b>
-                  (<code>bool</code>, default:
+                  (<code><span title="bool">bool</span></code>, default:
                       <code>True</code>
 )
               –
@@ -681,7 +702,7 @@ be chosen based on <code>handler_name</code>.</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-<b><code>FDL</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.FDL" href="../../FDL%20Classes/fdl/#pyfdl.FDL">FDL</a></code>
+<b><code>FDL</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.FDL(uuid_=None, version=None, fdl_creator=None, default_framing_intent=None, framing_intents=None, contexts=None, canvas_templates=None) (pyfdl.FDL)" href="../../FDL%20Classes/fdl/#pyfdl.FDL">FDL</a></code>
 )              –
               <div class="doc-md-description">
                 
@@ -692,6 +713,7 @@ be chosen based on <code>handler_name</code>.</p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -700,14 +722,14 @@ be chosen based on <code>handler_name</code>.</p>
 
 
 <h4 id="pyfdl.handlers.fdl_handler.FDLHandler.write_to_file" class="doc doc-heading">
-            <code class="highlight language-python">write_to_file(fdl, path, validate=True, indent=2)</code>
+            <code class="highlight language-python"><span class="n">write_to_file</span><span class="p">(</span><span class="n">fdl</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></code>
 
 </h4>
 
 
     <div class="doc doc-contents ">
 
-      <p>Dump an FDL to a file.</p>
+        <p>Dump an FDL to a file.</p>
 
 
 <table class="field-list">
@@ -722,7 +744,7 @@ be chosen based on <code>handler_name</code>.</p>
         <ul class="first simple">
             <li>
               <b><code>fdl</code></b>
-                  (<code><a class="autorefs autorefs-internal" title="pyfdl.FDL" href="../../FDL%20Classes/fdl/#pyfdl.FDL">FDL</a></code>)
+                  (<code><a class="autorefs autorefs-internal" title="pyfdl.FDL(uuid_=None, version=None, fdl_creator=None, default_framing_intent=None, framing_intents=None, contexts=None, canvas_templates=None) (pyfdl.FDL)" href="../../FDL%20Classes/fdl/#pyfdl.FDL">FDL</a></code>)
               –
               <div class="doc-md-description">
                 <p>object to serialize</p>
@@ -738,7 +760,7 @@ be chosen based on <code>handler_name</code>.</p>
             </li>
             <li>
               <b><code>validate</code></b>
-                  (<code>bool</code>, default:
+                  (<code><span title="bool">bool</span></code>, default:
                       <code>True</code>
 )
               –
@@ -748,7 +770,7 @@ be chosen based on <code>handler_name</code>.</p>
             </li>
             <li>
               <b><code>indent</code></b>
-                  (<code><span title="typing.Union">Union</span>[int, None]</code>, default:
+                  (<code><span title="typing.Union">Union</span>[<span title="int">int</span>, None]</code>, default:
                       <code>2</code>
 )
               –
@@ -784,6 +806,7 @@ be chosen based on <code>handler_name</code>.</p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -792,14 +815,14 @@ be chosen based on <code>handler_name</code>.</p>
 
 
 <h4 id="pyfdl.handlers.fdl_handler.FDLHandler.write_to_string" class="doc doc-heading">
-            <code class="highlight language-python">write_to_string(fdl, validate=True, indent=2)</code>
+            <code class="highlight language-python"><span class="n">write_to_string</span><span class="p">(</span><span class="n">fdl</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></code>
 
 </h4>
 
 
     <div class="doc doc-contents ">
 
-      <p>Dump an FDL to string</p>
+        <p>Dump an FDL to string</p>
 
 
 <table class="field-list">
@@ -814,7 +837,7 @@ be chosen based on <code>handler_name</code>.</p>
         <ul class="first simple">
             <li>
               <b><code>fdl</code></b>
-                  (<code><a class="autorefs autorefs-internal" title="pyfdl.FDL" href="../../FDL%20Classes/fdl/#pyfdl.FDL">FDL</a></code>)
+                  (<code><a class="autorefs autorefs-internal" title="pyfdl.FDL(uuid_=None, version=None, fdl_creator=None, default_framing_intent=None, framing_intents=None, contexts=None, canvas_templates=None) (pyfdl.FDL)" href="../../FDL%20Classes/fdl/#pyfdl.FDL">FDL</a></code>)
               –
               <div class="doc-md-description">
                 <p>object to serialize</p>
@@ -822,7 +845,7 @@ be chosen based on <code>handler_name</code>.</p>
             </li>
             <li>
               <b><code>validate</code></b>
-                  (<code>bool</code>, default:
+                  (<code><span title="bool">bool</span></code>, default:
                       <code>True</code>
 )
               –
@@ -832,7 +855,7 @@ be chosen based on <code>handler_name</code>.</p>
             </li>
             <li>
               <b><code>indent</code></b>
-                  (<code><span title="typing.Union">Union</span>[int, None]</code>, default:
+                  (<code><span title="typing.Union">Union</span>[<span title="int">int</span>, None]</code>, default:
                       <code>2</code>
 )
               –
@@ -880,7 +903,7 @@ be chosen based on <code>handler_name</code>.</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-<b><code>string</code></b>(                  <code>str</code>
+<b><code>string</code></b>(                  <code><span title="str">str</span></code>
 )              –
               <div class="doc-md-description">
                 <p>representation of the resulting json</p>
@@ -891,6 +914,7 @@ be chosen based on <code>handler_name</code>.</p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -908,14 +932,14 @@ be chosen based on <code>handler_name</code>.</p>
 
 
 <h3 id="pyfdl.handlers.fdl_handler.register_plugin" class="doc doc-heading">
-            <code class="highlight language-python">register_plugin(registry)</code>
+            <code class="highlight language-python"><span class="n">register_plugin</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-      <p>Mandatory function to register handler in the registry. Called by the PluginRegistry itself.</p>
+        <p>Mandatory function to register handler in the registry. Called by the PluginRegistry itself.</p>
 
 
 <table class="field-list">
@@ -941,6 +965,7 @@ be chosen based on <code>handler_name</code>.</p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>

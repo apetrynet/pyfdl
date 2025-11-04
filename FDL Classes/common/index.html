@@ -72,9 +72,11 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#pyfdl.NO_ROUNDING">NO_ROUNDING</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#global-rounding-functions">Global Rounding Functions</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#pyfdl.set_rounding_strategy">set_rounding_strategy</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.rounding_strategy">rounding_strategy</a>
+    <li class="toctree-l2"><a class="reference internal" href="#pyfdl.get_rounding_strategy">get_rounding_strategy</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#base-classes">Base Classes</a>
     </li>
@@ -179,7 +181,7 @@ if no version is set.</p>
 
 
 <h2 id="pyfdl.FDL_SCHEMA_MAJOR" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.FDL_SCHEMA_MAJOR = 1</code>
+            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">FDL_SCHEMA_MAJOR</span> <span class="o">=</span> <span class="mi">1</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
@@ -189,6 +191,7 @@ if no version is set.</p>
 
 
     <div class="doc doc-contents first">
+
     </div>
 
 </div>
@@ -198,7 +201,7 @@ if no version is set.</p>
 
 
 <h2 id="pyfdl.FDL_SCHEMA_MINOR" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.FDL_SCHEMA_MINOR = 0</code>
+            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">FDL_SCHEMA_MINOR</span> <span class="o">=</span> <span class="mi">0</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
@@ -208,6 +211,7 @@ if no version is set.</p>
 
 
     <div class="doc doc-contents first">
+
     </div>
 
 </div>
@@ -217,7 +221,7 @@ if no version is set.</p>
 
 
 <h2 id="pyfdl.FDL_SCHEMA_VERSION" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.FDL_SCHEMA_VERSION = {'major': FDL_SCHEMA_MAJOR, 'minor': FDL_SCHEMA_MINOR}</code>
+            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">FDL_SCHEMA_VERSION</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;major&#39;</span><span class="p">:</span> <span class="n">FDL_SCHEMA_MAJOR</span><span class="p">,</span> <span class="s1">&#39;minor&#39;</span><span class="p">:</span> <span class="n">FDL_SCHEMA_MINOR</span><span class="p">}</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
@@ -227,6 +231,7 @@ if no version is set.</p>
 
 
     <div class="doc doc-contents first">
+
     </div>
 
 </div><hr />
@@ -239,7 +244,7 @@ rounding of values</p>
 
 
 <h2 id="pyfdl.DEFAULT_ROUNDING_STRATEGY" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.DEFAULT_ROUNDING_STRATEGY = NO_ROUNDING</code>
+            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">DEFAULT_ROUNDING_STRATEGY</span> <span class="o">=</span> <span class="n">NO_ROUNDING</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
@@ -249,6 +254,7 @@ rounding of values</p>
 
 
     <div class="doc doc-contents first">
+
     </div>
 
 </div><p>This is the default behavior for rounding the values of dimensions. The rules are the same as for
@@ -260,7 +266,7 @@ rounding of values</p>
 
 
 <h2 id="pyfdl.NO_ROUNDING" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.NO_ROUNDING = {}</code>
+            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">NO_ROUNDING</span> <span class="o">=</span> <span class="n">RoundStrategy</span><span class="p">(</span><span class="n">even</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
@@ -270,22 +276,30 @@ rounding of values</p>
 
 
     <div class="doc doc-contents first">
+
     </div>
 
 </div><p>This will disable rounding of values in dimensions. Exception being <code>Canvas.dimensions</code> when
 created by a canvas templates</p>
+<h2 id="global-rounding-functions">Global Rounding Functions</h2>
+<p>Use these functions to set the global rounding strategy for values of dimensions</p>
 
 
 <div class="doc doc-object doc-function">
 
 
 <h2 id="pyfdl.set_rounding_strategy" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.set_rounding_strategy(rules)</code>
+            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">set_rounding_strategy</span><span class="p">(</span><span class="n">strategy</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents first">
+
+        <p>Set the global rounding strategy for all values except where the spec require its own rules
+Args:
+    strategy:</p>
+
 
     </div>
 
@@ -294,17 +308,43 @@ created by a canvas templates</p>
 <div class="doc doc-object doc-function">
 
 
-<h2 id="pyfdl.rounding_strategy" class="doc doc-heading">
-            <code class="highlight language-python">pyfdl.rounding_strategy()</code>
+<h2 id="pyfdl.get_rounding_strategy" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">get_rounding_strategy</span><span class="p">()</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents first">
 
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+                  <code><span title="pyfdl.rounding.RoundStrategy">RoundStrategy</span></code>
+              –
+              <div class="doc-md-description">
+                <p>the global rounding strategy</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
     </div>
 
-</div><h2 id="base-classes">Base Classes</h2>
+</div><hr />
+<h2 id="base-classes">Base Classes</h2>
 <p>Below is a collection of the common classes that are used by other classes.</p>
 
 
@@ -313,7 +353,7 @@ created by a canvas templates</p>
 
 
 <h2 id="pyfdl.Base" class="doc doc-heading">
-              <code class="highlight language-python">pyfdl.Base()</code>
+              <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">Base</span><span class="p">()</span></code>
 
 </h2>
 
@@ -321,7 +361,7 @@ created by a canvas templates</p>
     <div class="doc doc-contents first">
 
 
-      <p>Base class not to be instanced directly.</p>
+        <p>Base class not to be instanced directly.</p>
 
 
 <table class="field-list">
@@ -381,7 +421,15 @@ subclasses of <a href="./#pyfdl.Base">Base</a></p>
 
 
 
+
+
+
+
+
+
+
   <div class="doc doc-children">
+
 
 
 
@@ -395,14 +443,15 @@ subclasses of <a href="./#pyfdl.Base">Base</a></p>
 
 
 <h3 id="pyfdl.Base.apply_defaults" class="doc doc-heading">
-            <code class="highlight language-python">apply_defaults()</code>
+            <code class="highlight language-python"><span class="n">apply_defaults</span><span class="p">()</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-      <p>Applies default values defined in the <code>defaults</code> attribute to attributes that are <code>None</code></p>
+        <p>Applies default values defined in the <code>defaults</code> attribute to attributes that are <code>None</code></p>
+
 
     </div>
 
@@ -412,14 +461,14 @@ subclasses of <a href="./#pyfdl.Base">Base</a></p>
 
 
 <h3 id="pyfdl.Base.check_required" class="doc doc-heading">
-            <code class="highlight language-python">check_required()</code>
+            <code class="highlight language-python"><span class="n">check_required</span><span class="p">()</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-      <p>Check that required attributes contain values.
+        <p>Check that required attributes contain values.
 Checks linked attributes like: "effective_dimensions.effective_anchor_point" where
 "effective_anchor_point" is required if "effective_dimensions" is set</p>
 
@@ -435,7 +484,7 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
       <td class="field-body">
         <ul class="first simple">
             <li>
-                  <code>list</code>
+                  <code><span title="list">list</span></code>
               –
               <div class="doc-md-description">
                 <p>a list of missing attributes</p>
@@ -446,6 +495,7 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -454,7 +504,7 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
 
 
 <h3 id="pyfdl.Base.from_dict" class="doc doc-heading">
-            <code class="highlight language-python">from_dict(raw)</code>
+            <code class="highlight language-python"><span class="n">from_dict</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
@@ -465,7 +515,7 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
 
     <div class="doc doc-contents ">
 
-      <p>Create instances of classes from a provided dict.</p>
+        <p>Create instances of classes from a provided dict.</p>
 
 
 <table class="field-list">
@@ -480,7 +530,7 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
         <ul class="first simple">
             <li>
               <b><code>raw</code></b>
-                  (<code>dict</code>)
+                  (<code><span title="dict">dict</span></code>)
               –
               <div class="doc-md-description">
                 <p>dictionary to convert to supported classes</p>
@@ -514,6 +564,7 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -522,14 +573,14 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
 
 
 <h3 id="pyfdl.Base.to_dict" class="doc doc-heading">
-            <code class="highlight language-python">to_dict()</code>
+            <code class="highlight language-python"><span class="n">to_dict</span><span class="p">()</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-      <p>Produce a dictionary representation of the current object along with all sub objects.</p>
+        <p>Produce a dictionary representation of the current object along with all sub objects.</p>
 
 
 <table class="field-list">
@@ -543,7 +594,7 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
       <td class="field-body">
         <ul class="first simple">
             <li>
-                  <code><a class="autorefs autorefs-internal" title="pyfdl.errors.FDLError" href="../errors/#pyfdl.FDLError">FDLError</a></code>
+                  <code><a class="autorefs autorefs-internal" title="pyfdl.FDLError (pyfdl.errors.FDLError)" href="../errors/#pyfdl.FDLError">FDLError</a></code>
               –
               <div class="doc-md-description">
                 <p>if required keys are missing</p>
@@ -566,7 +617,7 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
       <td class="field-body">
         <ul class="first simple">
             <li>
-                  <code>dict</code>
+                  <code><span title="dict">dict</span></code>
               –
               <div class="doc-md-description">
                 <p>representation of object</p>
@@ -577,6 +628,7 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -594,7 +646,7 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
 
 
 <h2 id="pyfdl.TypedCollection" class="doc doc-heading">
-              <code class="highlight language-python">pyfdl.TypedCollection(cls)</code>
+              <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">TypedCollection</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span></code>
 
 </h2>
 
@@ -602,7 +654,7 @@ Checks linked attributes like: "effective_dimensions.effective_anchor_point" whe
     <div class="doc doc-contents first">
 
 
-      <p>Collection only accepting items of a given class.
+        <p>Collection only accepting items of a given class.
 In addition, a strict control of unique id's is enforced.</p>
 
 
@@ -632,7 +684,15 @@ In addition, a strict control of unique id's is enforced.</p>
 
 
 
+
+
+
+
+
+
+
   <div class="doc doc-children">
+
 
 
 
@@ -646,14 +706,14 @@ In addition, a strict control of unique id's is enforced.</p>
 
 
 <h3 id="pyfdl.TypedCollection.add" class="doc doc-heading">
-            <code class="highlight language-python">add(item)</code>
+            <code class="highlight language-python"><span class="n">add</span><span class="p">(</span><span class="n">item</span><span class="p">)</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-      <p>Add an item to the collection.
+        <p>Add an item to the collection.
  All items added to a collection get associated to the collection by passing itself
  as parent</p>
 
@@ -693,7 +753,7 @@ In addition, a strict control of unique id's is enforced.</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-                  <code><a class="autorefs autorefs-internal" title="pyfdl.errors.FDLError" href="../errors/#pyfdl.FDLError">FDLError</a></code>
+                  <code><a class="autorefs autorefs-internal" title="pyfdl.FDLError (pyfdl.errors.FDLError)" href="../errors/#pyfdl.FDLError">FDLError</a></code>
               –
               <div class="doc-md-description">
                 <p>for missing id or if a duplicate id is detected</p>
@@ -704,6 +764,7 @@ In addition, a strict control of unique id's is enforced.</p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -712,14 +773,14 @@ In addition, a strict control of unique id's is enforced.</p>
 
 
 <h3 id="pyfdl.TypedCollection.get" class="doc doc-heading">
-            <code class="highlight language-python">get(item_id)</code>
+            <code class="highlight language-python"><span class="n">get</span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-      <p>Get an item in the collection</p>
+        <p>Get an item in the collection</p>
 
 
 <table class="field-list">
@@ -734,7 +795,7 @@ In addition, a strict control of unique id's is enforced.</p>
         <ul class="first simple">
             <li>
               <b><code>item_id</code></b>
-                  (<code>str</code>)
+                  (<code><span title="str">str</span></code>)
               –
               <div class="doc-md-description">
                 <p>id of item you'd like to get</p>
@@ -768,6 +829,7 @@ In addition, a strict control of unique id's is enforced.</p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -776,14 +838,14 @@ In addition, a strict control of unique id's is enforced.</p>
 
 
 <h3 id="pyfdl.TypedCollection.remove" class="doc doc-heading">
-            <code class="highlight language-python">remove(item_id)</code>
+            <code class="highlight language-python"><span class="n">remove</span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-      <p>Remove an item in the collection if found</p>
+        <p>Remove an item in the collection if found</p>
 
 
 <table class="field-list">
@@ -798,7 +860,7 @@ In addition, a strict control of unique id's is enforced.</p>
         <ul class="first simple">
             <li>
               <b><code>item_id</code></b>
-                  (<code>str</code>)
+                  (<code><span title="str">str</span></code>)
               –
               <div class="doc-md-description">
                 <p>id of item to be removed</p>
@@ -809,6 +871,7 @@ In addition, a strict control of unique id's is enforced.</p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -826,17 +889,17 @@ In addition, a strict control of unique id's is enforced.</p>
 
 
 <h2 id="pyfdl.Dimensions" class="doc doc-heading">
-              <code class="highlight language-python">pyfdl.Dimensions(width=None, height=None, dtype=float)</code>
+              <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">Dimensions</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents first">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.common.Base" href="#pyfdl.Base">Base</a></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.Base() (pyfdl.common.Base)" href="#pyfdl.Base">Base</a></code></p>
 
 
-      <p>Dimensions may be either <code>ints</code> or <code>floats</code>. You may pass the desired data type at instantiation.
+        <p>Dimensions may be either <code>ints</code> or <code>floats</code>. You may pass the desired data type at instantiation.
 However, the objects using the dimensions will set the required type for you when they are passed
 to them</p>
 
@@ -853,7 +916,7 @@ to them</p>
         <ul class="first simple">
             <li>
               <b><code>width</code></b>
-                  (<code><span title="typing.Optional">Optional</span>[<span title="typing.Union">Union</span>[int, float]]</code>, default:
+                  (<code><span title="typing.Optional">Optional</span>[<span title="typing.Union">Union</span>[<span title="int">int</span>, <span title="float">float</span>]]</code>, default:
                       <code>None</code>
 )
               –
@@ -863,7 +926,7 @@ to them</p>
             </li>
             <li>
               <b><code>height</code></b>
-                  (<code><span title="typing.Optional">Optional</span>[<span title="typing.Union">Union</span>[int, float]]</code>, default:
+                  (<code><span title="typing.Optional">Optional</span>[<span title="typing.Union">Union</span>[<span title="int">int</span>, <span title="float">float</span>]]</code>, default:
                       <code>None</code>
 )
               –
@@ -873,8 +936,8 @@ to them</p>
             </li>
             <li>
               <b><code>dtype</code></b>
-                  (<code><span title="typing.Optional">Optional</span>[<span title="typing.Union">Union</span>[int, float]]</code>, default:
-                      <code>float</code>
+                  (<code><span title="typing.Optional">Optional</span>[<span title="typing.Union">Union</span>[<span title="int">int</span>, <span title="float">float</span>]]</code>, default:
+                      <code><span title="float">float</span></code>
 )
               –
               <div class="doc-md-description">
@@ -889,7 +952,15 @@ to them</p>
 
 
 
+
+
+
+
+
+
+
   <div class="doc doc-children">
+
 
 
 
@@ -903,14 +974,14 @@ to them</p>
 
 
 <h3 id="pyfdl.Dimensions.copy" class="doc doc-heading">
-            <code class="highlight language-python">copy()</code>
+            <code class="highlight language-python"><span class="n">copy</span><span class="p">()</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-      <p>Create a copy of these dimensions</p>
+        <p>Create a copy of these dimensions</p>
 
 
 <table class="field-list">
@@ -924,7 +995,7 @@ to them</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-<b><code>copy</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.common.Dimensions" href="#pyfdl.Dimensions">Dimensions</a></code>
+<b><code>copy</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.Dimensions(width=None, height=None, dtype=float) (pyfdl.common.Dimensions)" href="#pyfdl.Dimensions">Dimensions</a></code>
 )              –
               <div class="doc-md-description">
                 <p>of these dimensions</p>
@@ -935,6 +1006,7 @@ to them</p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -943,14 +1015,14 @@ to them</p>
 
 
 <h3 id="pyfdl.Dimensions.scale_by" class="doc doc-heading">
-            <code class="highlight language-python">scale_by(factor)</code>
+            <code class="highlight language-python"><span class="n">scale_by</span><span class="p">(</span><span class="n">factor</span><span class="p">)</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-      <p>Scale the dimensions by the provider factor</p>
+        <p>Scale the dimensions by the provider factor</p>
 
 
 <table class="field-list">
@@ -965,7 +1037,7 @@ to them</p>
         <ul class="first simple">
             <li>
               <b><code>factor</code></b>
-                  (<code>float</code>)
+                  (<code><span title="float">float</span></code>)
               –
               <div class="doc-md-description">
                 
@@ -976,6 +1048,7 @@ to them</p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
@@ -993,17 +1066,17 @@ to them</p>
 
 
 <h2 id="pyfdl.Point" class="doc doc-heading">
-              <code class="highlight language-python">pyfdl.Point(x=None, y=None)</code>
+              <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents first">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.common.Base" href="#pyfdl.Base">Base</a></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.Base() (pyfdl.common.Base)" href="#pyfdl.Base">Base</a></code></p>
 
 
-      <p>Point properly formatted</p>
+        <p>Point properly formatted</p>
 
 
 <table class="field-list">
@@ -1018,7 +1091,7 @@ to them</p>
         <ul class="first simple">
             <li>
               <b><code>x</code></b>
-                  (<code><span title="typing.Optional">Optional</span>[float]</code>, default:
+                  (<code><span title="typing.Optional">Optional</span>[<span title="float">float</span>]</code>, default:
                       <code>None</code>
 )
               –
@@ -1028,7 +1101,7 @@ to them</p>
             </li>
             <li>
               <b><code>y</code></b>
-                  (<code><span title="typing.Optional">Optional</span>[float]</code>, default:
+                  (<code><span title="typing.Optional">Optional</span>[<span title="float">float</span>]</code>, default:
                       <code>None</code>
 )
               –
@@ -1044,7 +1117,15 @@ to them</p>
 
 
 
+
+
+
+
+
+
+
   <div class="doc doc-children">
+
 
 
 
@@ -1067,17 +1148,17 @@ to them</p>
 
 
 <h2 id="pyfdl.RoundStrategy" class="doc doc-heading">
-              <code class="highlight language-python">pyfdl.RoundStrategy(even=None, mode=None)</code>
+              <code class="highlight language-python"><span class="n">pyfdl</span><span class="o">.</span><span class="n">RoundStrategy</span><span class="p">(</span><span class="n">even</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents first">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.common.Base" href="#pyfdl.Base">Base</a></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="pyfdl.Base() (pyfdl.common.Base)" href="#pyfdl.Base">Base</a></code></p>
 
 
-      <p>Describes how to handle rounding canvas dimensions when applying a
+        <p>Describes how to handle rounding canvas dimensions when applying a
 <a href="../canvas_template/#pyfdl.CanvasTemplate">CanvasTemplate</a>.</p>
 
 
@@ -1093,7 +1174,7 @@ to them</p>
         <ul class="first simple">
             <li>
               <b><code>even</code></b>
-                  (<code><span title="typing.Optional">Optional</span>[str]</code>, default:
+                  (<code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>, default:
                       <code>None</code>
 )
               –
@@ -1104,7 +1185,7 @@ to them</p>
             </li>
             <li>
               <b><code>mode</code></b>
-                  (<code><span title="typing.Optional">Optional</span>[str]</code>, default:
+                  (<code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>, default:
                       <code>None</code>
 )
               –
@@ -1131,7 +1212,7 @@ to them</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-                  <code><a class="autorefs autorefs-internal" title="pyfdl.errors.FDLError" href="../errors/#pyfdl.FDLError">FDLError</a></code>
+                  <code><a class="autorefs autorefs-internal" title="pyfdl.FDLError (pyfdl.errors.FDLError)" href="../errors/#pyfdl.FDLError">FDLError</a></code>
               –
               <div class="doc-md-description">
                 <p>if you provide a value other than the ones listed above</p>
@@ -1145,7 +1226,15 @@ to them</p>
 
 
 
+
+
+
+
+
+
+
   <div class="doc doc-children">
+
 
 
 
@@ -1159,14 +1248,14 @@ to them</p>
 
 
 <h3 id="pyfdl.RoundStrategy.round_dimensions" class="doc doc-heading">
-            <code class="highlight language-python">round_dimensions(dimensions)</code>
+            <code class="highlight language-python"><span class="n">round_dimensions</span><span class="p">(</span><span class="n">dimensions</span><span class="p">)</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-      <p>Round the provided dimensions based on the rules defined in this object</p>
+        <p>Round the provided dimensions based on the rules defined in this object</p>
 
 
 <table class="field-list">
@@ -1181,7 +1270,7 @@ to them</p>
         <ul class="first simple">
             <li>
               <b><code>dimensions</code></b>
-                  (<code><a class="autorefs autorefs-internal" title="pyfdl.common.Dimensions" href="#pyfdl.Dimensions">Dimensions</a></code>)
+                  (<code><a class="autorefs autorefs-internal" title="pyfdl.Dimensions(width=None, height=None, dtype=float) (pyfdl.common.Dimensions)" href="#pyfdl.Dimensions">Dimensions</a></code>)
               –
               <div class="doc-md-description">
                 
@@ -1204,7 +1293,7 @@ to them</p>
       <td class="field-body">
         <ul class="first simple">
             <li>
-<b><code>dimensions</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.common.Dimensions" href="#pyfdl.Dimensions">Dimensions</a></code>
+<b><code>dimensions</code></b>(                  <code><a class="autorefs autorefs-internal" title="pyfdl.Dimensions(width=None, height=None, dtype=float) (pyfdl.common.Dimensions)" href="#pyfdl.Dimensions">Dimensions</a></code>
 )              –
               <div class="doc-md-description">
                 <p>rounded based on rules</p>
@@ -1215,6 +1304,7 @@ to them</p>
     </tr>
   </tbody>
 </table>
+
     </div>
 
 </div>
