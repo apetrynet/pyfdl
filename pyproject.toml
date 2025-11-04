@@ -1,20 +1,13 @@
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
 [project]
 name = "pyfdl"
-authors = [
-  { name="Daniel Flehner Heen", email="flehnerheener@gmail.com" },
-]
-description = "Toolkit for parsing and producing ASC FDL files"
 dynamic = ["version"]
-license = {file="LICENSE"}
+description = "Toolkit for parsing and producing ASC FDL files"
 readme = "README.md"
-requires-python = ">=3.9"
-dependencies = [
-    "jsonschema"
+authors = [
+    { name = "Daniel Flehner Heen", email = "flehnerheener@gmail.com" }
 ]
+license = {file="LICENSE"}
+requires-python = ">=3.12"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Development Status :: 4 - Beta",
@@ -28,49 +21,39 @@ classifiers = [
     "Natural Language :: English"
 ]
 keywords = ["film", "tv", "editing", "editorial", "fdl", "asc", "conform", "reformat", "vfx"]
+dependencies = [
+    "jsonschema>=4.25.1",
+]
+
+#[project.scripts]
+#pyfdl = "pyfdl:main"
 
 [project.urls]
 "Source" = "https://github.com/apetrynet/pyfdl"
 "Issues" = "https://github.com/apetrynet/pyfdl/issues"
 "Documentation" = "https://apetrynet.github.io/pyfdl"
 
+#[tool.uv]
+#package = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [tool.hatch.version]
 path = "src/pyfdl/__init__.py"
 
-[tool.hatch.envs.hatch-test]
-dependencies = [
-    "pip",
-    "pytest",
-    "mktestdocs",
-    "pyyaml"
+[dependency-groups]
+dev = [
+    "mktestdocs>=0.2.5",
+    "pip>=25.3",
+    "pytest>=8.4.2",
+    "pyyaml>=6.0.3",
 ]
-
-[tool.hatch.envs.test]
-dependencies = [
-    "pytest",
-    "mktestdocs",
-    "pyyaml"
+docs = [
+    "mkdocs>=1.6.1",
+    "mkdocs-autorefs>=1.4.3",
+    "mkdocstrings>=0.30.1",
+    "mkdocstrings-python>=1.18.2",
+    "mktestdocs>=0.2.5",
 ]
-
-[tool.hatch.envs.test.scripts]
-test = "pytest -v ."
-
-[tool.hatch.envs.docs]
-dependencies = [
-    "mkdocs",
-    "mkdocstrings",
-    "mkdocstrings-python",
-    "mkdocs-autorefs"
-]
-
-[tool.ruff.lint]
-ignore = ["RET504", "RUF012", "FA100", "TID252", "FBT001", "FBT002"]
-
-[tool.hatch.envs.docs.scripts]
-build = "mkdocs build --clean --strict"
-serve = "mkdocs serve --dev-addr localhost:8000"
-
-[tool.hatch.build.targets.sdist]
-# Ensure the sdist includes a setup.py for older pip versions
-support-legacy = true
-exclude = [".github"]
