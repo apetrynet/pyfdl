@@ -3,30 +3,11 @@ import uuid
 from typing import Any, Optional, Union
 
 from pyfdl.errors import FDLError
+from pyfdl.rounding import get_rounding_strategy
 
 FDL_SCHEMA_MAJOR = 1
 FDL_SCHEMA_MINOR = 0
 FDL_SCHEMA_VERSION = {"major": FDL_SCHEMA_MAJOR, "minor": FDL_SCHEMA_MINOR}
-
-_ROUNDING = None
-NO_ROUNDING = {}
-DEFAULT_ROUNDING_STRATEGY = NO_ROUNDING
-
-
-def set_rounding_strategy(rules: Union[dict, None]):
-    global _ROUNDING  # noqa
-
-    if rules is None:
-        rules = NO_ROUNDING
-
-    _ROUNDING = RoundStrategy(**rules)
-
-
-def rounding_strategy() -> "RoundStrategy":
-    if _ROUNDING is None:
-        set_rounding_strategy(DEFAULT_ROUNDING_STRATEGY)
-
-    return _ROUNDING
 
 
 class Base:
@@ -60,7 +41,7 @@ class Base:
 
     @property
     def rounding_strategy(self) -> "RoundStrategy":
-        return rounding_strategy()
+        return get_rounding_strategy()
 
     def apply_defaults(self) -> None:
         """Applies default values defined in the `defaults` attribute to attributes that are `None`"""
@@ -449,6 +430,10 @@ class RoundStrategy(Base):
 
         self._mode = value
 
+    @property
+    def rules(self) -> dict:
+        return dict(even=self.even, mode=self.mode)
+
     def round_dimensions(self, dimensions: Dimensions) -> Dimensions:
         """
         Round the provided dimensions based on the rules defined in this object
@@ -482,5 +467,12 @@ class RoundStrategy(Base):
 
         return self.even == other.even and self.mode == other.mode
 
+    def __str__(self):
+        return self.__repr__()
+
     def __repr__(self):
         return f'{self.__class__.__name__}(even="{self.even}", mode="{self.mode}")'
+
+
+NO_ROUNDING = RoundStrategy(even=None, mode=None)
+DEFAULT_ROUNDING_STRATEGY = NO_ROUNDING

@@ -1,6 +1,7 @@
 from typing import Optional, TypeVar, Union
 
-from .common import Base, Dimensions, Point, rounding_strategy
+from .common import Base, Dimensions, Point
+from .rounding import get_rounding_strategy
 
 Canvas = TypeVar("Canvas")
 FramingIntent = TypeVar("FramingIntent")
@@ -97,7 +98,7 @@ class FramingDecision(Base):
 
         if framing_intent.protection > 0:
             protection_dimensions = Dimensions(width=width, height=height)
-            framing_decision.protection_dimensions = rounding_strategy().round_dimensions(protection_dimensions)
+            framing_decision.protection_dimensions = get_rounding_strategy().round_dimensions(protection_dimensions)
             framing_decision.adjust_protection_anchor_point(canvas)
 
         # We use the protection dimensions as base for dimensions if they're set
@@ -108,7 +109,7 @@ class FramingDecision(Base):
         dimensions = Dimensions(
             width=width * (1 - framing_intent.protection), height=height * (1 - framing_intent.protection)
         )
-        framing_decision.dimensions = rounding_strategy().round_dimensions(dimensions)
+        framing_decision.dimensions = get_rounding_strategy().round_dimensions(dimensions)
         framing_decision.adjust_anchor_point(canvas)
 
         return framing_decision
