@@ -23,6 +23,7 @@ classifiers = [
 keywords = ["film", "tv", "editing", "editorial", "fdl", "asc", "conform", "reformat", "vfx"]
 dependencies = [
     "jsonschema>=4.25.1",
+    "ruff>=0.14.4",
 ]
 
 #[project.scripts]

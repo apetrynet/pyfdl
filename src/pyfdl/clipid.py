@@ -99,5 +99,5 @@ class ClipID(Base):
             f'clip_name="{self.clip_name}"'
             f', file="{self.file}"' if self._file is not None else ""
             f', sequence={self.sequence}' if self.sequence is not None else ""
-            f")"
+            ")"
         )
