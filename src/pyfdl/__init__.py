@@ -12,6 +12,7 @@ from .common import (
     RoundStrategy,
     TypedCollection,
 )
+from .clipid import ClipID
 from .context import Context
 from .errors import FDLError, FDLValidationError
 from .fdl import FDL
@@ -26,6 +27,7 @@ __all__ = [
     "Base",
     "Canvas",
     "CanvasTemplate",
+    "ClipID",
     "Context",
     "DEFAULT_ROUNDING_STRATEGY",
     "Dimensions",
