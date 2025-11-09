@@ -5,7 +5,7 @@ from typing import Any, Optional, Union
 from pyfdl.errors import FDLError
 from pyfdl.rounding import get_rounding_strategy
 
-FDL_SCHEMA_MAJOR = 1
+FDL_SCHEMA_MAJOR = 2
 FDL_SCHEMA_MINOR = 0
 FDL_SCHEMA_VERSION = {"major": FDL_SCHEMA_MAJOR, "minor": FDL_SCHEMA_MINOR}
 
