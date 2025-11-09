@@ -5,7 +5,13 @@ from pyfdl.errors import FDLError
 
 
 class FileSequence(Base):
-    def __init__(self, value: str, idx: str, min_: int, max_: str):
+    def __init__(
+            self,
+            value: Optional[str] = None,
+            idx: Optional[str] = None,
+            min_: Optional[int] = None,
+            max_: Optional[int] = None
+    ):
         super().__init__()
         self._min = 0
         self._max = 0
@@ -25,7 +31,7 @@ class FileSequence(Base):
 
     @min.setter
     def min(self, value: int):
-        if value < 0:
+        if value is not None and value < 0:
             raise FDLError("Sequences do not allow negative values")
 
         self._min = value
@@ -36,7 +42,7 @@ class FileSequence(Base):
 
     @max.setter
     def max(self, value: int):
-        if value < 0:
+        if value is not None and value < 0:
             raise FDLError("Sequences do not allow negative values")
 
         self._max = value
@@ -46,7 +52,13 @@ class FileSequence(Base):
 
 
 class ClipID(Base):
-    def __init__(self, clip_name: str, *, file: Optional[str] = None, sequence: Optional[FileSequence] = None):
+    def __init__(
+            self,
+            clip_name: Optional[str] = None,
+            *,
+            file: Optional[str] = None,
+            sequence: Optional[FileSequence] = None
+    ):
         super().__init__()
         self._file = None
         self._sequence = None

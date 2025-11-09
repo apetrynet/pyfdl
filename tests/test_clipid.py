@@ -1,5 +1,6 @@
 import pytest
 
+import pyfdl
 from pyfdl.errors import FDLError
 from pyfdl.clipid import ClipID, FileSequence
 
@@ -57,3 +58,48 @@ def test_clip_id_raise_on_two_identifiers():
         cid2.file = "A002_C307_0523JT.mov"
 
     assert "A sequence is already provided. " in str(err)
+
+
+def test_deserializing_clip_id():
+    fdl = pyfdl.read_from_string(
+        '{'
+        '"uuid": "4ff5d6b1-aaf2-48fd-a947-2d61e45d676a",'
+        '"version": {"major": 2, "minor": 0},'
+        '"fdl_creator": "PyFDL",'
+        '"framing_intents": [],'
+        '"contexts": ['
+        '{'
+        '"label": "test_clipid",'
+        '"clip_id": {"clip_name": "ABX_001_110_911", "file": "ABX_001_110_911.mov"},'
+        '"canvases": []'
+        '}'
+        '],'
+        '"canvas_templates": []'
+        '}'
+     )
+    assert isinstance(fdl.contexts[0].clip_id, ClipID)
+
+
+def test_deserializing_file_sequence():
+    fdl = pyfdl.read_from_string(
+        '{'
+        '"uuid": "4ff5d6b1-aaf2-48fd-a947-2d61e45d676a",'
+        '"version": {"major": 2, "minor": 0},'
+        '"fdl_creator": "PyFDL",'
+        '"framing_intents": [],'
+        '"contexts": ['
+        '{'
+        '"label": "test_clipid",'
+        '"clip_id": {'
+        '"clip_name": "ABX_001_110_911", '
+        '"sequence": {"value": "ABX_001_110_911.####.exr", "idx": "#", "min": 0, "max": 100}'
+        '},'
+        '"canvases": []'
+        '}'
+        '],'
+        '"canvas_templates": []'
+        '}'
+     )
+
+    clip_id = fdl.contexts[0].clip_id
+    assert isinstance(clip_id.sequence, FileSequence)
