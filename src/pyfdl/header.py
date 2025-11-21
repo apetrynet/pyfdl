@@ -1,33 +1,13 @@
-from typing import Optional
+import uuid
+from typing import Union
 
-from pyfdl import FDL_SCHEMA_VERSION, Base
+from pydantic import BaseModel, Field
+
+from pyfdl import FDL_SCHEMA_VERSION
 
 
-class Header(Base):
-    def __init__(
-        self,
-        uuid_: Optional[str] = None,
-        version: Optional[dict] = None,
-        fdl_creator: Optional[str] = None,
-        default_framing_intent: Optional[str] = None,
-    ):
-        super().__init__()
-        self.attributes = ["uuid", "version", "fdl_creator", "default_framing_intent"]
-        self.kwarg_map = {"uuid": "uuid_"}
-        self.required = ["uuid", "version"]
-        self.defaults = {"uuid": Base.generate_uuid, "fdl_creator": "PyFDL", "version": FDL_SCHEMA_VERSION}
-
-        self.uuid = uuid_
-        self.version = version
-        self.fdl_creator = fdl_creator
-        self.default_framing_intent = default_framing_intent
-
-    def __repr__(self):
-        return (
-            f"{self.__class__.__name__}("
-            f'uuid="{self.uuid}", '
-            f"version={self.version}, "
-            f'fdl_creator="{self.fdl_creator}", '
-            f'default_framing_intent="{self.default_framing_intent}"'
-            f")"
-        )
+class Header(BaseModel):
+    uuid: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    version: dict[str, int] = Field(default=FDL_SCHEMA_VERSION)
+    fdl_creator: str = Field(default="PyFDL")
+    default_framing_intent: Union[str, None] = None

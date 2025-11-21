@@ -1,103 +1,54 @@
-from typing import Optional, Union
+from typing import Annotated, Union
 
-from pyfdl import Base
-from pyfdl.errors import FDLError
-
-
-class FileSequence(Base):
-    def __init__(
-            self,
-            value: Optional[str] = None,
-            idx: Optional[str] = None,
-            min_: Optional[int] = None,
-            max_: Optional[int] = None
-    ):
-        super().__init__()
-        self._min = 0
-        self._max = 0
-
-        self.attributes = ["value", "idx", "min", "max"]
-        self.required = ["value", "idx", "min", "max"]
-        self.kwarg_map = {"min": "min_", "max": "max_"}
-
-        self.value = value
-        self.idx = idx
-        self.min = min_
-        self.max = max_
-
-    @property
-    def min(self) -> int:
-        return self._min
-
-    @min.setter
-    def min(self, value: int):
-        if value is not None and value < 0:
-            raise FDLError("Sequences do not allow negative values")
-
-        self._min = value
-
-    @property
-    def max(self) -> int:
-        return self._max
-
-    @max.setter
-    def max(self, value: int):
-        if value is not None and value < 0:
-            raise FDLError("Sequences do not allow negative values")
-
-        self._max = value
-
-    def __repr__(self):
-        return self.to_dict()
+from pydantic import BaseModel, Field, field_validator, model_serializer
 
 
-class ClipID(Base):
-    def __init__(
-            self,
-            clip_name: Optional[str] = None,
-            *,
-            file: Optional[str] = None,
-            sequence: Optional[FileSequence] = None
-    ):
-        super().__init__()
-        self._file = None
-        self._sequence = None
+class FileSequence(BaseModel):
+    value: str
+    idx: Annotated[str, Field(max_length=1)]
+    min_: Annotated[int, Field(alias="min")]
+    max_: Annotated[int, Field(alias="max")]
 
-        self.attributes = ["clip_name", "file", "sequence"]
-        self.object_map = {"sequence": FileSequence}
-        self.required = ["clip_name"]
 
-        self.clip_name = clip_name
-        self.file = file
-        self.sequence = sequence
+class ClipID(BaseModel):
+    clip_name: str
+    file: Union[str, None] = None
+    sequence: Union[FileSequence, None] = None
 
-    @property
-    def file(self) -> Union[str, None]:
-        return self._file
+    @field_validator("file", mode="after")
+    @classmethod
+    def check_for_sequence(cls, value, info):
+        if info.data.get("sequence") is not None:
+            raise ValueError(
+                "A sequence is already provided. You may only have file OR sequence as an identifier"
+            )
 
-    @file.setter
-    def file(self, file: Union[str, None]):
-        if file is not None and self.sequence is not None:
-            raise FDLError("A sequence is already provided. You may only have file OR sequence as an identifier")
+        return value
 
-        self._file = file
+    @field_validator("sequence", mode="after")
+    @classmethod
+    def check_for_file(cls, value, info):
+        if info.data.get("file") is not None:
+            raise ValueError(
+                "A file is already provided. You may only have file OR sequence as an identifier"
+            )
 
-    @property
-    def sequence(self) -> Union[FileSequence, None]:
-        return self._sequence
+        return value
 
-    @sequence.setter
-    def sequence(self, sequence: Union[FileSequence, None]):
-        if sequence is not None and self.file is not None:
-            raise FDLError("A file is already provided. You may only have file OR sequence as an identifier")
+    @model_serializer
+    def _validate(self) -> dict:
+        result = {
+            "clip_name": self.clip_name
+        }
+        if self.file is not None:
+            result["file"] = self.file
 
-        self._sequence = sequence
+        if self.sequence is not None:
+            result["sequence"] = self.sequence.model_dump()
 
-    def __repr__(self):
-        return (
-            f"{self.__class__.__name__}("
-            f'clip_name="{self.clip_name}"'
-            f', file="{self.file}"' if self._file is not None else ""
-            f', sequence={self.sequence}' if self.sequence is not None else ""
-            ")"
-        )
+        if self.file and self.sequence:
+            raise ValueError(
+                "Both file and sequence attributes are provided, you may only use one"
+            )
+
+        return result

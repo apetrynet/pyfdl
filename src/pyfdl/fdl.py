@@ -1,52 +1,46 @@
 import json
-from pathlib import Path
-from typing import Optional
-
 import jsonschema
+from pathlib import Path
+from typing import Union, TypeVar, Any
 
-from .canvas import Canvas
-from .canvas_template import CanvasTemplate
-from .common import FDL_SCHEMA_MAJOR, FDL_SCHEMA_MINOR, FDL_SCHEMA_VERSION, Base, TypedCollection
-from .context import Context
-from .errors import FDLError, FDLValidationError
-from .framing_intent import FramingIntent
-from .header import Header
+import pydantic
+from pydantic import field_serializer, PrivateAttr, model_serializer
+
+from pyfdl import FDLValidationError
+from pyfdl.common import FDL_SCHEMA_VERSION, FDL_SCHEMA_MINOR, TypedCollection
+from pyfdl.canvastemplate import CanvasTemplate
+from pyfdl.framingintent import FramingIntent
+from pyfdl.canvas import Canvas
+from pyfdl.context import Context
+from pyfdl.header import Header
 
 
-class FDL(Base):
-    def __init__(
-        self,
-        uuid_: Optional[str] = None,
-        version: Optional[dict] = None,
-        fdl_creator: Optional[str] = None,
-        default_framing_intent: Optional[str] = None,
-        framing_intents: Optional[TypedCollection] = None,
-        contexts: Optional[TypedCollection] = None,
-        canvas_templates: Optional[TypedCollection] = None,
-    ):
-        super().__init__()
-        self.attributes = [
-            "uuid",
-            "version",
-            "fdl_creator",
-            "default_framing_intent",
-            "framing_intents",
-            "contexts",
-            "canvas_templates",
-        ]
-        self.kwarg_map = {"uuid": "uuid_"}
-        self.required = ["uuid", "version"]
-        self.defaults = {"uuid": Base.generate_uuid, "fdl_creator": "PyFDL", "version": FDL_SCHEMA_VERSION}
-        self.object_map = {"framing_intents": FramingIntent, "contexts": Context, "canvas_templates": CanvasTemplate}
+class FDL(Header):
+    # uuid: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    # version: dict[str, int] = Field(default=FDL_SCHEMA_VERSION)
+    # fdl_creator: str = Field(default="PyFDL")
+    # default_framing_intent: Union[str, None] = None
+    framing_intents: TypedCollection[FramingIntent] = TypedCollection[FramingIntent]()
+    contexts: TypedCollection[Context] = TypedCollection[Context]()
+    canvas_templates: TypedCollection[CanvasTemplate] = TypedCollection[CanvasTemplate]()
 
-        self.uuid = uuid_
-        self.version = version
-        self.fdl_creator = fdl_creator
-        self.framing_intents = framing_intents or TypedCollection(FramingIntent)
-        self.default_framing_intent = default_framing_intent
-        self.contexts = contexts or TypedCollection(Context)
-        self.canvas_templates = canvas_templates or TypedCollection(CanvasTemplate)
-        self._schema = None
+    _schema: dict[str, Any] = PrivateAttr(default=None)
+
+    def load_schema(self) -> dict:
+        """Load a jsonschema based on the version in `Header` or default to current version
+        set in [base](common.md)
+
+        Returns:
+            schema:
+        """
+        major = self.version.get("major", FDL_SCHEMA_VERSION)
+        minor = self.version.get("minor", FDL_SCHEMA_MINOR)
+
+        schema_path = Path(__file__).parent.joinpath("schema", f"v{major}.{minor}", "ascfdl.schema.json")
+        with schema_path.open("rb") as fp:
+            schema = json.load(fp)
+
+        return schema
 
     def place_canvas_in_context(self, context_label: str, canvas: Canvas):
         """Place a canvas in a context. If no context with the provided label exist,
@@ -57,53 +51,28 @@ class FDL(Base):
             canvas: to be placed in context
         """
 
-        context = self.contexts.get(context_label)
+        context = self.contexts.get_by_id(context_label)
         if context is None:
             context = Context(label=context_label)
-            self.contexts.add(context)
+            self.contexts.append(context)
 
-        context.canvases.add(canvas)
+        context.canvases.append(canvas)
 
-    @property
-    def header(self) -> Header:
-        """
+    @field_serializer("default_framing_intent")
+    def _check_default_framing_intent(self, framing_intent_id: Union[str, None]) -> Union[str, None]:
+        if framing_intent_id is None:
+            return None
 
-        Returns:
-            Header: based on attributes
-        """
-        header = Header(
-            uuid_=self.uuid,
-            version=self.version,
-            fdl_creator=self.fdl_creator,
-            default_framing_intent=self.default_framing_intent,
-        )
+        if self.framing_intents.get_by_id(framing_intent_id) is None:
+            raise ValueError(
+                f'Default framing intent: "{framing_intent_id}" '
+                'is not found among registered framing intents'
+            )
 
-        return header
+        return framing_intent_id
 
-    @header.setter
-    def header(self, header: Header):
-        """
-
-        Args:
-            header: Header instance
-        """
-        # "Future-proof" setting of attributes in case Header expands its attributes
-        for attr in header.attributes:
-            setattr(self, attr, getattr(header, attr))
-
-    @property
-    def default_framing_intent(self) -> str:
-        return self._default_framing_intent
-
-    @default_framing_intent.setter
-    def default_framing_intent(self, framing_intent_id: str):
-        if framing_intent_id and framing_intent_id not in self.framing_intents:
-            msg = f'Default framing intent: "{framing_intent_id}" not found in ' f"registered framing intents."
-            raise FDLError(msg)
-
-        self._default_framing_intent = framing_intent_id
-
-    def validate(self):
+    # @model_serializer()
+    def _validate(self):
         """Validate the current state of the FDL.
          ID's and relationships between items are checked and values are
          validated against the json schema.
@@ -117,52 +86,41 @@ class FDL(Base):
         errors = []
 
         # Check internal relations
-        canvases = TypedCollection(Canvas)
+        canvases = TypedCollection[Canvas]()
         canvas_collections = [context.canvases for context in self.contexts]
 
         for canvas_collection in canvas_collections:
             for canvas in canvas_collection:
-                canvases.add(canvas)
+                canvases.append(canvas)
 
         for canvas in canvases:
-            if canvases.get(canvas.source_canvas_id) is None:
+            if canvases.get_by_id(canvas.source_canvas_id) is None:
                 errors.append(
-                    f"{canvas.source_canvas_id} (canvas.source_canvas_id) not found in " f"registered canvases"
+                    f'canvas.source_canvas_id: "{canvas.source_canvas_id}" not found among registered canvases'
                 )
+                # raise ValueError(
+                #     f'canvas.source_canvas_id: "{canvas.source_canvas_id}" not found among registered canvases'
+                # )
 
             for framing_decision in canvas.framing_decisions:
                 if framing_decision.framing_intent_id not in self.framing_intents:
-                    errors.append(  # noqa: PERF401
-                        f"{framing_decision}.framing_intent_id ({framing_decision.framing_intent_id}) "
-                        f"not found in registered framing intents"
+                    errors.append(
+                        f'framing_decision.framing_intent_id: "{framing_decision.framing_intent_id}" '
+                        "not found among registered framing intents"
                     )
+                    # raise ValueError(
+                    #     f'framing_decision.framing_intent_id: "{framing_decision.framing_intent_id}" '
+                    #     "not found among registered framing intents"
+                    # )
 
         # Check structure and values against json schema
-        v = jsonschema.validators.validator_for(self._schema)
-        validator = v(schema=self._schema, format_checker=v.FORMAT_CHECKER)
-        for error in validator.iter_errors(self.to_dict()):
-            errors.append(str(error))  # noqa: PERF401
+        json_v = jsonschema.validators.validator_for(self._schema)
+        validator = json_v(schema=self._schema, format_checker=json_v.FORMAT_CHECKER)
+        for error in validator.iter_errors(self.model_dump(by_alias=True, exclude_unset=True, exclude_none=True)):
+            errors.append(str(error))
+            # raise ValueError(str(error))
 
         if errors:
             nl = "\n"
             msg = f"Validation failed!\n" f"{f'{nl}'.join(errors)}"
             raise FDLValidationError(msg)
-
-    def load_schema(self) -> dict:
-        """Load a jsonschema based on the version in `Header` or default to current version
-        set in [base](common.md)
-
-        Returns:
-            schema:
-        """
-        major = self.version.get("major") if self.version else FDL_SCHEMA_MAJOR
-        minor = self.version.get("minor") if self.version else FDL_SCHEMA_MINOR
-
-        schema_path = Path(__file__).parent.joinpath("schema", f"v{major}.{minor}", "ascfdl.schema.json")
-        with schema_path.open("rb") as fp:
-            schema = json.load(fp)
-
-        return schema
-
-    def __repr__(self):
-        return repr(self.header)

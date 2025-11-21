@@ -1,99 +1,27 @@
-from typing import Optional, TypeVar, Union
+import uuid
+from typing import Union, Annotated, Self, TypeVar
 
-from .common import Base, Dimensions, Point, TypedCollection
-from .framing_decision import FramingDecision
-from .framing_intent import FramingIntent
+from pydantic import BaseModel, Field, field_validator, field_serializer
+
+from pyfdl.common import Dimensions, Point, TypedCollection
+from pyfdl.framingdecision import FramingDecision
+from pyfdl.framingintent import FramingIntent
+
 
 CanvasTemplate = TypeVar("CanvasTemplate")
 
 
-class Canvas(Base):
-    def __init__(
-        self,
-        label: Optional[str] = None,
-        id_: Optional[str] = None,
-        source_canvas_id: Optional[str] = None,
-        dimensions: Optional[Dimensions] = None,
-        effective_dimensions: Optional[Dimensions] = None,
-        effective_anchor_point: Optional[Point] = None,
-        photosite_dimensions: Optional[Dimensions] = None,
-        physical_dimensions: Optional[Dimensions] = None,
-        anamorphic_squeeze: Optional[float] = None,
-        framing_decisions: Optional[TypedCollection] = None,
-    ):
-        super().__init__()
-        self.attributes = [
-            "label",
-            "id",
-            "source_canvas_id",
-            "dimensions",
-            "effective_dimensions",
-            "effective_anchor_point",
-            "photosite_dimensions",
-            "physical_dimensions",
-            "anamorphic_squeeze",
-            "framing_decisions",
-        ]
-        self.kwarg_map = {"id": "id_"}
-        self.object_map = {
-            "dimensions": Dimensions,
-            "effective_dimensions": Dimensions,
-            "effective_anchor_point": Point,
-            "photosite_dimensions": Dimensions,
-            "physical_dimensions": Dimensions,
-            "framing_decisions": FramingDecision,
-        }
-        self.required = ["id", "source_canvas_id", "dimensions", "effective_dimensions.effective_anchor_point"]
-        self.defaults = {"source_canvas_id": "self.id", "anamorphic_squeeze": 1}
-
-        self.label = label
-        self.id = id_
-        self.source_canvas_id = source_canvas_id
-        self.dimensions = dimensions
-        self.effective_dimensions = effective_dimensions
-        self.effective_anchor_point = effective_anchor_point
-        self.photosite_dimensions = photosite_dimensions
-        self.physical_dimensions = physical_dimensions
-        self.anamorphic_squeeze = anamorphic_squeeze
-        self.framing_decisions = framing_decisions or TypedCollection(FramingDecision)
-
-    @property
-    def dimensions(self) -> Union[Dimensions, None]:
-        return self._dimensions
-
-    @dimensions.setter
-    def dimensions(self, dim: Union[Dimensions, None]):
-        self._dimensions = dim
-        if dim is not None:
-            self._dimensions.dtype = int
-
-    @property
-    def effective_dimensions(self) -> Union[Dimensions, None]:
-        return self._effective_dimensions
-
-    @effective_dimensions.setter
-    def effective_dimensions(self, dim: Union[Dimensions, None]):
-        self._effective_dimensions = dim
-        if dim is not None:
-            self._effective_dimensions.dtype = int
-
-    @property
-    def photosite_dimensions(self) -> Union[Dimensions, None]:
-        return self._photosite_dimensions
-
-    @photosite_dimensions.setter
-    def photosite_dimensions(self, dim: Union[Dimensions, None]):
-        self._photosite_dimensions = dim
-        if dim is not None:
-            self._photosite_dimensions.dtype = int
-
-    @property
-    def physical_dimensions(self) -> Union[Dimensions, None]:
-        return self._physical_dimensions
-
-    @physical_dimensions.setter
-    def physical_dimensions(self, dim: Union[Dimensions, None]):
-        self._physical_dimensions = dim
+class Canvas(BaseModel):
+    label: Union[str, None] = None
+    id: str
+    source_canvas_id: str   # TODO: make sure it exists
+    dimensions: Dimensions[int]
+    effective_dimensions: Union[Dimensions[int]] = None
+    effective_anchor_point: Union[Point[float]] = None
+    photosite_dimensions: Union[Dimensions[int]] = None
+    physical_dimensions: Union[Dimensions[float]] = None
+    anamorphic_squeeze: Annotated[float, Field(default=1)]
+    framing_decisions: TypedCollection[FramingDecision] = TypedCollection[FramingDecision]()
 
     def place_framing_intent(self, framing_intent: FramingIntent) -> str:
         """Create a new [FramingDecision](framing_decision.md#pyfdl.FramingDecision) based on the provided
@@ -116,26 +44,13 @@ class Canvas(Base):
 
         return framing_decision.id
 
-    def get_dimensions(self) -> tuple[Dimensions, Point]:
-        """Get the most relevant dimensions and anchor point for the canvas.
-        `effective_dimensions` and `effective_anchor_point` win over `dimensions`
-
-        Returns:
-            (dimensions, anchor_point):
-
-        """
-        if self.effective_dimensions is not None:
-            return self.effective_dimensions, self.effective_anchor_point
-
-        return self.dimensions, Point(x=0, y=0)
-
     @classmethod
     def from_canvas_template(
-        cls,
-        canvas_template: CanvasTemplate,
-        source_canvas: "Canvas",
-        source_framing_decision: Union[FramingDecision, int] = 0,
-    ) -> "Canvas":
+            cls,
+            canvas_template: CanvasTemplate,
+            source_canvas: Self,
+            source_framing_decision: Union[FramingDecision, int] = 0,
+    ) -> Self:
         """
         Create a new `Canvas` from the provided `source_canvas` and `framing_decision`
         based on a [CanvasTemplate](canvas_template.md#pyfdl.CanvasTemplate)
@@ -154,14 +69,14 @@ class Canvas(Base):
 
         canvas = Canvas(
             label=canvas_template.label,
-            id_=Base.generate_uuid().replace("-", ""),
+            id=str(uuid.uuid4()).replace("-", ""),
             source_canvas_id=source_canvas.id,
             anamorphic_squeeze=canvas_template.target_anamorphic_squeeze,
         )
 
         framing_decision = FramingDecision(
             label=source_framing_decision.label,
-            id_=f"{canvas.id}-{source_framing_decision.framing_intent_id}",
+            id=f"{canvas.id}-{source_framing_decision.framing_intent_id}",
             framing_intent_id=source_framing_decision.framing_intent_id,
         )
         canvas.framing_decisions.add(framing_decision)
@@ -192,7 +107,7 @@ class Canvas(Base):
                 continue
 
             source_type, dimension_source_attribute = transfer_key.split(".")
-            dimensions = getattr(source_map[source_type], dimension_source_attribute, dummy_dimensions).copy()
+            dimensions = getattr(source_map[source_type], dimension_source_attribute, dummy_dimensions).duplicate()
 
             if dimensions == dummy_dimensions:
                 # Source canvas/framing decision is missing this dimension. Let's move on
@@ -205,7 +120,7 @@ class Canvas(Base):
         # Make sure the canvas has dimensions
         if canvas.dimensions is None:
             preserve_source_type, preserve_source_attribute = preserve.split(".")
-            canvas.dimensions = getattr(dest_map[preserve_source_type], preserve_source_attribute).copy()
+            canvas.dimensions = getattr(dest_map[preserve_source_type], preserve_source_attribute).duplicate()
 
         # Round values according to rules defined in the template
         if canvas_template.round is not None:
@@ -241,5 +156,32 @@ class Canvas(Base):
             y=(self.dimensions.height - self.effective_dimensions.height) / 2,
         )
 
-    def __repr__(self):
-        return f'{self.__class__.__name__}(label="{self.label}", id="{self.id}")'
+    @field_validator("effective_anchor_point", mode="after")
+    @classmethod
+    def _check_effective_dimensions(cls, value, info) -> Point[float]:
+        if info.data.get("effective_dimensions") is not None:
+            if value is None:
+                raise ValueError(
+                    "effective_anchor_point must be provided when effective_dimensions is present"
+                )
+
+        return value
+
+    @field_serializer("effective_anchor_point")
+    def _check_effective_anchor_point(self, point: Point[float]) -> Union[Point[float], None]:
+        if self.effective_dimensions is None:
+            return None
+
+        if point is None:
+            raise ValueError("Effective anchor point is required when effective dimensions are provided")
+
+        return point
+
+    def __eq__(self, other) -> bool:
+        try:
+            return self.id == other.id
+        except AttributeError:
+            return self.id == other
+
+    def __hash__(self):
+        return hash((self.id,))

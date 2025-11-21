@@ -1,25 +1,51 @@
-from typing import TypeVar
+import math
+from typing import TypeVar, Annotated, Literal
 
-RoundStrategy = TypeVar("RoundStrategy")
+from pydantic import BaseModel, Field, model_serializer
 
-__rounding_strategy = None
+Dimensions = TypeVar("Dimensions")
 
-
-def set_rounding_strategy(strategy: RoundStrategy):
-    """
-    Set the global rounding strategy for all values except where the spec require its own rules
-    Args:
-        strategy:
-    """
-    global __rounding_strategy
-    __rounding_strategy = strategy
+ValidEven = Literal["whole", "even"]
+ValidMode = Literal["up", "down", "round"]
 
 
-def get_rounding_strategy() -> RoundStrategy:
-    """
+class RoundStrategy(BaseModel):
+    even: Annotated[ValidEven, Field(default="even")] = None
+    mode: Annotated[ValidMode, Field(default="up")] = None
 
-    Returns:
-        the global rounding strategy
+    @property
+    def rules(self) -> dict:
+        return self.model_dump()
 
-    """
-    return __rounding_strategy
+    def round_dimensions(self, dimensions: Dimensions) -> Dimensions:
+        """
+        Round the provided dimensions based on the rules defined in this object
+
+        Args:
+            dimensions:
+
+        Returns:
+            dimensions: rounded based on rules
+
+        """
+
+        mode_map = {"up": math.ceil, "down": math.floor, "round": round}
+
+        width = dimensions.width
+        height = dimensions.height
+
+        adjust = 1
+        if self.even == "even":
+            adjust = 2
+
+        if self.mode is not None:
+            width = mode_map[self.mode](width / adjust) * adjust
+            height = mode_map[self.mode](height / adjust) * adjust
+
+        return dimensions.__class__(width=width, height=height)
+
+    def __eq__(self, other):
+        if isinstance(other, dict):
+            return self.even == other.get("even") and self.mode == other.get("mode")
+
+        return self.even == other.even and self.mode == other.mode

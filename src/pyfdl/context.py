@@ -1,30 +1,21 @@
-from typing import Optional
+from typing import Union
 
-from pyfdl import Base, Canvas, TypedCollection
-from pyfdl.clipid import ClipID
+from pydantic import BaseModel
+
+from pyfdl import ClipID, TypedCollection, Canvas
 
 
-class Context(Base):
-    def __init__(
-        self,
-        label: Optional[str] = None,
-        context_creator: Optional[str] = None,
-        canvases: Optional[TypedCollection] = None,
-        clip_id: Optional[ClipID] = None,
-    ):
-        super().__init__()
-        self.attributes = ["label", "context_creator", "clip_id", "canvases"]
-        self.defaults = {"context_creator": "PyFDL"}
-        self.object_map = {"clip_id": ClipID, "canvases": Canvas}
-        self.id_attribute = "label"
+class Context(BaseModel):
+    label: Union[str, None] = None
+    context_creator: str = "PyFDL"
+    clip_id: Union[ClipID, None] = None
+    canvases: TypedCollection[Canvas] = TypedCollection[Canvas]()
 
-        self.label = label
-        self.context_creator = context_creator
-        self.clip_id = clip_id
-        self.canvases = canvases or TypedCollection(Canvas)
+    def __eq__(self, other) -> bool:
+        try:
+            return self.label == other.label
+        except AttributeError:
+            return self.label == other
 
-    def __eq__(self, other):
-        return self.label == other.label
-
-    def __repr__(self):
-        return f'{self.__class__.__name__}(label="{self.label}")'
+    def __hash__(self):
+        return hash((self.label,))
