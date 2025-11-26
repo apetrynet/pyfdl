@@ -6,7 +6,7 @@ from pyfdl.clipid import ClipID, FileSequence
 
 
 def test_file_sequence_init():
-    seq = FileSequence("A002_C307_0523JT.####.exr", "#", 0, 100)
+    seq = FileSequence(value="A002_C307_0523JT.####.exr", idx="#", min=0, max=100)
     assert seq.value == "A002_C307_0523JT.####.exr"
     assert seq.idx == "#"
     assert seq.min == 0
@@ -24,10 +24,10 @@ def test_file_sequence_init():
 )
 def test_file_sequence_min_max_not_negative(min_, max_, expect_fail):
     if expect_fail:
-        with pytest.raises(FDLError):
-            FileSequence("A002_C307_0523JT.####.exr", "#", min_, max_)
+        with pytest.raises(ValueError):
+            FileSequence(value="A002_C307_0523JT.####.exr", idx="#", min=min_, max=max_)
     else:
-        assert FileSequence("A002_C307_0523JT.####.exr", "#", min_, max_)
+        assert FileSequence(value="A002_C307_0523JT.####.exr", idx="#", min=min_, max=max_)
 
 
 @pytest.mark.parametrize(
@@ -35,7 +35,7 @@ def test_file_sequence_min_max_not_negative(min_, max_, expect_fail):
     [
         ("A002_C307_0523JT", None, None),
         ("A002_C307_0523JT", "A002_C307_0523JT.mov", None),
-         ("A002_C307_0523JT", None, FileSequence("A002_C307_0523JT.####.exr", "#", 0, 100)),
+        ("A002_C307_0523JT", None, FileSequence(value="A002_C307_0523JT.####.exr", idx="#", min=0, max=100)),
     ]
 )
 def test_clip_id_init(clip_name, file, sequence):
@@ -48,16 +48,18 @@ def test_clip_id_init(clip_name, file, sequence):
 
 def test_clip_id_raise_on_two_identifiers():
     cid1 = ClipID(clip_name="A002_C307_0523JT", file="A002_C307_0523JT.mov")
-    with pytest.raises(FDLError) as err:
-        cid1.sequence = FileSequence("A002_C307_0523JT.####.exr", "#", 0, 100)
+    with pytest.raises(ValueError) as err:
+        cid1.sequence = FileSequence(value="A002_C307_0523JT.####.exr", idx="#", min=0, max=100)
+        cid1.model_dump()
 
-    assert "A file is already provided. " in str(err)
+    assert "Both file and sequence attributes are provided, " in str(err)
 
-    cid2 = ClipID(clip_name="A002_C307_0523JT", sequence=FileSequence("A002_C307_0523JT.####.exr", "#", 0, 100))
-    with pytest.raises(FDLError) as err:
+    cid2 = ClipID(clip_name="A002_C307_0523JT", sequence=FileSequence(value="A002_C307_0523JT.####.exr", idx="#", min=0, max=100))
+    with pytest.raises(ValueError) as err:
         cid2.file = "A002_C307_0523JT.mov"
+        cid2.model_dump()
 
-    assert "A sequence is already provided. " in str(err)
+    assert "Both file and sequence attributes are provided, " in str(err)
 
 
 def test_deserializing_clip_id():

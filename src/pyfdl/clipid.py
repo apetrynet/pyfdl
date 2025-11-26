@@ -6,8 +6,8 @@ from pydantic import BaseModel, Field, field_validator, model_serializer
 class FileSequence(BaseModel):
     value: str
     idx: Annotated[str, Field(max_length=1)]
-    min_: Annotated[int, Field(alias="min")]
-    max_: Annotated[int, Field(alias="max")]
+    min: Annotated[int, Field(ge=0)]
+    max: Annotated[int, Field(ge=0)]
 
 
 class ClipID(BaseModel):
@@ -18,7 +18,7 @@ class ClipID(BaseModel):
     @field_validator("file", mode="after")
     @classmethod
     def check_for_sequence(cls, value, info):
-        if info.data.get("sequence") is not None:
+        if value is not None and info.data.get("sequence") is not None:
             raise ValueError(
                 "A sequence is already provided. You may only have file OR sequence as an identifier"
             )
@@ -28,7 +28,7 @@ class ClipID(BaseModel):
     @field_validator("sequence", mode="after")
     @classmethod
     def check_for_file(cls, value, info):
-        if info.data.get("file") is not None:
+        if value is not None and info.data.get("file") is not None:
             raise ValueError(
                 "A file is already provided. You may only have file OR sequence as an identifier"
             )

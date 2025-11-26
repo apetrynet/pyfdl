@@ -1,10 +1,12 @@
 import json
+import uuid
+
 import jsonschema
 from pathlib import Path
 from typing import Union, TypeVar, Any
 
 import pydantic
-from pydantic import field_serializer, PrivateAttr, model_serializer
+from pydantic import field_serializer, PrivateAttr, model_serializer, BaseModel, Field
 
 from pyfdl import FDLValidationError
 from pyfdl.common import FDL_SCHEMA_VERSION, FDL_SCHEMA_MINOR, TypedCollection
@@ -85,6 +87,13 @@ class FDL(Header):
 
         errors = []
 
+        # Check if default framing intent is present
+        if self.default_framing_intent and self.default_framing_intent not in self.framing_intents:
+            errors.append(
+                f'Default framing intent: "{self.default_framing_intent}" '
+                "not found in registered framing intents."
+            )
+
         # Check internal relations
         canvases = TypedCollection[Canvas]()
         canvas_collections = [context.canvases for context in self.contexts]
@@ -116,7 +125,7 @@ class FDL(Header):
         # Check structure and values against json schema
         json_v = jsonschema.validators.validator_for(self._schema)
         validator = json_v(schema=self._schema, format_checker=json_v.FORMAT_CHECKER)
-        for error in validator.iter_errors(self.model_dump(by_alias=True, exclude_unset=True, exclude_none=True)):
+        for error in validator.iter_errors(self.model_dump(by_alias=True, exclude_none=True)):
             errors.append(str(error))
             # raise ValueError(str(error))
 

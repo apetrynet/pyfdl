@@ -1,5 +1,5 @@
 import math
-from typing import TypeVar, Annotated, Literal
+from typing import TypeVar, Annotated, Literal, Union, get_args
 
 from pydantic import BaseModel, Field, model_serializer
 
@@ -10,8 +10,8 @@ ValidMode = Literal["up", "down", "round"]
 
 
 class RoundStrategy(BaseModel):
-    even: Annotated[ValidEven, Field(default="even")] = None
-    mode: Annotated[ValidMode, Field(default="up")] = None
+    even: Annotated[Union[ValidEven, None], Field(default="even")]
+    mode: Annotated[Union[ValidMode, None], Field(default="up")]
 
     @property
     def rules(self) -> dict:
@@ -42,10 +42,27 @@ class RoundStrategy(BaseModel):
             width = mode_map[self.mode](width / adjust) * adjust
             height = mode_map[self.mode](height / adjust) * adjust
 
-        return dimensions.__class__(width=width, height=height)
+        new_dim = dimensions.__class__()
+        new_dim.width = width
+        new_dim.height = height
+
+        return new_dim
+
+    @model_serializer()
+    def check_values(self) -> dict[str, str]:
+        if self.even is None or self.even not in get_args(ValidEven):
+            raise ValueError(
+                f'"{self.even}" is not a valid option for even. '
+                f"Please use one of the following: {get_args(ValidEven)}"
+            )
+
+        if self.mode is None or self.mode not in get_args(ValidMode):
+            raise ValueError(
+                f'"{self.mode}" is not a valid option for mode. '
+                f"Please use one of the following: {get_args(ValidMode)}"
+            )
+
+        return {"even": self.even, "mode": self.mode}
 
     def __eq__(self, other):
-        if isinstance(other, dict):
-            return self.even == other.get("even") and self.mode == other.get("mode")
-
         return self.even == other.even and self.mode == other.mode

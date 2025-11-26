@@ -13,10 +13,10 @@ class FramingDecision(BaseModel):
     label: Union[str, None] = None
     id: str
     framing_intent_id: str
-    dimensions: Dimensions[float]
-    anchor_point: Point[float]
-    protection_dimensions: Union[Dimensions[float], None]
-    protection_anchor_point: Union[Point[float], None]
+    dimensions: Annotated[Dimensions[float], Field(default=Dimensions[float](), exclude_if=lambda dim: not dim)]
+    anchor_point: Point[float] = Point[float]()
+    protection_dimensions: Union[Dimensions[float], None] = None
+    protection_anchor_point: Union[Point[float], None] = Point[float]()
 
     @classmethod
     def from_framing_intent(cls, canvas: Canvas, framing_intent: FramingIntent) -> "FramingDecision":
@@ -36,13 +36,14 @@ class FramingDecision(BaseModel):
             framing_decision:
 
         """
-        framing_decision = FramingDecision(
-            id=f"{canvas.id}-{framing_intent.id}",
-            label=framing_intent.label,
-            framing_intent_id=framing_intent.id
-        )
+        # framing_decision = FramingDecision(
+        #     id=f"{canvas.id}-{framing_intent.id}",
+        #     label=framing_intent.label,
+        #     framing_intent_id=framing_intent.id
+        # )
 
         canvas_dimensions = canvas.effective_dimensions or canvas.dimensions
+        protection_dimensions = None
 
         # Compare aspect ratios of framing intent and canvas
         intent_aspect = framing_intent.aspect_ratio.width / framing_intent.aspect_ratio.height
@@ -56,20 +57,34 @@ class FramingDecision(BaseModel):
             height = canvas_dimensions.height
 
         if framing_intent.protection > 0:
-            protection_dimensions = Dimensions[float](width=width, height=height)
-            framing_decision.protection_dimensions = config.get_rounding().round_dimensions(protection_dimensions)
-            framing_decision.adjust_protection_anchor_point(canvas)
+            protection_dimensions = config.get_rounding().round_dimensions(
+                Dimensions[float](width=width, height=height)
+            )
+            # framing_decision.protection_dimensions = config.get_rounding().round_dimensions(protection_dimensions)
+            # framing_decision.adjust_protection_anchor_point(canvas)
 
         # We use the protection dimensions as base for dimensions if they're set
-        if framing_decision.protection_dimensions is not None:
-            width = framing_decision.protection_dimensions.width
-            height = framing_decision.protection_dimensions.height
+        # if framing_decision.protection_dimensions is not None:
+        if protection_dimensions is not None:
+            # width = framing_decision.protection_dimensions.width
+            width = protection_dimensions.width
+            # height = framing_decision.protection_dimensions.height
+            height = protection_dimensions.height
 
         dimensions = Dimensions(
             width=width * (1 - framing_intent.protection),
             height=height * (1 - framing_intent.protection)
         )
-        framing_decision.dimensions = config.get_rounding().round_dimensions(dimensions)
+
+        framing_decision = FramingDecision(
+            id=f"{canvas.id}-{framing_intent.id}",
+            label=framing_intent.label,
+            framing_intent_id=framing_intent.id,
+            dimensions=config.get_rounding().round_dimensions(dimensions),
+            protection_dimensions=protection_dimensions
+        )
+        # framing_decision.dimensions = config.get_rounding().round_dimensions(dimensions)
+        framing_decision.adjust_protection_anchor_point(canvas)
         framing_decision.adjust_anchor_point(canvas)
 
         return framing_decision
@@ -88,30 +103,22 @@ class FramingDecision(BaseModel):
         """
 
         # TODO: check if anchor point is shifted before centering
-        active_dimensions = canvas.effective_dimensions or canvas.dimensions
+        canvas_dimensions = canvas.dimensions.duplicate()
 
-        offset_point = self.protection_anchor_point or Point[float]()
-        offset_dimensions = self.protection_dimensions or active_dimensions
+        x = 0
+        y = 0
 
-        x = offset_point.x
-        y = offset_point.y
+        if h_method == "center":
+            x += (canvas_dimensions.width - self.dimensions.width) / 2
 
-        if self.protection_anchor_point:
-            x += (offset_dimensions.width - self.dimensions.width) / 2
-            y += (offset_dimensions.height - self.dimensions.height) / 2
+        elif h_method == "right":
+            x += canvas_dimensions.width - self.dimensions.width
 
-        else:
-            if h_method == "center":
-                x += (offset_dimensions.width - self.dimensions.width) / 2
+        if v_method == "center":
+            y += (canvas_dimensions.height - self.dimensions.height) / 2
 
-            elif h_method == "right":
-                x += offset_dimensions.width - self.dimensions.width
-
-            if v_method == "center":
-                y += (offset_dimensions.height - self.dimensions.height) / 2
-
-            elif v_method == "bottom":
-                y += offset_dimensions.height - self.dimensions.height
+        elif v_method == "bottom":
+            y += canvas_dimensions.height - self.dimensions.height
 
         self.anchor_point = Point[float](x=x, y=y)
 
@@ -132,21 +139,22 @@ class FramingDecision(BaseModel):
         if self.protection_dimensions is None:
             return
 
-        active_dimensions, active_anchor_point = canvas.get_dimensions()
-        x = active_anchor_point.x
-        y = active_anchor_point.y
+        canvas_dimensions = canvas.dimensions.duplicate()
+
+        x = 0
+        y = 0
 
         if h_method == "center":
-            x += (active_dimensions.width - self.protection_dimensions.width) / 2
+            x += (canvas_dimensions.width - self.protection_dimensions.width) / 2
 
         elif h_method == "right":
-            x += active_dimensions.width - self.protection_dimensions.width
+            x += canvas_dimensions.width - self.protection_dimensions.width
 
         if v_method == "center":
-            y += (active_dimensions.height - self.protection_dimensions.height) / 2
+            y += (canvas_dimensions.height - self.protection_dimensions.height) / 2
 
         elif v_method == "bottom":
-            y += active_dimensions.height - self.protection_dimensions.height
+            y += canvas_dimensions.height - self.protection_dimensions.height
 
         self.protection_anchor_point = Point[float](x=x, y=y)
 

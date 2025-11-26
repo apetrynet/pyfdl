@@ -48,10 +48,11 @@ class FDLHandler:
             FDL:
 
         """
-        fdl = FDL.from_dict(json.loads(s))
+        # fdl = FDL.from_dict(json.loads(s))
+        fdl = FDL.model_validate_json(s)
 
         if validate:
-            fdl.validate()
+            fdl._validate()
 
         return fdl
 
@@ -85,9 +86,9 @@ class FDLHandler:
             string: representation of the resulting json
         """
         if validate:
-            fdl.validate()
+            FDL.model_validate(fdl)
 
-        return json.dumps(fdl.to_dict(), indent=indent, sort_keys=False)
+        return fdl.model_dump_json(indent=indent, exclude_none=True)
 
 
 def register_plugin(registry: PluginRegistry):

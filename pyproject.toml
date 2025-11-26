@@ -23,7 +23,6 @@ classifiers = [
 keywords = ["film", "tv", "editing", "editorial", "fdl", "asc", "conform", "reformat", "vfx"]
 dependencies = [
     "jsonschema>=4.25.1",
-    "ruff>=0.14.4",
 ]
 
 #[project.scripts]
@@ -48,8 +47,10 @@ path = "src/pyfdl/__init__.py"
 dev = [
     "mktestdocs>=0.2.5",
     "pip>=25.3",
+    "pydantic>=2.12.4",
     "pytest>=8.4.2",
     "pyyaml>=6.0.3",
+    "ruff>=0.14.4",
 ]
 docs = [
     "mkdocs>=1.6.1",

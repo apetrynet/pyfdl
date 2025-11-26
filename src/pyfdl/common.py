@@ -14,8 +14,8 @@ FDL_SCHEMA_VERSION = {"major": FDL_SCHEMA_MAJOR, "minor": FDL_SCHEMA_MINOR}
 
 
 class Dimensions(BaseModel, Generic[T]):
-    width: T = Field(ge=0)
-    height: T = Field(ge=0)
+    width: T = Field(ge=0, default=0)
+    height: T = Field(ge=0, default=0)
     _dtype: T = PrivateAttr()
 
     def model_post_init(self, context: Any, /) -> None:
@@ -42,7 +42,10 @@ class Dimensions(BaseModel, Generic[T]):
             duplicate: of these dimensions
         """
 
-        return Dimensions[self._dtype](width=self.width, height=self.height)
+        dup = Dimensions[self._dtype]()
+        dup.width = self.width
+        dup.height = self.height
+        return dup
 
     def __iter__(self):
         return iter((self.width, self.height))
@@ -57,7 +60,7 @@ class Dimensions(BaseModel, Generic[T]):
         return self.width > other.width or self.height > other.height
 
     def __bool__(self):
-        return self.width is not None and self.height is not None
+        return bool(self.width) and bool(self.height)
 
 
 class Point(BaseModel, Generic[T]):

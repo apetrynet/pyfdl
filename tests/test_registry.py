@@ -1,4 +1,7 @@
-import pip
+import shlex
+import subprocess
+import sys
+
 import pytest
 
 import pyfdl.plugins.registry
@@ -9,16 +12,19 @@ from pyfdl.plugins import get_registry
 
 @pytest.fixture
 def install_plugins():
-    pip.main(["install", "tests/sample_data/handler-plugin", "tests/sample_data/faulty-handler-plugin"])
+    subprocess.call(
+        shlex.split(
+            f"{sys.executable} -m pip install tests/sample_data/handler-plugin tests/sample_data/faulty-handler-plugin"
+        )
+    )
     yield
-
-    pip.main(["uninstall", "-y", "handler-plugin", "faulty-handler-plugin"])
+    subprocess.call(shlex.split(f"{sys.executable} -m pip uninstall -y handler-plugin faulty-handler-plugin"))
 
 
 def test_loading_registry():
-    pyfdl.plugins.registry._REGISTRY = None  # noqa
+    pyfdl.plugins.registry._REGISTRY = None
     assert isinstance(get_registry(), pyfdl.plugins.registry.PluginRegistry)
-    assert pyfdl.plugins.registry._REGISTRY is not None  # noqa
+    assert pyfdl.plugins.registry._REGISTRY is not None
 
     id_ = id(get_registry())
     get_registry(reload=True)
@@ -30,7 +36,7 @@ def test_load_builtin():
     assert isinstance(_registry.handlers["fdl"], FDLHandler)
 
 
-def test_load_plugin(capsys, install_plugins):  # noqa
+def test_load_plugin(capsys, install_plugins):
     _registry = get_registry(reload=True)
     assert _registry.handlers.get("myhandler1") is not None
     assert _registry.handlers.get("myhandler2") is not None

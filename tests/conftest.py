@@ -4,11 +4,13 @@ from pathlib import Path
 import pytest
 
 import pyfdl
+import pyfdl.config
+import pyfdl.rounding
 
 
 @pytest.fixture(autouse=True)
 def consistent_rounding():
-    pyfdl.set_rounding_strategy(pyfdl.DEFAULT_ROUNDING_STRATEGY)
+    pyfdl.config.set_rounding(pyfdl.config.DEFAULT_ROUNDING_STRATEGY)
 
 
 @pytest.fixture(autouse=True)
@@ -20,88 +22,6 @@ def cleanup_temp_files():
     # Remove temp files
     for file in files:
         file.unlink(missing_ok=True)
-
-
-@pytest.fixture
-def base_subclass():
-    class BaseSubclass(pyfdl.Base):
-        def __init__(
-            self,
-            id_=None,
-            string=None,
-            point=None,
-            dimensions=None,
-            collection=None,
-            round_=None,
-            callable_=None,
-            instance=None,
-            self_reference=None,
-        ):
-            super().__init__()
-            # Holds a list of known attributes
-            self.attributes = ["id", "string", "point", "dimensions", "collection", "round"]
-            # Maps attribute names that clash with reserved builtin functions to safe alternatives (id -> id_)
-            self.kwarg_map = {"id": "id_", "round": "round_"}
-            # Map keys to custom classes
-            self.object_map = {
-                "point": pyfdl.Point,
-                "dimensions": pyfdl.Dimensions,
-                "collection": pyfdl.FramingIntent,
-                "round": pyfdl.RoundStrategy,
-            }
-            # List of required attributes
-            self.required = ["id", "string.point"]
-            # Default values for attributes
-            self.defaults = {
-                "id": "my_id",
-                "callable": pyfdl.Base.generate_uuid,
-                "instance": pyfdl.RoundStrategy,
-                "self_reference": "self.id",
-            }
-
-            self.id = id_
-            self.string = string
-            self.point = point
-            self.dimensions = dimensions
-            self.collection = collection or pyfdl.TypedCollection(pyfdl.FramingIntent)
-            self.round = round_
-            self.callable = callable_
-            self.instance = instance
-            self.self_reference = self_reference
-
-    return BaseSubclass
-
-
-@pytest.fixture
-def base_class_kwargs(sample_framing_intent_obj, sample_rounding_strategy_obj):
-    collection = pyfdl.TypedCollection(pyfdl.FramingIntent)
-    collection.add(sample_framing_intent_obj)
-    kwargs = {
-        "id_": "my_id",
-        "string": "hello",
-        "point": pyfdl.Point(x=0, y=0),
-        "dimensions": pyfdl.Dimensions(width=1920, height=1080),
-        "collection": collection,
-        "round_": sample_rounding_strategy_obj,
-    }
-
-    return kwargs
-
-
-@pytest.fixture
-def base_class_dict():
-    d = {
-        "id": "my_id",
-        "string": "hello",
-        "point": {"x": 0, "y": 0},
-        "dimensions": {"width": 1920, "height": 1080},
-        "collection": [
-            {"label": "1.78-1", "id": "FDLSMP03", "aspect_ratio": {"width": 16, "height": 9}, "protection": 0.088}
-        ],
-        "round": {"even": "even", "mode": "round"},
-    }
-
-    return d
 
 
 @pytest.fixture
@@ -118,8 +38,8 @@ def sample_dimensions_int():
 def sample_framing_intent_obj():
     framing_intent = pyfdl.FramingIntent(
         label="1.78-1 Framing",
-        id_="FDLSMP03",
-        aspect_ratio=pyfdl.Dimensions(width=16, height=9, dtype=int),
+        id="FDLSMP03",
+        aspect_ratio=pyfdl.Dimensions[int](width=16, height=9),
         protection=0.088,
     )
 
@@ -130,7 +50,7 @@ def sample_framing_intent_obj():
 def sample_framing_decision_obj():
     fd = pyfdl.FramingDecision(
         label="1.78-1 Framing",
-        id_="20220310-FDLSMP03",
+        id="20220310-FDLSMP03",
         framing_intent_id="FDLSMP03",
         dimensions=pyfdl.Dimensions(width=4728, height=3456),
         anchor_point=pyfdl.Point(x=228, y=432),
@@ -144,7 +64,7 @@ def sample_framing_decision_obj():
 def sample_canvas_obj():
     canvas = pyfdl.Canvas(
         label="Open Gate RAW",
-        id_="20220310",
+        id="20220310",
         source_canvas_id="20220310",
         dimensions=pyfdl.Dimensions(width=5184, height=4320),
         effective_dimensions=pyfdl.Dimensions(width=5184, height=4320),
@@ -152,7 +72,7 @@ def sample_canvas_obj():
         photosite_dimensions=pyfdl.Dimensions(width=5184, height=4320),
         physical_dimensions=pyfdl.Dimensions(width=25.92, height=21.60),
         anamorphic_squeeze=1.30,
-        framing_decisions=pyfdl.TypedCollection(pyfdl.FramingDecision),
+        framing_decisions=pyfdl.TypedCollection[pyfdl.FramingDecision](),
     )
 
     return canvas
@@ -161,7 +81,9 @@ def sample_canvas_obj():
 @pytest.fixture
 def sample_context_obj():
     ctx = pyfdl.Context(
-        label="PanavisionDXL2", context_creator="ASC FDL Committee", canvases=pyfdl.TypedCollection(pyfdl.Canvas)
+        label="PanavisionDXL2",
+        context_creator="ASC FDL Committee",
+        canvases=pyfdl.TypedCollection[pyfdl.Canvas]()
     )
 
     return ctx
@@ -171,22 +93,22 @@ def sample_context_obj():
 def sample_canvas_template_obj():
     canvas_template = pyfdl.CanvasTemplate(
         label="VFX Pull",
-        id_="VX220310",
-        target_dimensions=pyfdl.Dimensions(width=4096, height=2304),
+        id="VX220310",
+        target_dimensions=pyfdl.Dimensions[int](width=4096, height=2304),
         target_anamorphic_squeeze=1.00,
         fit_source="framing_decision.dimensions",
         fit_method="width",
         alignment_method_vertical="center",
         alignment_method_horizontal="center",
         preserve_from_source_canvas="canvas.dimensions",
-        round_=pyfdl.RoundStrategy(even="even", mode="up"),
+        round=pyfdl.rounding.RoundStrategy(even="even", mode="up"),
     )
     return canvas_template
 
 
 @pytest.fixture
 def sample_rounding_strategy_obj():
-    return pyfdl.RoundStrategy(even="even", mode="up")
+    return pyfdl.rounding.RoundStrategy(even="even", mode="up")
 
 
 @pytest.fixture

@@ -15,7 +15,7 @@ class Canvas(BaseModel):
     label: Union[str, None] = None
     id: str
     source_canvas_id: str   # TODO: make sure it exists
-    dimensions: Dimensions[int]
+    dimensions: Annotated[Dimensions[int], Field(default=Dimensions[int](), exclude_if=lambda dim: not dim)]
     effective_dimensions: Union[Dimensions[int]] = None
     effective_anchor_point: Union[Point[float]] = None
     photosite_dimensions: Union[Dimensions[int]] = None
@@ -40,7 +40,7 @@ class Canvas(BaseModel):
 
         """
         framing_decision = FramingDecision.from_framing_intent(self, framing_intent)
-        self.framing_decisions.add(framing_decision)
+        self.framing_decisions.append(framing_decision)
 
         return framing_decision.id
 
@@ -79,7 +79,7 @@ class Canvas(BaseModel):
             id=f"{canvas.id}-{source_framing_decision.framing_intent_id}",
             framing_intent_id=source_framing_decision.framing_intent_id,
         )
-        canvas.framing_decisions.add(framing_decision)
+        canvas.framing_decisions.append(framing_decision)
 
         source_map = {"framing_decision": source_framing_decision, "canvas": source_canvas}
 
@@ -97,7 +97,7 @@ class Canvas(BaseModel):
         scale_factor = canvas_template.get_scale_factor(source_dimensions, source_canvas.anamorphic_squeeze)
 
         # Dummy dimensions to test against if we received a proper value
-        dummy_dimensions = Dimensions(width=0, height=0)
+        dummy_dimensions = Dimensions[int](width=0, height=0)
 
         # Copy and scale dimensions from source to target
         for transfer_key in canvas_template.get_transfer_keys():
@@ -118,7 +118,7 @@ class Canvas(BaseModel):
             setattr(dest_map[source_type], dimension_source_attribute, dimensions)
 
         # Make sure the canvas has dimensions
-        if canvas.dimensions is None:
+        if not canvas.dimensions:
             preserve_source_type, preserve_source_attribute = preserve.split(".")
             canvas.dimensions = getattr(dest_map[preserve_source_type], preserve_source_attribute).duplicate()
 

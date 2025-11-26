@@ -36,16 +36,16 @@ class YAMLHandler:
 
     def write_to_string(self, fdl: FDL, validate: bool = True, **yaml_args: Optional[Any]) -> str:
         if validate:
-            fdl.validate()
+            fdl._validate()
         
-        return yaml.dump(fdl.to_dict(), **yaml_args)
+        return yaml.dump(fdl.model_dump(), **yaml_args)
 
     def write_to_file(self, fdl: FDL, path: Path, validate: bool = True, **yaml_args: Optional[Any]) -> str:
         if validate:
-            fdl.validate()
-        print('yoho')
+            fdl._validate()
+        
         with path.open('w') as f:
-            f.write(yaml.dump(fdl.to_dict(), **yaml_args))
+            f.write(yaml.dump(fdl.model_dump(), **yaml_args))
 
     def custom_method(self, fdl: FDL, brand: str) -> FDL:
         fdl.fdl_creator = brand
@@ -96,7 +96,6 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 
 fdl = pyfdl.FDL()
-fdl.apply_defaults()
 pyfdl.write_to_string(fdl, handler_name='yaml', indent=4)
 pyfdl.write_to_file(fdl, path=NamedTemporaryFile(suffix='.yml', delete=False).name)
 ```
@@ -106,7 +105,6 @@ from pyfdl.handlers import get_handler
 
 my_handler = get_handler(func_name='custom_method', handler_name='yaml')
 fdl = FDL()
-fdl.apply_defaults()
 assert fdl.fdl_creator == 'PyFDL'
 my_handler.custom_method(fdl, "my brand")
 assert fdl.fdl_creator == 'my brand'

@@ -34,9 +34,9 @@ class CanvasTemplate(BaseModel):
     alignment_method_vertical: Annotated[AlignmentMethodVertical, Field(default="center")]
     alignment_method_horizontal: Annotated[AlignmentMethodHorizontal, Field(default="center")]
     preserve_from_source_canvas: Annotated[PreserveFromSource, Field(default="none")]
-    maximum_dimensions: Dimensions[int] = None
-    pad_to_maximum: Annotated[bool, Field(default=False, exclude_if=None)]
-    round: RoundStrategy = None
+    maximum_dimensions: Annotated[Dimensions[int], Field(default=None, exclude_if=lambda v: not v)]
+    pad_to_maximum: Annotated[bool, Field(default=False, exclude_if=lambda v: v is None)]
+    round: Annotated[RoundStrategy, Field(default=RoundStrategy())]
 
     def get_desqueezed_width(self, source_width: float, squeeze_factor: float) -> float:
         """

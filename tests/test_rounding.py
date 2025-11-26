@@ -1,5 +1,5 @@
-import pydantic
 import pytest
+from pydantic_core import PydanticSerializationError
 
 import pyfdl
 from pyfdl import config as config
@@ -14,18 +14,18 @@ def test_set_rounding_strategy():
 
 
 def test_rounding_strategy_validation():
-    rs = pyfdl.rounding.RoundStrategy()
-    with pytest.raises(pydantic.ValidationError) as err:
-        pyfdl.rounding.RoundStrategy.model_validate(rs.model_dump())
+    rs = pyfdl.rounding.RoundStrategy(even=None, mode=None)
+    with pytest.raises(PydanticSerializationError) as err:
+        rs.model_dump()
 
     rs.even = "wrong"
-    with pytest.raises(pydantic.ValidationError) as err:
-        pyfdl.rounding.RoundStrategy.model_validate(rs.model_dump())
+    with pytest.raises(PydanticSerializationError):
+        rs.model_dump()
 
     rs.even = "whole"
     rs.mode = "wrong"
-    with pytest.raises(pydantic.ValidationError) as err:
-        pyfdl.rounding.RoundStrategy.model_validate(rs.model_dump())
+    with pytest.raises(PydanticSerializationError):
+        rs.model_dump()
 
 
 # TODO: commented lines are in case we decide to reinstate the dtype argument in Dimensions

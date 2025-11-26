@@ -1,6 +1,6 @@
 from .rounding import RoundStrategy
 
-NO_ROUNDING = RoundStrategy()
+NO_ROUNDING = RoundStrategy(even=None, mode=None)
 DEFAULT_ROUNDING_STRATEGY = NO_ROUNDING
 
 __rounding_strategy = NO_ROUNDING

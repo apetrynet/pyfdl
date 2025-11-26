@@ -18,14 +18,17 @@ overridden by setting the rounding strategy via the
 
 ### Setting the global rounding strategy
 Here are a some examples of how to set the rounding strategy:
+
 ```python
+import pyfdl.config
+import pyfdl.rounding
 import pyfdl
 
 # No rounding (default behavior) is set by passing the NO_ROUNDING variable
-pyfdl.set_rounding_strategy(pyfdl.NO_ROUNDING)
+pyfdl.config.set_rounding(pyfdl.config.NO_ROUNDING)
 
 # For other requirements pass a RoundStrategy instance with the desired rules
-pyfdl.set_rounding_strategy(pyfdl.RoundStrategy(even="whole", mode="up"))
+pyfdl.config.set_rounding(pyfdl.rounding.RoundStrategy(even="whole", mode="up"))
 ```
 
 ## Usage Examples
@@ -36,31 +39,29 @@ import pyfdl
 from pyfdl import Canvas, FramingIntent, Dimensions, Point
 from tempfile import NamedTemporaryFile
 
+# A clean FDL instance populates the header with a valid staring point 
 fdl = pyfdl.FDL()
-
-# Applying defaults will provide you with a valid staring point 
-fdl.apply_defaults()
 
 # Let's create a framing intent
 framing_intent = FramingIntent(
     label="1.78-1 Framing",
-    id_="FDLSMP03",
+    id="FDLSMP03",
     aspect_ratio=Dimensions(width=16, height=9),
     protection=0.088
 )
 
 # Add the newly created framing intent to our FDL
-fdl.framing_intents.add(framing_intent)
+fdl.framing_intents.append(framing_intent)
 
 # Now let's create a canvas
 canvas = Canvas(
     label="Open Gate RAW",
-    id_="20220310",
+    id="20220310",
     source_canvas_id="20220310",
     dimensions=Dimensions(width=5184, height=4320),
     effective_dimensions=Dimensions(width=5184, height=4320),
     effective_anchor_point=Point(x=0, y=0),
-    photosite_dimensions=Dimensions(5184, height=4320),
+    photosite_dimensions=Dimensions(width=5184, height=4320),
     physical_dimensions=Dimensions(width=25.92, height=21.60),
     anamorphic_squeeze=1.30
 )
