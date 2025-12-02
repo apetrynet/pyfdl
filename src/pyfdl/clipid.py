@@ -37,9 +37,7 @@ class ClipID(BaseModel):
 
     @model_serializer
     def _validate(self) -> dict:
-        result = {
-            "clip_name": self.clip_name
-        }
+        result = {"clip_name": self.clip_name}
         if self.file is not None:
             result["file"] = self.file
 

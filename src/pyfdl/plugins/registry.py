@@ -60,7 +60,10 @@ class PluginRegistry:
                 register_func(self)
 
             except (ModuleNotFoundError, TypeError) as err:
-                print(f'Unable to load plugin: "{plugin.name}" due to: "{err}"', file=sys.stderr)  # noqa
+                print(
+                    f'Unable to load plugin: "{plugin.name}" due to: "{err}"',
+                    file=sys.stderr,
+                )  # noqa
 
     def add_handler(self, handler: Any):
         """
@@ -70,7 +73,9 @@ class PluginRegistry:
         """
         self.handlers.setdefault(handler.name, handler)
 
-    def get_handler_by_name(self, handler_name: str, func_name: str) -> Union[Handler, None]:
+    def get_handler_by_name(
+        self, handler_name: str, func_name: str
+    ) -> Union[Handler, None]:
         """
         Get a registered handler by `handler_name`, and
         make sure it has a function (`func_name`) to call
@@ -96,7 +101,9 @@ class PluginRegistry:
         )
         raise UnknownHandlerError(msg)
 
-    def get_handler_by_suffix(self, suffix: str, func_name: str) -> Union[Handler, None]:
+    def get_handler_by_suffix(
+        self, suffix: str, func_name: str
+    ) -> Union[Handler, None]:
         """
         Get a registered handler by `suffix`, and
         make sure it has a function (`func_name`) to call

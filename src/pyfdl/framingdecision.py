@@ -13,13 +13,18 @@ class FramingDecision(BaseModel):
     label: Union[str, None] = None
     id: str
     framing_intent_id: str
-    dimensions: Annotated[Dimensions[float], Field(default=Dimensions[float](), exclude_if=lambda dim: not dim)]
+    dimensions: Annotated[
+        Dimensions[float],
+        Field(default=Dimensions[float](), exclude_if=lambda dim: not dim),
+    ]
     anchor_point: Point[float] = Point[float]()
     protection_dimensions: Union[Dimensions[float], None] = None
     protection_anchor_point: Union[Point[float], None] = Point[float]()
 
     @classmethod
-    def from_framing_intent(cls, canvas: Canvas, framing_intent: FramingIntent) -> "FramingDecision":
+    def from_framing_intent(
+        cls, canvas: Canvas, framing_intent: FramingIntent
+    ) -> "FramingDecision":
         """
         Create a new [FramingDecision](framing_decision.md#pyfdl.FramingDecision) based on the provided
         [Canvas](canvas.md#pyfdl.Canvas) and [FramingIntent](framing_intent.md#pyfdl.FramingIntent)
@@ -46,7 +51,9 @@ class FramingDecision(BaseModel):
         protection_dimensions = None
 
         # Compare aspect ratios of framing intent and canvas
-        intent_aspect = framing_intent.aspect_ratio.width / framing_intent.aspect_ratio.height
+        intent_aspect = (
+            framing_intent.aspect_ratio.width / framing_intent.aspect_ratio.height
+        )
         canvas_aspect = canvas_dimensions.width / canvas_dimensions.height
         if intent_aspect >= canvas_aspect:
             width = canvas_dimensions.width
@@ -73,7 +80,7 @@ class FramingDecision(BaseModel):
 
         dimensions = Dimensions(
             width=width * (1 - framing_intent.protection),
-            height=height * (1 - framing_intent.protection)
+            height=height * (1 - framing_intent.protection),
         )
 
         framing_decision = FramingDecision(
@@ -81,7 +88,7 @@ class FramingDecision(BaseModel):
             label=framing_intent.label,
             framing_intent_id=framing_intent.id,
             dimensions=config.get_rounding().round_dimensions(dimensions),
-            protection_dimensions=protection_dimensions
+            protection_dimensions=protection_dimensions,
         )
         # framing_decision.dimensions = config.get_rounding().round_dimensions(dimensions)
         framing_decision.adjust_protection_anchor_point(canvas)
@@ -89,7 +96,9 @@ class FramingDecision(BaseModel):
 
         return framing_decision
 
-    def adjust_anchor_point(self, canvas: Canvas, h_method: str = "center", v_method: str = "center") -> None:
+    def adjust_anchor_point(
+        self, canvas: Canvas, h_method: str = "center", v_method: str = "center"
+    ) -> None:
         """
         Adjust this object's `anchor_point` either relative to `protection_anchor_point`
         or `canvas.effective_anchor_point`

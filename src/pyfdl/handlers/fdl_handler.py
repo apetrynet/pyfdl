@@ -1,4 +1,3 @@
-import json
 from pathlib import Path
 from typing import TypeVar, Union
 
@@ -56,7 +55,9 @@ class FDLHandler:
 
         return fdl
 
-    def write_to_file(self, fdl: FDL, path: Path, validate: bool = True, indent: Union[int, None] = 2):
+    def write_to_file(
+        self, fdl: FDL, path: Path, validate: bool = True, indent: Union[int, None] = 2
+    ):
         """Dump an FDL to a file.
 
         Args:
@@ -71,7 +72,9 @@ class FDLHandler:
         with path.open("w") as fp:
             fp.write(self.write_to_string(fdl, validate=validate, indent=indent))
 
-    def write_to_string(self, fdl: FDL, validate: bool = True, indent: Union[int, None] = 2) -> str:
+    def write_to_string(
+        self, fdl: FDL, validate: bool = True, indent: Union[int, None] = 2
+    ) -> str:
         """Dump an FDL to string
 
         Args:

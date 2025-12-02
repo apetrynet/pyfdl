@@ -14,23 +14,30 @@ CanvasTemplate = TypeVar("CanvasTemplate")
 class Canvas(BaseModel):
     label: Union[str, None] = None
     id: Annotated[str, Field(min_length=1, max_length=32)]
-    source_canvas_id: Annotated[str, Field(min_length=1, max_length=32)]    # <- Follow same rules as id?
-    dimensions: Annotated[Dimensions[int], Field(default=Dimensions[int](), exclude_if=lambda dim: not dim)]
+    source_canvas_id: Annotated[
+        str, Field(min_length=1, max_length=32)
+    ]  # <- Follow same rules as id?
+    dimensions: Annotated[
+        Dimensions[int],
+        Field(default=Dimensions[int](), exclude_if=lambda dim: not dim),
+    ]
     effective_dimensions: Annotated[
         Union[Dimensions[int], None],
-        Field(default=Dimensions[int](), exclude_if=lambda dim: not dim)
+        Field(default=Dimensions[int](), exclude_if=lambda dim: not dim),
     ]
     effective_anchor_point: Union[Point[float]] = None
     photosite_dimensions: Annotated[
         Union[Dimensions[int], None],
-        Field(default=Dimensions[int](), exclude_if=lambda dim: not dim)
+        Field(default=Dimensions[int](), exclude_if=lambda dim: not dim),
     ]
     physical_dimensions: Annotated[
         Union[Dimensions[float], None],
-        Field(default=Dimensions[float](), exclude_if=lambda dim: not dim)
+        Field(default=Dimensions[float](), exclude_if=lambda dim: not dim),
     ]
     anamorphic_squeeze: Annotated[float, Field(default=1)]
-    framing_decisions: TypedCollection[FramingDecision] = TypedCollection[FramingDecision]()
+    framing_decisions: TypedCollection[FramingDecision] = TypedCollection[
+        FramingDecision
+    ]()
 
     def place_framing_intent(self, framing_intent: FramingIntent) -> str:
         """Create a new [FramingDecision](framing_decision.md#pyfdl.FramingDecision) based on the provided
@@ -55,10 +62,10 @@ class Canvas(BaseModel):
 
     @classmethod
     def from_canvas_template(
-            cls,
-            canvas_template: CanvasTemplate,
-            source_canvas: Self,
-            source_framing_decision: Union[FramingDecision, int] = 0,
+        cls,
+        canvas_template: CanvasTemplate,
+        source_canvas: Self,
+        source_framing_decision: Union[FramingDecision, int] = 0,
     ) -> Self:
         """
         Create a new `Canvas` from the provided `source_canvas` and `framing_decision`
@@ -74,7 +81,9 @@ class Canvas(BaseModel):
 
         """
         if isinstance(source_framing_decision, int):
-            source_framing_decision = source_canvas.framing_decisions[source_framing_decision]
+            source_framing_decision = source_canvas.framing_decisions[
+                source_framing_decision
+            ]
 
         canvas = Canvas(
             label=canvas_template.label,
@@ -90,7 +99,10 @@ class Canvas(BaseModel):
         )
         canvas.framing_decisions.append(framing_decision)
 
-        source_map = {"framing_decision": source_framing_decision, "canvas": source_canvas}
+        source_map = {
+            "framing_decision": source_framing_decision,
+            "canvas": source_canvas,
+        }
 
         dest_map = {"framing_decision": framing_decision, "canvas": canvas}
 
@@ -103,7 +115,9 @@ class Canvas(BaseModel):
 
         # Get the scale factor
         source_dimensions = getattr(source_map[source_type], source_attribute)
-        scale_factor = canvas_template.get_scale_factor(source_dimensions, source_canvas.anamorphic_squeeze)
+        scale_factor = canvas_template.get_scale_factor(
+            source_dimensions, source_canvas.anamorphic_squeeze
+        )
 
         # Dummy dimensions to test against if we received a proper value
         dummy_dimensions = Dimensions[int](width=0, height=0)
@@ -111,43 +125,59 @@ class Canvas(BaseModel):
         # Copy and scale dimensions from source to target
         for transfer_key in canvas_template.get_transfer_keys():
             if transfer_key == fit_source:
-                target_size = canvas_template.fit_source_to_target(source_dimensions, source_canvas.anamorphic_squeeze)
+                target_size = canvas_template.fit_source_to_target(
+                    source_dimensions, source_canvas.anamorphic_squeeze
+                )
                 setattr(dest_map[source_type], source_attribute, target_size)
                 continue
 
             source_type, dimension_source_attribute = transfer_key.split(".")
-            dimensions = getattr(source_map[source_type], dimension_source_attribute, dummy_dimensions).duplicate()
+            dimensions = getattr(
+                source_map[source_type], dimension_source_attribute, dummy_dimensions
+            ).duplicate()
 
             if dimensions == dummy_dimensions:
                 # Source canvas/framing decision is missing this dimension. Let's move on
                 continue
 
-            dimensions.width = canvas_template.get_desqueezed_width(dimensions.width, source_canvas.anamorphic_squeeze)
+            dimensions.width = canvas_template.get_desqueezed_width(
+                dimensions.width, source_canvas.anamorphic_squeeze
+            )
             dimensions.scale_by(scale_factor)
             setattr(dest_map[source_type], dimension_source_attribute, dimensions)
 
         # Make sure the canvas has dimensions
         if not canvas.dimensions:
             preserve_source_type, preserve_source_attribute = preserve.split(".")
-            canvas.dimensions = getattr(dest_map[preserve_source_type], preserve_source_attribute).duplicate()
+            canvas.dimensions = getattr(
+                dest_map[preserve_source_type], preserve_source_attribute
+            ).duplicate()
 
         # Round values according to rules defined in the template
         if canvas_template.round is not None:
-            canvas.dimensions = canvas_template.round.round_dimensions(canvas.dimensions)
+            canvas.dimensions = canvas_template.round.round_dimensions(
+                canvas.dimensions
+            )
 
         # Override canvas dimensions to maximum defined in template
         if canvas_template.maximum_dimensions is not None:
-            canvas.dimensions = min(canvas_template.maximum_dimensions, canvas.dimensions)
+            canvas.dimensions = min(
+                canvas_template.maximum_dimensions, canvas.dimensions
+            )
             if canvas_template.pad_to_maximum:
                 canvas.dimensions = canvas_template.maximum_dimensions
 
         # Make sure all anchor points are correct according to new sizes
         canvas.adjust_effective_anchor_point()
         framing_decision.adjust_protection_anchor_point(
-            canvas, canvas_template.alignment_method_horizontal, canvas_template.alignment_method_vertical
+            canvas,
+            canvas_template.alignment_method_horizontal,
+            canvas_template.alignment_method_vertical,
         )
         framing_decision.adjust_anchor_point(
-            canvas, canvas_template.alignment_method_horizontal, canvas_template.alignment_method_vertical
+            canvas,
+            canvas_template.alignment_method_horizontal,
+            canvas_template.alignment_method_vertical,
         )
 
         return canvas
@@ -177,12 +207,16 @@ class Canvas(BaseModel):
         return value
 
     @field_serializer("effective_anchor_point")
-    def _check_effective_anchor_point(self, point: Point[float]) -> Union[Point[float], None]:
+    def _check_effective_anchor_point(
+        self, point: Point[float]
+    ) -> Union[Point[float], None]:
         if not self.effective_dimensions:
             return None
 
         if point is None:
-            raise ValueError("Effective anchor point is required when effective dimensions are provided")
+            raise ValueError(
+                "Effective anchor point is required when effective dimensions are provided"
+            )
 
         return point
 

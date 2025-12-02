@@ -9,15 +9,15 @@ from .common import (
     Point,
     TypedCollection,
 )
-from .clipid import ClipID
-from .context import Context
+from .clipid import ClipID as ClipID
+from .context import Context as Context
 from .errors import FDLError, FDLValidationError
-from .fdl import FDL
-from .framingdecision import FramingDecision
-from .framingintent import FramingIntent
+from .fdl import FDL as FDL
+from .framingdecision import FramingDecision as FramingDecision
+from .framingintent import FramingIntent as FramingIntent
 from .handlers import read_from_file, read_from_string, write_to_file, write_to_string
-from .header import Header
-from .rounding import RoundStrategy
+from .header import Header as Header
+from .rounding import RoundStrategy as RoundStrategy
 
 __all__ = [
     "Canvas",
@@ -47,4 +47,4 @@ __all__ = [
 
 __version__ = "0.1.0.dev0"
 
-config.set_rounding(config.DEFAULT_ROUNDING_STRATEGY)
+set_rounding(DEFAULT_ROUNDING_STRATEGY)

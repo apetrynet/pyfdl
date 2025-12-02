@@ -5,7 +5,11 @@ from pyfdl.fdl import FDL
 from pyfdl.plugins import get_registry
 
 
-def get_handler(func_name: str, path: Optional[Union[Path, str]] = None, handler_name: Optional[str] = None) -> Any:
+def get_handler(
+    func_name: str,
+    path: Optional[Union[Path, str]] = None,
+    handler_name: Optional[str] = None,
+) -> Any:
     """
     Convenience function to get a handler matching the provided arguments.
 
@@ -34,7 +38,9 @@ def get_handler(func_name: str, path: Optional[Union[Path, str]] = None, handler
 
 
 def read_from_file(
-    path: Union[Path, str], handler_name: Optional[str] = None, **handler_kwargs: Optional[Any]
+    path: Union[Path, str],
+    handler_name: Optional[str] = None,
+    **handler_kwargs: Optional[Any],
 ) -> "FDL":
     """
     Handler agnostic function for producing an FDL from a file. A suitable handler will be
@@ -49,12 +55,16 @@ def read_from_file(
         FDL:
     """
     path = Path(path)
-    handler = get_handler(func_name="read_from_file", path=path, handler_name=handler_name)
+    handler = get_handler(
+        func_name="read_from_file", path=path, handler_name=handler_name
+    )
 
     return handler.read_from_file(path, **handler_kwargs)
 
 
-def read_from_string(s: str, handler_name: str = "fdl", **handler_kwargs: Optional[Any]) -> "FDL":
+def read_from_string(
+    s: str, handler_name: str = "fdl", **handler_kwargs: Optional[Any]
+) -> "FDL":
     """
     Handler agnostic function for producing an FDL based on a string. A suitable handler will be
     chosen based on `handler_name`. Defaults to "fdl".
@@ -72,7 +82,10 @@ def read_from_string(s: str, handler_name: str = "fdl", **handler_kwargs: Option
 
 
 def write_to_file(
-    fdl: FDL, path: Union[Path, str], handler_name: Optional[str] = None, **handler_kwargs: Optional[Any]
+    fdl: FDL,
+    path: Union[Path, str],
+    handler_name: Optional[str] = None,
+    **handler_kwargs: Optional[Any],
 ):
     """
     Handler agnostic function to write a file based on an FDL. A suitable handler will be chosen based
@@ -85,11 +98,15 @@ def write_to_file(
         **handler_kwargs: arguments passed to handler
     """
     path = Path(path)
-    handler = get_handler(func_name="write_to_file", path=path, handler_name=handler_name)
+    handler = get_handler(
+        func_name="write_to_file", path=path, handler_name=handler_name
+    )
     handler.write_to_file(fdl, path, **handler_kwargs)
 
 
-def write_to_string(fdl: FDL, handler_name: str = "fdl", **handler_kwargs: Optional[Any]):
+def write_to_string(
+    fdl: FDL, handler_name: str = "fdl", **handler_kwargs: Optional[Any]
+):
     """
     Handler agnostic function for producing a string representation of an FDL. A suitable handler will
     be chosen based on `handler_name`.

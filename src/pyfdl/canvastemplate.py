@@ -10,7 +10,7 @@ FitSource = Literal[
     "framing_decision.dimensions",
     "framing_decision.protection_dimensions",
     "canvas.dimensions",
-    "canvas.effective_dimensions"
+    "canvas.effective_dimensions",
 ]
 FitMethod = Literal["width", "height", "fit_all", "fill"]
 AlignmentMethodVertical = Literal["top", "center", "bottom"]
@@ -20,7 +20,7 @@ PreserveFromSource = Literal[
     "framing_decision.dimensions",
     "framing_decision.protection_dimensions",
     "canvas.dimensions",
-    "canvas.effective_dimensions"
+    "canvas.effective_dimensions",
 ]
 
 
@@ -31,12 +31,20 @@ class CanvasTemplate(BaseModel):
     target_anamorphic_squeeze: Annotated[float, Field(ge=0, default=1)]
     fit_source: Annotated[FitSource, Field(default="framing_decision.dimensions")]
     fit_method: Annotated[FitMethod, Field(default="width")]
-    alignment_method_vertical: Annotated[AlignmentMethodVertical, Field(default="center")]
-    alignment_method_horizontal: Annotated[AlignmentMethodHorizontal, Field(default="center")]
+    alignment_method_vertical: Annotated[
+        AlignmentMethodVertical, Field(default="center")
+    ]
+    alignment_method_horizontal: Annotated[
+        AlignmentMethodHorizontal, Field(default="center")
+    ]
     preserve_from_source_canvas: Annotated[PreserveFromSource, Field(default="none")]
-    maximum_dimensions: Annotated[Dimensions[int], Field(default=None, exclude_if=lambda v: not v)]
-    pad_to_maximum: Annotated[bool, Field(default=False, exclude_if=lambda v: v is None)]
-    round: Annotated[RoundStrategy, Field(default=RoundStrategy())]
+    maximum_dimensions: Annotated[
+        Dimensions[int], Field(default=None, exclude_if=lambda v: not v)
+    ]
+    pad_to_maximum: Annotated[
+        bool, Field(default=False, exclude_if=lambda v: v is None)
+    ]
+    round: Annotated[RoundStrategy, Field(default=RoundStrategy(), exclude_if=lambda rnd: not rnd)]
 
     def get_desqueezed_width(self, source_width: float, squeeze_factor: float) -> float:
         """
@@ -61,7 +69,9 @@ class CanvasTemplate(BaseModel):
 
         return width
 
-    def get_scale_factor(self, source_dimensions: Dimensions, source_anamorphic_squeeze: float) -> float:
+    def get_scale_factor(
+        self, source_dimensions: Dimensions, source_anamorphic_squeeze: float
+    ) -> float:
         """
         Calculate the scale factor used when creating a new `Canvas` and `FramingDecision`
 
@@ -74,7 +84,9 @@ class CanvasTemplate(BaseModel):
         """
 
         # We default to fit_method "width"
-        source_width = self.get_desqueezed_width(source_dimensions.width, source_anamorphic_squeeze)
+        source_width = self.get_desqueezed_width(
+            source_dimensions.width, source_anamorphic_squeeze
+        )
         scale_factor = self.target_dimensions.width / source_width
 
         target_aspect = self.target_dimensions.width / self.target_dimensions.height
@@ -95,7 +107,9 @@ class CanvasTemplate(BaseModel):
 
         return scale_factor
 
-    def fit_source_to_target(self, source_dimensions: Dimensions, source_anamorphic_squeeze: float) -> Dimensions:
+    def fit_source_to_target(
+        self, source_dimensions: Dimensions, source_anamorphic_squeeze: float
+    ) -> Dimensions:
         """
         Calculate the dimensions of `fit_source` inside `target_dimensions` based on `fit_mode`
 
@@ -107,8 +121,12 @@ class CanvasTemplate(BaseModel):
             size:
         """
 
-        scale_factor = self.get_scale_factor(source_dimensions, source_anamorphic_squeeze)
-        source_width = self.get_desqueezed_width(source_dimensions.width, source_anamorphic_squeeze)
+        scale_factor = self.get_scale_factor(
+            source_dimensions, source_anamorphic_squeeze
+        )
+        source_width = self.get_desqueezed_width(
+            source_dimensions.width, source_anamorphic_squeeze
+        )
 
         # In case of fit_mode == fill
         width = self.target_dimensions.width

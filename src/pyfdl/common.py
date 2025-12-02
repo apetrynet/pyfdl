@@ -31,7 +31,7 @@ class Dimensions(BaseModel, Generic[T]):
         self.width *= factor
         self.height *= factor
 
-        if self._dtype == int:
+        if self._dtype is int:
             self.width, self.height = config.get_rounding().round_dimensions(self)
 
     def duplicate(self) -> Self:

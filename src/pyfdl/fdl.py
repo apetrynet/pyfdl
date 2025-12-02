@@ -1,12 +1,10 @@
 import json
-import uuid
 
 import jsonschema
 from pathlib import Path
-from typing import Union, TypeVar, Any
+from typing import Union, Any
 
-import pydantic
-from pydantic import field_serializer, PrivateAttr, model_serializer, BaseModel, Field
+from pydantic import field_serializer, PrivateAttr
 
 from pyfdl import FDLValidationError
 from pyfdl.common import FDL_SCHEMA_VERSION, FDL_SCHEMA_MINOR, TypedCollection
@@ -24,7 +22,9 @@ class FDL(Header):
     # default_framing_intent: Union[str, None] = None
     framing_intents: TypedCollection[FramingIntent] = TypedCollection[FramingIntent]()
     contexts: TypedCollection[Context] = TypedCollection[Context]()
-    canvas_templates: TypedCollection[CanvasTemplate] = TypedCollection[CanvasTemplate]()
+    canvas_templates: TypedCollection[CanvasTemplate] = TypedCollection[
+        CanvasTemplate
+    ]()
 
     _schema: dict[str, Any] = PrivateAttr(default=None)
 
@@ -38,7 +38,9 @@ class FDL(Header):
         major = self.version.get("major", FDL_SCHEMA_VERSION)
         minor = self.version.get("minor", FDL_SCHEMA_MINOR)
 
-        schema_path = Path(__file__).parent.joinpath("schema", f"v{major}.{minor}", "ascfdl.schema.json")
+        schema_path = Path(__file__).parent.joinpath(
+            "schema", f"v{major}.{minor}", "ascfdl.schema.json"
+        )
         with schema_path.open("rb") as fp:
             schema = json.load(fp)
 
@@ -61,14 +63,16 @@ class FDL(Header):
         context.canvases.append(canvas)
 
     @field_serializer("default_framing_intent")
-    def _check_default_framing_intent(self, framing_intent_id: Union[str, None]) -> Union[str, None]:
+    def _check_default_framing_intent(
+        self, framing_intent_id: Union[str, None]
+    ) -> Union[str, None]:
         if framing_intent_id is None:
             return None
 
         if self.framing_intents.get_by_id(framing_intent_id) is None:
             raise ValueError(
                 f'Default framing intent: "{framing_intent_id}" '
-                'is not found among registered framing intents'
+                "is not found among registered framing intents"
             )
 
         return framing_intent_id
@@ -88,7 +92,10 @@ class FDL(Header):
         errors = []
 
         # Check if default framing intent is present
-        if self.default_framing_intent and self.default_framing_intent not in self.framing_intents:
+        if (
+            self.default_framing_intent
+            and self.default_framing_intent not in self.framing_intents
+        ):
             errors.append(
                 f'Default framing intent: "{self.default_framing_intent}" '
                 "not found in registered framing intents."
@@ -125,11 +132,13 @@ class FDL(Header):
         # Check structure and values against json schema
         json_v = jsonschema.validators.validator_for(self._schema)
         validator = json_v(schema=self._schema, format_checker=json_v.FORMAT_CHECKER)
-        for error in validator.iter_errors(self.model_dump(by_alias=True, exclude_none=True)):
+        for error in validator.iter_errors(
+            self.model_dump(by_alias=True, exclude_none=True)
+        ):
             errors.append(str(error))
             # raise ValueError(str(error))
 
         if errors:
             nl = "\n"
-            msg = f"Validation failed!\n" f"{f'{nl}'.join(errors)}"
+            msg = f"Validation failed!\n{f'{nl}'.join(errors)}"
             raise FDLValidationError(msg)

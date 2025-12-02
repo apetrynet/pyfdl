@@ -66,3 +66,6 @@ class RoundStrategy(BaseModel):
 
     def __eq__(self, other):
         return self.even == other.even and self.mode == other.mode
+
+    def __bool__(self):
+        return self.even is None and self.mode is None
