@@ -7,7 +7,7 @@ from pyfdl.common import Dimensions
 
 class FramingIntent(BaseModel):
     label: Union[str, None] = None
-    id: str
+    id: Annotated[str, Field(min_length=1, max_length=32)]
     aspect_ratio: Dimensions[int]
     protection: Annotated[float, Field(default=0)]
 
