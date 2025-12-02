@@ -41,12 +41,6 @@ class FramingDecision(BaseModel):
             framing_decision:
 
         """
-        # framing_decision = FramingDecision(
-        #     id=f"{canvas.id}-{framing_intent.id}",
-        #     label=framing_intent.label,
-        #     framing_intent_id=framing_intent.id
-        # )
-
         canvas_dimensions = canvas.effective_dimensions or canvas.dimensions
         protection_dimensions = None
 
@@ -67,15 +61,10 @@ class FramingDecision(BaseModel):
             protection_dimensions = config.get_rounding().round_dimensions(
                 Dimensions[float](width=width, height=height)
             )
-            # framing_decision.protection_dimensions = config.get_rounding().round_dimensions(protection_dimensions)
-            # framing_decision.adjust_protection_anchor_point(canvas)
 
         # We use the protection dimensions as base for dimensions if they're set
-        # if framing_decision.protection_dimensions is not None:
         if protection_dimensions is not None:
-            # width = framing_decision.protection_dimensions.width
             width = protection_dimensions.width
-            # height = framing_decision.protection_dimensions.height
             height = protection_dimensions.height
 
         dimensions = Dimensions(
@@ -90,7 +79,6 @@ class FramingDecision(BaseModel):
             dimensions=config.get_rounding().round_dimensions(dimensions),
             protection_dimensions=protection_dimensions,
         )
-        # framing_decision.dimensions = config.get_rounding().round_dimensions(dimensions)
         framing_decision.adjust_protection_anchor_point(canvas)
         framing_decision.adjust_anchor_point(canvas)
 
