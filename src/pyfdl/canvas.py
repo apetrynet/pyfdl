@@ -13,13 +13,22 @@ CanvasTemplate = TypeVar("CanvasTemplate")
 
 class Canvas(BaseModel):
     label: Union[str, None] = None
-    id: str
-    source_canvas_id: str   # TODO: make sure it exists
+    id: Annotated[str, Field(min_length=1, max_length=32)]
+    source_canvas_id: Annotated[str, Field(min_length=1, max_length=32)]    # <- Follow same rules as id?
     dimensions: Annotated[Dimensions[int], Field(default=Dimensions[int](), exclude_if=lambda dim: not dim)]
-    effective_dimensions: Union[Dimensions[int]] = None
+    effective_dimensions: Annotated[
+        Union[Dimensions[int], None],
+        Field(default=Dimensions[int](), exclude_if=lambda dim: not dim)
+    ]
     effective_anchor_point: Union[Point[float]] = None
-    photosite_dimensions: Union[Dimensions[int]] = None
-    physical_dimensions: Union[Dimensions[float]] = None
+    photosite_dimensions: Annotated[
+        Union[Dimensions[int], None],
+        Field(default=Dimensions[int](), exclude_if=lambda dim: not dim)
+    ]
+    physical_dimensions: Annotated[
+        Union[Dimensions[float], None],
+        Field(default=Dimensions[float](), exclude_if=lambda dim: not dim)
+    ]
     anamorphic_squeeze: Annotated[float, Field(default=1)]
     framing_decisions: TypedCollection[FramingDecision] = TypedCollection[FramingDecision]()
 
@@ -169,7 +178,7 @@ class Canvas(BaseModel):
 
     @field_serializer("effective_anchor_point")
     def _check_effective_anchor_point(self, point: Point[float]) -> Union[Point[float], None]:
-        if self.effective_dimensions is None:
+        if not self.effective_dimensions:
             return None
 
         if point is None:
