@@ -26,7 +26,7 @@ PreserveFromSource = Literal[
 
 class CanvasTemplate(BaseModel):
     label: Union[str, None] = None
-    id: str
+    id: Annotated[str, Field(min_length=1, max_length=32)]
     target_dimensions: Dimensions[int]
     target_anamorphic_squeeze: Annotated[float, Field(ge=0, default=1)]
     fit_source: Annotated[FitSource, Field(default="framing_decision.dimensions")]
