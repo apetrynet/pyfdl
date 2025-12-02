@@ -90,7 +90,7 @@ class TypedCollection(RootModel[List[T]]):
         Raises:
             ValueError: if a duplicate id is detected
         """
-        if not isinstance(item, self._cls):
+        if not type(item) is self._cls:
             raise ValueError(
                 f'This collection only accepts items of type: "{self._cls.__name__}", not "{item.__class__.__name__}"'
             )
