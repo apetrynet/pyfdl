@@ -98,7 +98,7 @@ def test_validate_missing_requirements():
     # This raises FDLError as header is missing required attributes
     fdl.uuid = None
     with pytest.raises(pyfdl.FDLValidationError):
-        fdl._validate()
+        fdl.validate_fdl()
 
 
 def test_validate_schema_rule(sample_framing_intent_obj):
@@ -109,7 +109,7 @@ def test_validate_schema_rule(sample_framing_intent_obj):
     framing_intent.id = "x" * 33
     fdl.framing_intents.append(framing_intent)
     with pytest.raises(pyfdl.FDLValidationError):
-        fdl._validate()
+        fdl.validate_fdl()
 
 
 def test_validate_missing_source_framing_intent(sample_framing_intent_obj, sample_canvas_obj):
@@ -119,7 +119,7 @@ def test_validate_missing_source_framing_intent(sample_framing_intent_obj, sampl
     fdl.place_canvas_in_context(context_label="test", canvas=sample_canvas_obj)
     sample_canvas_obj.place_framing_intent(sample_framing_intent_obj)
     with pytest.raises(pyfdl.FDLValidationError):
-        fdl._validate()
+        fdl.validate_fdl()
 
 
 def test_validate_missing_source_canvas_id(sample_canvas_obj):
@@ -129,4 +129,4 @@ def test_validate_missing_source_canvas_id(sample_canvas_obj):
     # Change source canvas id to provoke validation error
     sample_canvas_obj.source_canvas_id = "shouldnotbethere"
     with pytest.raises(pyfdl.FDLValidationError):
-        fdl._validate()
+        fdl.validate_fdl()

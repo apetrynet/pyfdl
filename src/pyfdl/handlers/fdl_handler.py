@@ -47,11 +47,10 @@ class FDLHandler:
             FDL:
 
         """
-        # fdl = FDL.from_dict(json.loads(s))
         fdl = FDL.model_validate_json(s)
 
         if validate:
-            fdl._validate()
+            fdl.validate_fdl()
 
         return fdl
 

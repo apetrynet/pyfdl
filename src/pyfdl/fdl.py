@@ -4,7 +4,7 @@ import jsonschema
 from pathlib import Path
 from typing import Union, Any
 
-from pydantic import field_serializer, PrivateAttr
+from pydantic import field_serializer, PrivateAttr, Field, ConfigDict, model_serializer
 
 from pyfdl import FDLValidationError
 from pyfdl.common import FDL_SCHEMA_VERSION, FDL_SCHEMA_MINOR, TypedCollection
@@ -77,8 +77,7 @@ class FDL(Header):
 
         return framing_intent_id
 
-    # @model_serializer()
-    def _validate(self):
+    def validate_fdl(self):
         """Validate the current state of the FDL.
          ID's and relationships between items are checked and values are
          validated against the json schema.
@@ -114,9 +113,6 @@ class FDL(Header):
                 errors.append(
                     f'canvas.source_canvas_id: "{canvas.source_canvas_id}" not found among registered canvases'
                 )
-                # raise ValueError(
-                #     f'canvas.source_canvas_id: "{canvas.source_canvas_id}" not found among registered canvases'
-                # )
 
             for framing_decision in canvas.framing_decisions:
                 if framing_decision.framing_intent_id not in self.framing_intents:
@@ -124,10 +120,6 @@ class FDL(Header):
                         f'framing_decision.framing_intent_id: "{framing_decision.framing_intent_id}" '
                         "not found among registered framing intents"
                     )
-                    # raise ValueError(
-                    #     f'framing_decision.framing_intent_id: "{framing_decision.framing_intent_id}" '
-                    #     "not found among registered framing intents"
-                    # )
 
         # Check structure and values against json schema
         json_v = jsonschema.validators.validator_for(self._schema)
@@ -136,7 +128,6 @@ class FDL(Header):
             self.model_dump(by_alias=True, exclude_none=True)
         ):
             errors.append(str(error))
-            # raise ValueError(str(error))
 
         if errors:
             nl = "\n"

@@ -36,13 +36,13 @@ class YAMLHandler:
 
     def write_to_string(self, fdl: FDL, validate: bool = True, **yaml_args: Optional[Any]) -> str:
         if validate:
-            fdl._validate()
+            fdl.validate_fdl()
         
         return yaml.dump(fdl.model_dump(), **yaml_args)
 
     def write_to_file(self, fdl: FDL, path: Path, validate: bool = True, **yaml_args: Optional[Any]) -> str:
         if validate:
-            fdl._validate()
+            fdl.validate_fdl()
         
         with path.open('w') as f:
             f.write(yaml.dump(fdl.model_dump(), **yaml_args))

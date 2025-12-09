@@ -8,7 +8,7 @@ from pyfdl.rounding import RoundStrategy
 def test_source_canvas_id(sample_canvas_obj):
     fdl = pyfdl.FDL()
     fdl.place_canvas_in_context(context_label="context1", canvas=sample_canvas_obj)
-    assert fdl._validate() is None
+    assert fdl.validate_fdl() is None
     fdl.contexts[0].canvases.remove(sample_canvas_obj.id)
 
     sample_canvas_obj.id = "456"
@@ -16,7 +16,7 @@ def test_source_canvas_id(sample_canvas_obj):
     fdl.place_canvas_in_context(context_label="context2", canvas=sample_canvas_obj)
 
     with pytest.raises(pyfdl.FDLValidationError) as err:
-        fdl._validate()
+        fdl.validate_fdl()
 
     assert f'canvas.source_canvas_id: "{sample_canvas_obj.source_canvas_id}" not found among ' in str(err)
 
