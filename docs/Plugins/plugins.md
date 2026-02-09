@@ -25,7 +25,7 @@ Example of a YAML Handler:
 import yaml
 from pathlib import Path
 from typing import Optional, Any
-from pyfdl import FDL
+from fdl import FDL
 
 class YAMLHandler:
     def __init__(self):
@@ -60,12 +60,12 @@ def register_plugin(registry: 'PluginRegistry'):
 ### Install via pip
 Ideally you package your plugin according to best practices and share it via PyPi for other to use.
 However, the only requirement from PyFDL's perspective is that you install the plugin to PyFDL's 
-plugin namespace: `pyfdl.plugins`.
+plugin namespace: `fdl.plugins`.
 
 In your pyproject.toml or setup.py make sure to add your package/module like so:
 ``` toml
 
-[project.entry-points."pyfdl.plugins"]
+[project.entry-points."fdl.plugins"]
 # If you choose to call your register function something else, make sure to adjust the entry below.
 yaml_handler = "yaml_handler:register_plugin"
 ```
@@ -79,7 +79,7 @@ You may also add your handler directly in your code.
 To do this, simply get a hold of the registry and add your handler.
 
 ```python
-from pyfdl.plugins import get_registry
+from fdl.plugins import get_registry
 
 registry = get_registry()
 registry.add_handler(YAMLHandler())
@@ -91,17 +91,17 @@ If your handler provides one or more of the following methods: `read_from_file` 
 directly asking for this specific handler.
 
 ```python
-import pyfdl
+import fdl
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
-fdl = pyfdl.FDL()
-pyfdl.write_to_string(fdl, handler_name='yaml', indent=4)
-pyfdl.write_to_file(fdl, path=NamedTemporaryFile(suffix='.yml', delete=False).name)
+fdl = fdl.FDL()
+fdl.write_to_string(fdl, handler_name='yaml', indent=4)
+fdl.write_to_file(fdl, path=NamedTemporaryFile(suffix='.yml', delete=False).name)
 ```
 If your handler doesn't provide one of the methods above or you have others exposed you can use them like so:
 ```python
-from pyfdl.handlers import get_handler
+from fdl.handlers import get_handler
 
 my_handler = get_handler(func_name='custom_method', handler_name='yaml')
 fdl = FDL()

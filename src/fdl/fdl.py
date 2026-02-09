@@ -6,13 +6,13 @@ from typing import Union, Any
 
 from pydantic import field_serializer, PrivateAttr, Field, ConfigDict, model_serializer
 
-from pyfdl import FDLValidationError
-from pyfdl.common import FDL_SCHEMA_VERSION, FDL_SCHEMA_MINOR, TypedCollection
-from pyfdl.canvastemplate import CanvasTemplate
-from pyfdl.framingintent import FramingIntent
-from pyfdl.canvas import Canvas
-from pyfdl.context import Context
-from pyfdl.header import Header
+from fdl import FDLValidationError
+from fdl.common import FDL_SCHEMA_VERSION, FDL_SCHEMA_MINOR, TypedCollection
+from fdl.canvastemplate import CanvasTemplate
+from fdl.framingintent import FramingIntent
+from fdl.canvas import Canvas
+from fdl.context import Context
+from fdl.header import Header
 
 
 class FDL(Header):
@@ -35,8 +35,8 @@ class FDL(Header):
         Returns:
             schema:
         """
-        major = self.version.get("major", FDL_SCHEMA_VERSION)
-        minor = self.version.get("minor", FDL_SCHEMA_MINOR)
+        major = self.version.major
+        minor = self.version.minor
 
         schema_path = Path(__file__).parent.joinpath(
             "schema", f"v{major}.{minor}", "ascfdl.schema.json"

@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import TypeVar, Union
 
-from pyfdl import FDL
+from fdl import FDL
 
 PluginRegistry = TypeVar("PluginRegistry")
 

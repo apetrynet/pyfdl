@@ -1,8 +1,8 @@
 import pytest
 
-import pyfdl
-from pyfdl.errors import FDLError
-from pyfdl.clipid import ClipID, FileSequence
+import fdl
+from fdl.errors import FDLError
+from fdl.clipid import ClipID, FileSequence
 
 
 def test_file_sequence_init():
@@ -63,7 +63,7 @@ def test_clip_id_raise_on_two_identifiers():
 
 
 def test_deserializing_clip_id():
-    fdl = pyfdl.read_from_string(
+    result = fdl.read_from_string(
         '{'
         '"uuid": "4ff5d6b1-aaf2-48fd-a947-2d61e45d676a",'
         '"version": {"major": 2, "minor": 0},'
@@ -79,11 +79,11 @@ def test_deserializing_clip_id():
         '"canvas_templates": []'
         '}'
      )
-    assert isinstance(fdl.contexts[0].clip_id, ClipID)
+    assert isinstance(result.contexts[0].clip_id, ClipID)
 
 
 def test_deserializing_file_sequence():
-    fdl = pyfdl.read_from_string(
+    result = fdl.read_from_string(
         '{'
         '"uuid": "4ff5d6b1-aaf2-48fd-a947-2d61e45d676a",'
         '"version": {"major": 2, "minor": 0},'
@@ -103,5 +103,5 @@ def test_deserializing_file_sequence():
         '}'
      )
 
-    clip_id = fdl.contexts[0].clip_id
+    clip_id = result.contexts[0].clip_id
     assert isinstance(clip_id.sequence, FileSequence)

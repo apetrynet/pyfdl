@@ -1,8 +1,8 @@
 from pathlib import Path
 from typing import Any, Optional, Union
 
-from pyfdl.fdl import FDL
-from pyfdl.plugins import get_registry
+from fdl.fdl import FDL
+from fdl.plugins import get_registry
 
 
 def get_handler(

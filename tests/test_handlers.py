@@ -1,8 +1,8 @@
 import pytest
 
-from pyfdl.errors import UnknownHandlerError
-from pyfdl.handlers import get_handler
-from pyfdl.plugins import get_registry
+from fdl.errors import UnknownHandlerError
+from fdl.handlers import get_handler
+from fdl.plugins import get_registry
 
 
 @pytest.mark.parametrize(

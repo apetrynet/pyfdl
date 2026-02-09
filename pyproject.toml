@@ -1,61 +1,30 @@
 [project]
-name = "pyfdl"
-dynamic = ["version"]
-description = "Toolkit for parsing and producing ASC FDL files"
-readme = "README.md"
-authors = [
-    { name = "Daniel Flehner Heen", email = "flehnerheener@gmail.com" }
-]
-license = {file="LICENSE"}
-requires-python = ">=3.9"
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "Topic :: Multimedia :: Video",
-    "Topic :: Multimedia :: Video :: Display",
-    "Topic :: Multimedia :: Video :: Non-Linear Editor",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Operating System :: OS Independent",
-    "License :: OSI Approved :: Apache Software License",
-    "Natural Language :: English"
-]
-keywords = ["film", "tv", "editing", "editorial", "fdl", "asc", "conform", "reformat", "vfx"]
+name = "fdl"
+version = "0.1.0"
+description = "Pydantic-based ASC Framing Decision List (FDL) data model and toolkit"
+requires-python = ">=3.10"
 dependencies = [
     "jsonschema>=4.25.1",
     "pydantic>=2.12.4",
 ]
 
-#[project.scripts]
-#pyfdl = "pyfdl:main"
-
-[project.urls]
-"Source" = "https://github.com/apetrynet/pyfdl"
-"Issues" = "https://github.com/apetrynet/pyfdl/issues"
-"Documentation" = "https://apetrynet.github.io/pyfdl"
-
-#[tool.uv]
-#package = true
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+]
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.hatch.version]
-path = "src/pyfdl/__init__.py"
+[tool.hatch.build.targets.wheel]
+packages = ["src/fdl"]
 
-[dependency-groups]
-dev = [
-    "mktestdocs>=0.2.5",
-    "pip>=25.3",
-    "pytest>=8.4.2",
-    "pyyaml>=6.0.3",
-    "ruff>=0.14.4",
-]
-docs = [
-    "mkdocs>=1.6.1",
-    "mkdocs-autorefs>=1.4.3",
-    "mkdocstrings>=0.30.1",
-    "mkdocstrings-python>=1.18.2",
-    "mktestdocs>=0.2.5",
+[tool.hatch.build.targets.wheel.force-include]
+"src/fdl/schema" = "fdl/schema"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/fdl/**/*.py",
+    "src/fdl/schema/**/*.json",
 ]

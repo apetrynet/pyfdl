@@ -2,12 +2,12 @@ from typing import Union
 
 from pydantic import BaseModel
 
-from pyfdl import ClipID, TypedCollection, Canvas
+from fdl import ClipID, TypedCollection, Canvas
 
 
 class Context(BaseModel):
     label: Union[str, None] = None
-    context_creator: str = "PyFDL"
+    context_creator: Union[str, None] = None
     clip_id: Union[ClipID, None] = None
     canvases: TypedCollection[Canvas] = TypedCollection[Canvas]()
 

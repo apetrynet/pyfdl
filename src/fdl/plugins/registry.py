@@ -3,7 +3,7 @@ from importlib import import_module, resources
 from importlib.metadata import entry_points
 from typing import Any, TypeVar, Union
 
-from pyfdl.errors import UnknownHandlerError
+from fdl.errors import UnknownHandlerError
 
 _REGISTRY = None
 Handler = TypeVar("Handler")
@@ -23,7 +23,7 @@ class PluginRegistry:
         """
         Load the built-in handlers
         """
-        anchor = "pyfdl.handlers"
+        anchor = "fdl.handlers"
         for module in resources.files(anchor).iterdir():
             if module.name.startswith("_") or module.suffix != ".py":
                 continue
@@ -34,13 +34,13 @@ class PluginRegistry:
 
     def load_plugins(self):
         """
-        Load plugins from the "pyfdl.plugins" namespace.
+        Load plugins from the "fdl.plugins" namespace.
         """
         try:
-            plugin_packages = entry_points(group="pyfdl.plugins")
+            plugin_packages = entry_points(group="fdl.plugins")
         except TypeError:
             # Python < 3.10
-            plugin_packages = entry_points().get("pyfdl.plugins", [])
+            plugin_packages = entry_points().get("fdl.plugins", [])
 
         for plugin in plugin_packages:
             try:

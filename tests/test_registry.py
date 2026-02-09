@@ -1,20 +1,25 @@
 import shlex
 import subprocess
 import sys
+from pathlib import Path
 
 import pytest
 
-import pyfdl.plugins.registry
-from pyfdl.errors import UnknownHandlerError
-from pyfdl.handlers.fdl_handler import FDLHandler
-from pyfdl.plugins import get_registry
+import fdl.plugins.registry
+from fdl.errors import UnknownHandlerError
+from fdl.handlers.fdl_handler import FDLHandler
+from fdl.plugins import get_registry
+
+SAMPLE_DATA = Path(__file__).parent / "sample_data"
 
 
 @pytest.fixture
 def install_plugins():
+    handler_plugin = SAMPLE_DATA / "handler-plugin"
+    faulty_plugin = SAMPLE_DATA / "faulty-handler-plugin"
     subprocess.call(
         shlex.split(
-            f"{sys.executable} -m pip install tests/sample_data/handler-plugin tests/sample_data/faulty-handler-plugin"
+            f"{sys.executable} -m pip install {handler_plugin} {faulty_plugin}"
         )
     )
     yield
@@ -22,9 +27,9 @@ def install_plugins():
 
 
 def test_loading_registry():
-    pyfdl.plugins.registry._REGISTRY = None
-    assert isinstance(get_registry(), pyfdl.plugins.registry.PluginRegistry)
-    assert pyfdl.plugins.registry._REGISTRY is not None
+    fdl.plugins.registry._REGISTRY = None
+    assert isinstance(get_registry(), fdl.plugins.registry.PluginRegistry)
+    assert fdl.plugins.registry._REGISTRY is not None
 
     id_ = id(get_registry())
     get_registry(reload=True)

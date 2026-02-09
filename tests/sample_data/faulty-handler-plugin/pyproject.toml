@@ -25,13 +25,13 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "pyfdl"
+  "fdl"
 ]
 
 [tool.hatch.version]
 path = "src/faulty_handler_plugin/__about__.py"
 
-[project.entry-points."pyfdl.plugins"]
+[project.entry-points."fdl.plugins"]
 # Notice intentional typo (plugi) below. Provokes a ModuleNotFoundError
 faulty_handler_plugin1 = "faulty_handler_plugi:register_plugin_func"
 # This plugin has no "register_plugin" function and will not import properly

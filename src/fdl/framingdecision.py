@@ -2,9 +2,9 @@ from typing import Union, Annotated, TypeVar
 
 from pydantic import BaseModel, Field
 
-import pyfdl.config as config
-from pyfdl.common import Dimensions, Point
-from pyfdl.framingintent import FramingIntent
+import fdl.config as config
+from fdl.types import DimensionsFloat, PointFloat
+from fdl.framingintent import FramingIntent
 
 Canvas = TypeVar("Canvas")
 
@@ -14,12 +14,12 @@ class FramingDecision(BaseModel):
     id: str
     framing_intent_id: str
     dimensions: Annotated[
-        Dimensions[float],
-        Field(default=Dimensions[float](), exclude_if=lambda dim: not dim),
+        DimensionsFloat,
+        Field(default_factory=DimensionsFloat, exclude_if=lambda dim: not dim),
     ]
-    anchor_point: Point[float] = Point[float]()
-    protection_dimensions: Union[Dimensions[float], None] = None
-    protection_anchor_point: Union[Point[float], None] = Point[float]()
+    anchor_point: PointFloat = PointFloat()
+    protection_dimensions: Union[DimensionsFloat, None] = None
+    protection_anchor_point: Union[PointFloat, None] = None
 
     @classmethod
     def from_framing_intent(
@@ -59,7 +59,7 @@ class FramingDecision(BaseModel):
 
         if framing_intent.protection > 0:
             protection_dimensions = config.get_rounding().round_dimensions(
-                Dimensions[float](width=width, height=height)
+                DimensionsFloat(width=width, height=height)
             )
 
         # We use the protection dimensions as base for dimensions if they're set
@@ -67,7 +67,7 @@ class FramingDecision(BaseModel):
             width = protection_dimensions.width
             height = protection_dimensions.height
 
-        dimensions = Dimensions(
+        dimensions = DimensionsFloat(
             width=width * (1 - framing_intent.protection),
             height=height * (1 - framing_intent.protection),
         )
@@ -117,7 +117,7 @@ class FramingDecision(BaseModel):
         elif v_method == "bottom":
             y += canvas_dimensions.height - self.dimensions.height
 
-        self.anchor_point = Point[float](x=x, y=y)
+        self.anchor_point = PointFloat(x=x, y=y)
 
     def adjust_protection_anchor_point(
         self, canvas: Canvas, h_method: str = "center", v_method: str = "center"
@@ -153,7 +153,12 @@ class FramingDecision(BaseModel):
         elif v_method == "bottom":
             y += canvas_dimensions.height - self.protection_dimensions.height
 
-        self.protection_anchor_point = Point[float](x=x, y=y)
+        self.protection_anchor_point = PointFloat(x=x, y=y)
+
+    def has_protected_dims(self) -> bool:
+        if not self.protection_dimensions:
+            return False
+        return self.protection_dimensions.width > 0 or self.protection_dimensions.height > 0
 
     def __eq__(self, other) -> bool:
         try:

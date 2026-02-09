@@ -1,8 +1,8 @@
 import pytest
 
-import pyfdl
-import pyfdl.config
-import pyfdl.rounding
+import fdl
+import fdl.config
+import fdl.rounding
 
 
 @pytest.mark.parametrize(
@@ -34,23 +34,23 @@ def test_from_framing_intent(
     expected_prot,
 ):
     intent = sample_framing_intent_obj
-    intent.aspect_ratio = pyfdl.Dimensions(**intent_ratio)
+    intent.aspect_ratio = fdl.DimensionsInt(**intent_ratio)
     intent.protection = protection
     canvas = sample_canvas_obj
-    canvas.dimensions = pyfdl.Dimensions(**canvas_dim)
+    canvas.dimensions = fdl.DimensionsInt(**canvas_dim)
     canvas.anamorphic_squeeze = canvas_sqz
     if canvas_eff is not None:
-        canvas.effective_dimensions = pyfdl.Dimensions(**canvas_eff)
+        canvas.effective_dimensions = fdl.DimensionsInt(**canvas_eff)
     else:
         canvas.effective_dimensions = None
 
     # Override rounding to match values in samples
-    pyfdl.config.set_rounding(pyfdl.rounding.RoundStrategy(even="even", mode="round"))
-    result = pyfdl.FramingDecision.from_framing_intent(canvas=canvas, framing_intent=intent)
-    assert result.dimensions == pyfdl.Dimensions(**expected_dim)
+    fdl.config.set_rounding(fdl.rounding.RoundStrategy(even="even", mode="round"))
+    result = fdl.FramingDecision.from_framing_intent(canvas=canvas, framing_intent=intent)
+    assert result.dimensions == fdl.DimensionsFloat(**expected_dim)
 
     if expected_prot is not None:
-        assert result.protection_dimensions == pyfdl.Dimensions(**expected_prot)
+        assert result.protection_dimensions == fdl.DimensionsFloat(**expected_prot)
     else:
         assert result.protection_dimensions is None
 
@@ -79,22 +79,22 @@ def test_from_framing_intent(
     ],
 )
 def test_adjust_anchor_point(h_method, v_method, protection_dim, protection_pnt, expected):
-    canvas = pyfdl.Canvas(
+    canvas = fdl.Canvas(
         id="test_canvas",
         source_canvas_id="test_canvas",
-        dimensions=pyfdl.Dimensions(width=1000, height=1000)
+        dimensions=fdl.DimensionsInt(width=1000, height=1000)
     )
-    framing_decision = pyfdl.FramingDecision(
+    framing_decision = fdl.FramingDecision(
         id="test_decision",
         framing_intent_id="test_intent",
-        dimensions=pyfdl.Dimensions(width=500, height=500)
+        dimensions=fdl.DimensionsFloat(width=500, height=500)
     )
     if protection_dim is not None:
-        framing_decision.protection_dimensions = pyfdl.Dimensions(**protection_dim)
-        framing_decision.protection_anchor_point = pyfdl.Point(**protection_pnt)
+        framing_decision.protection_dimensions = fdl.DimensionsFloat(**protection_dim)
+        framing_decision.protection_anchor_point = fdl.PointFloat(**protection_pnt)
 
     framing_decision.adjust_anchor_point(canvas=canvas, h_method=h_method, v_method=v_method)
-    assert framing_decision.anchor_point == pyfdl.Point(**expected)
+    assert framing_decision.anchor_point == fdl.PointFloat(**expected)
 
 
 @pytest.mark.parametrize(
@@ -112,16 +112,16 @@ def test_adjust_anchor_point(h_method, v_method, protection_dim, protection_pnt,
     ],
 )
 def test_adjust_protection_anchor_point(h_method, v_method, expected):
-    canvas = pyfdl.Canvas(
+    canvas = fdl.Canvas(
         id="test_canvas",
         source_canvas_id="test_canvas",
-        dimensions=pyfdl.Dimensions(width=1000, height=1000)
+        dimensions=fdl.DimensionsInt(width=1000, height=1000)
     )
-    framing_decision = pyfdl.FramingDecision(
+    framing_decision = fdl.FramingDecision(
         id="test_decision",
         framing_intent_id="test_intent",
-        protection_dimensions=pyfdl.Dimensions(width=550, height=550)
+        protection_dimensions=fdl.DimensionsFloat(width=550, height=550)
     )
 
     framing_decision.adjust_protection_anchor_point(canvas=canvas, h_method=h_method, v_method=v_method)
-    assert framing_decision.protection_anchor_point == pyfdl.Point(**expected)
+    assert framing_decision.protection_anchor_point == fdl.PointFloat(**expected)

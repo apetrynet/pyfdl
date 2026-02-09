@@ -25,12 +25,12 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "pyfdl"
+  "fdl"
 ]
 
 [tool.hatch.version]
 path = "src/handler_plugin/__about__.py"
 
-[project.entry-points."pyfdl.plugins"]
+[project.entry-points."fdl.plugins"]
 handler_plugin1 = "handler_plugin:register_plugin_func"
 handler_plugin2 = "handler_plugin"
